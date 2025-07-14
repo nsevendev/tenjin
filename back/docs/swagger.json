@@ -1,0 +1,20 @@
+{
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "API service tenjin api",
+        "title": "tenjin api",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {},
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "headers"
+        }
+    }
+}
