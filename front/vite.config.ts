@@ -50,6 +50,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
     server: {
       host: '0.0.0.0', // Permet l'accès depuis Docker
       port: parseInt(process.env.PORT || '3000'),
+      allowedHosts: true,
       headers: {
         // Don't cache the server response in dev mode
         "Cache-Control": "public, max-age=0",
