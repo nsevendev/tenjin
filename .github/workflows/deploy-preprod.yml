@@ -1,0 +1,71 @@
+name: Deploy to Preprod
+
+on:
+  push:
+    branches: [preprod]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Ionos Preprod
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          # Write SSH key with proper formatting
+          printf '%s\n' "${{ secrets.IONOS_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          chmod 700 ~/.ssh
+          
+          # Debug: Check key format and size
+          echo "SSH key file size:"
+          wc -c ~/.ssh/id_rsa
+          echo "SSH key first line:"
+          head -1 ~/.ssh/id_rsa
+          echo "SSH key last line:"
+          tail -1 ~/.ssh/id_rsa
+          
+          # Test SSH key format
+          ssh-keygen -l -f ~/.ssh/id_rsa
+          
+          # Add server to known hosts
+          ssh-keyscan -H ${{ secrets.IONOS_HOST }} >> ~/.ssh/known_hosts
+          
+          # Test SSH connection with verbose output
+          ssh -v -o ConnectTimeout=10 -o StrictHostKeyChecking=no ${{ secrets.IONOS_USER }}@${{ secrets.IONOS_HOST }} "echo 'SSH connection successful'"
+          
+      - name: Deploy to server
+        run: |
+          ssh ${{ secrets.IONOS_USER }}@${{ secrets.IONOS_HOST }} << 'EOF'
+            set -e
+            
+            # Navigate to project directory
+            cd ~/projects/test/tenjin
+            
+            # Pull latest changes (safe even if already on preprod branch)
+            git fetch origin
+            git checkout preprod || git checkout -b preprod origin/preprod
+            git pull origin preprod
+            
+            # Deploy with Docker
+            make down || true
+            make upb
+            
+            # Verify deployment
+            sleep 10
+            docker compose --env-file .env -f docker/compose.preprod.yaml logs --tail=20 app
+            
+          EOF
+          
+      - name: Verify deployment
+        run: |
+          # Test if services are responding
+          ssh ${{ secrets.IONOS_USER }}@${{ secrets.IONOS_HOST }} << 'EOF'
+            curl -f https://tenjin.woopear.fr/health || echo "Frontend health check failed"
+            curl -f https://tenjin-api.woopear.fr/health || echo "API health check failed"
+          EOF
