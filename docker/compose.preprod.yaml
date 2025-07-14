@@ -1,0 +1,71 @@
+name: tenjin-${APP_ENV}
+services:
+  app:
+    build:
+      target: ${APP_ENV}
+      context: ../front
+      dockerfile: ../docker/front.dockerfile
+    container_name: tenjin_${APP_ENV}_app
+    image: tenjin-app:${APP_ENV}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-nseven"
+      - "traefik.http.routers.tenjin-app.rule=${HOST_TRAEFIK}"
+      - "traefik.http.routers.tenjin-app.entrypoints=websecure"
+      - "traefik.http.routers.tenjin-app.tls=true"
+      - "traefik.http.routers.tenjin-app.tls.certresolver=le"
+      - "traefik.http.services.tenjin-app.loadbalancer.server.port=${PORT}"
+    env_file:
+      - ../front/.env
+    networks:
+      - traefik-nseven
+      - tenjin
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      target: ${APP_ENV}
+      context: ../back
+      dockerfile: ../docker/back.dockerfile
+    container_name: tenjin_${APP_ENV}_api
+    image: tenjin-api:${APP_ENV}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-nseven"
+      - "traefik.http.routers.tenjin-api.rule=${HOST_TRAEFIK_API}"
+      - "traefik.http.routers.tenjin-api.entrypoints=websecure"
+      - "traefik.http.routers.tenjin-api.tls=true"
+      - "traefik.http.routers.tenjin-api.tls.certresolver=le"
+      - "traefik.http.services.tenjin-api.loadbalancer.server.port=${PORT}"
+    env_file:
+      - ../back/.env
+    networks:
+      - traefik-nseven
+      - tenjin
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mongo:7
+    container_name: tenjin_${APP_ENV}_db
+    restart: unless-stopped
+    volumes:
+      - tenjin_${APP_ENV}_db:/data/db
+      - ../docker/mongo-init:/docker-entrypoint-initdb.d
+    networks:
+      - traefik-nseven
+      - tenjin
+    environment:
+      - MONGO_INITDB_DATABASE=${DB_NAME}
+
+networks:
+  traefik-nseven:
+    external: true
+  tenjin:
+    driver: bridge
+
+volumes:
+  tenjin_preprod_db:
