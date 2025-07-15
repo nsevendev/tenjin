@@ -25,6 +25,11 @@ jobs:
             echo "VARIABLE_TEST=test" >> back/.env.test
           fi
           
+      - name: Create Docker networks
+        run: |
+          # Créer le réseau traefik-nseven requis par docker-compose
+          docker network create traefik-nseven || true
+          
       - name: Start services in dev mode
         run: |
           # Lancer le projet en mode dev
