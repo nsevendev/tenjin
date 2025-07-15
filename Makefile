@@ -14,7 +14,7 @@ NC = \033[0m # No Color
 COMPOSE_FILE = $(if $(filter $(APP_ENV),prod),docker/compose.prod.yaml,$(if $(filter $(APP_ENV),preprod),docker/compose.preprod.yaml,docker/compose.yaml))
 DOCKER_COMPOSE = docker compose $(ENV_FILE) -f $(COMPOSE_FILE)
 
-.PHONY: help build up down logs shell restart clean status ps tac tap tav tavp
+.PHONY: help build up down logs shell restart clean status ps ta tap tav tavp tf tfv
 
 help: ## Affiche cette aide
 	@echo ""
@@ -85,3 +85,9 @@ tav: ## Lance tous les tests api en mode verbose
 
 tavp: ## Lance les tests api en mode verbose pour un path spécifique (usage: make tavp path=monpath)
 	docker exec -i -e APP_ENV=test tenjin_dev_api go test -v ./$(path)
+
+tf: ## Lance tous les tests front
+	docker exec -i tenjin_dev_app npm run test.unit -- --run
+
+tfv: ## Lance tous les tests front en mode verbose
+	docker exec -i tenjin_dev_app npm run test.unit -- --run --reporter=verbose
