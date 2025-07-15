@@ -6,7 +6,63 @@ on:
   workflow_dispatch:
 
 jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Create .env files from dist
+        run: |
+          # Créer les fichiers .env à partir des .env.dist
+          find . -name "*.env.dist" -exec sh -c 'cp "$1" "${1%.dist}"' _ {} \;
+          
+          # Créer le fichier .env.test pour les tests backend
+          if [ -d "back" ]; then
+            echo "APP_ENV=test" > back/.env.test
+            echo "VARIABLE_TEST=test" >> back/.env.test
+          fi
+          
+      - name: Create Docker networks
+        run: |
+          # Créer le réseau traefik-nseven requis par docker-compose
+          docker network create traefik-nseven || true
+          
+      - name: Start services in dev mode
+        run: |
+          # Lancer le projet en mode dev
+          make up
+          
+          # Attendre que les services soient prêts
+          sleep 30
+          
+      - name: Run backend tests
+        run: |
+          # Lancer tous les tests backend
+          make tav
+          
+      - name: Run frontend tests
+        run: |
+          # Lancer tous les tests frontend
+          make tfv
+          
+      - name: Check logs on failure
+        if: failure()
+        run: |
+          echo "=== API Logs ==="
+          make logs-api
+          echo "=== DB Logs ==="
+          make logs-db
+          
+      - name: Cleanup
+        if: always()
+        run: |
+          make down || true
+          
   deploy:
+    needs: test
     name: Deploy to Ionos Preprod
     runs-on: ubuntu-latest
     
