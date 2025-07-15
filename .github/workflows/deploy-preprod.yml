@@ -43,6 +43,11 @@ jobs:
           # Lancer tous les tests backend
           make tav
           
+      - name: Run frontend tests
+        run: |
+          # Lancer tous les tests frontend
+          make tfv
+          
       - name: Check logs on failure
         if: failure()
         run: |
