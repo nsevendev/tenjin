@@ -32,7 +32,8 @@ func TestInitEnv(t *testing.T) {
 		key      string
 		expected string
 	}{
-		{"APP_ENV", "test"}, // ici la package e,v prend le .env.test car on est en test
+		{"APP_ENV", "test"}, // ici la package env prend le .env.test car on est en test
+		{"VARIABLE_TEST", "test"},
 	}
 
 	for _, test := range tests {
