@@ -14,7 +14,7 @@ NC = \033[0m # No Color
 COMPOSE_FILE = $(if $(filter $(APP_ENV),prod),docker/compose.prod.yaml,$(if $(filter $(APP_ENV),preprod),docker/compose.preprod.yaml,docker/compose.yaml))
 DOCKER_COMPOSE = docker compose $(ENV_FILE) -f $(COMPOSE_FILE)
 
-.PHONY: help build up down logs shell restart clean status ps
+.PHONY: help build up down logs shell restart clean status ps tac tap tav tavp
 
 help: ## Affiche cette aide
 	@echo ""
@@ -73,3 +73,15 @@ clean: ## Supprime les conteneurs, réseaux et volumes
 
 clean-all: ## Supprime tout (conteneurs, réseaux, volumes et images)
 	$(DOCKER_COMPOSE) down -v --remove-orphans --rmi all
+
+ta: ## Lance tous les tests api
+	docker exec -i -e APP_ENV=test tenjin_dev_api go test ./...
+
+tap: ## Lance les tests api pour un path spécifique (usage: make tap path=monpath)
+	docker exec -i -e APP_ENV=test tenjin_dev_api go test ./$(path)
+
+tav: ## Lance tous les tests api en mode verbose
+	docker exec -i -e APP_ENV=test tenjin_dev_api go test -v ./...
+
+tavp: ## Lance les tests api en mode verbose pour un path spécifique (usage: make tavp path=monpath)
+	docker exec -i -e APP_ENV=test tenjin_dev_api go test -v ./$(path)
