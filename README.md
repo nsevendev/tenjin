@@ -5,7 +5,7 @@
 ## Avant installation en mode dev
 - Treafik nseven doit etre installé, configuré et lancé
 - Creer des copies `.env` depuis `.env.dist` à l'endroit où sont les `.env.dist`
-- renseigner les valeurs `1270.0.0.1  vuclain.local`, `1270.0.0.1  vuclain-api.local`  
+- renseigner les valeurs `127.0.0.1  vuclain.local`, `127.0.0.1  vuclain-api.local`  
   dans le fichier `/etc/hosts` (attention utiliser `sudo` pour modifier ce fichier)
 
 ## Avant d'installer en mode prod ou preprod
