@@ -7,7 +7,7 @@ import (
 )
 
 type Ressource struct {
-	ID         primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty" validate:"required"`
+	ID         primitive.ObjectID `bson:"_id" json:"id" validate:"required"`
 	Type       string             `bson:"type" json:"type" validate:"required"`
 	URL        string             `bson:"url" json:"url" validate:"required,url"`
 	Name       string             `bson:"name" json:"name" validate:"required"`
