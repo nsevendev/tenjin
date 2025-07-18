@@ -1,11 +1,12 @@
 package institute
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Organization struct {
+type Institute struct {
 	ID            primitive.ObjectID   `bson:"_id,omitempty" json:"id"`
 	BusinessName  string               `bson:"business_name" json:"business_name" validate:"required"`
 	Siret         string               `bson:"siret" json:"siret" validate:"required"`
