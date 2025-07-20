@@ -1,9 +1,9 @@
 package institute
 
 import (
-	"tenjin/back/internal/constantes"
-	"tenjin/back/internal/models/address"
-	"tenjin/back/internal/models/phone"
+	"tenjin/back/internal/address"
+	"tenjin/back/internal/phone"
+	"tenjin/back/internal/utils/constantes"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"

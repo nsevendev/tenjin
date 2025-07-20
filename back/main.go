@@ -8,7 +8,7 @@ import (
 	"github.com/nsevenpack/mignosql"
 	"strings"
 	"tenjin/back/docs"
-	"tenjin/back/internal/db"
+	"tenjin/back/internal/utils/db"
 	"tenjin/back/router"
 )
 
