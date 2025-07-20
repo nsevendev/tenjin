@@ -20,5 +20,23 @@ describe('Validation Utils', () => {
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('Doit contenir au moins une majuscule');
     });
+    
+    test('rejette un mot de passe sans minuscule', () => {
+      const result = validatePassword('PASSWORD123');
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain('Doit contenir au moins une minuscule');
+    });
+    
+    test('rejette un mot de passe sans chiffre', () => {
+      const result = validatePassword('Password');
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain('Doit contenir au moins un chiffre');
+    });
+    
+    test('rejette un mot de passe vide', () => {
+      const result = validatePassword('');
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain('Mot de passe requis');
+    });
   });
 });
