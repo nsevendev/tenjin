@@ -34,7 +34,7 @@ func main() {
 	port := env.Get("PORT")
 	setSwaggerOpt(hostTraefikApi)             // config option swagger
 	infoServer(hostTraefikApi, hostTraefikDb) // log info server
-	router.New(s)
+	router.Routes(s)
 
 	if err := s.Run(host + ":" + port); err != nil {
 		logger.Ef("Une erreur est survenue au lancement du serveur : %v", err)
