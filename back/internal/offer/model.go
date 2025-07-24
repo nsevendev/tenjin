@@ -19,7 +19,7 @@ type Model struct {
 	Salary        string              `bson:"salary" json:"salary" validate:"required"`
 	ExpiredAt     time.Time           `bson:"expired_at" json:"expiredAt" validate:"required"`
 	EndDate       time.Time           `bson:"end_date" json:"endDate" validate:"required"`
-	Status        string              `bson:"status" json:"status" validate:"required,oneof=enabled expired disabled archived"` // ajouter archived et expired à la constante Status
+	Status        string              `bson:"status" json:"status" validate:"required,oneof=enabled expired disabled archived"`
 	EmploiType    string              `bson:"emploi_type" json:"emploiType" validate:"required,oneof=CDI CDD Alternance Stage Freelance"`
 	CreatedAt     time.Time           `bson:"created_at" json:"createdAt"`
 	UpdatedAt     time.Time           `bson:"updated_at" json:"updatedAt"`
@@ -32,7 +32,7 @@ type ModelSent struct {
 	CandidateID primitive.ObjectID `bson:"candidate_id" json:"candidateId" validate:"required"`
 	RecruiterID primitive.ObjectID `bson:"recruiter_id" json:"recruiterId" validate:"required"`
 	CompanyID   primitive.ObjectID `bson:"company_id" json:"companyId" validate:"required"`
-	Status      string             `bson:"status" json:"status" validate:"required,oneof=sent viewed responded"` // aussi dans la Constante Status ?
+	Status      string             `bson:"status" json:"status" validate:"required,oneof=sent viewed responded"`
 	SentAt      time.Time          `bson:"sent_at" json:"sentAt" validate:"required"`
 	ViewedAt    *time.Time         `bson:"viewed_at" json:"viewedAt"`
 	RespondedAt *time.Time         `bson:"responded_at" json:"respondedAt"`
