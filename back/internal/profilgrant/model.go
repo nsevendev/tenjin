@@ -13,7 +13,7 @@ type ProfileGrant struct {
 	CompanyID     *primitive.ObjectID `bson:"company_id" json:"companyID"`
 	Audience      *string             `bson:"audience" json:"audience" validate:"omitempty,oneof=recruiter institute company public"`
 	ScopeType     string              `bson:"scope_type" json:"scopeType" validate:"required,oneof=recruiter institute company audience"`
-	GrantedFields []string            `bson:"granted_fields" json:"grantedFields" validate:"required,dive,oneof=email cv"`
+	GrantedFields []string            `bson:"granted_fields" json:"grantedFields"`
 	Revoked       bool                `bson:"revoked" json:"revoked" validate:"required"`
 	ExpiresAt     *time.Time          `bson:"expires_at" json:"expiresAt"`
 	CreatedAt     time.Time           `bson:"created_at" json:"createdAt"`
