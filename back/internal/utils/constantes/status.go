@@ -6,23 +6,16 @@ const (
 	Enable    StatusActivate = "enable"
 	Disable   StatusActivate = "disable"
 	Suspended StatusActivate = "suspended"
+	Expired   StatusActivate = "expired"
+	Archived  StatusActivate = "archived"
 )
 
-type OfferStatus string
+type MessageStatus string
 
 const (
-	Enabled  OfferStatus = "enabled"
-	Expired  OfferStatus = "expired"
-	Disabled OfferStatus = "disabled"
-	Archived OfferStatus = "archived"
-)
-
-type OfferSentStatus string
-
-const (
-	Sent      OfferSentStatus = "sent"
-	Viewed    OfferSentStatus = "viewed"
-	Responded OfferSentStatus = "responded"
+	Sent      MessageStatus = "sent"
+	Viewed    MessageStatus = "viewed"
+	Responded MessageStatus = "responded"
 )
 
 type OfferResponseStatus string
