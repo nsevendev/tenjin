@@ -8,6 +8,6 @@ import (
 
 const pathApiV1 = "api/v1"
 
-func New(r *gin.Engine) {
+func Routes(r *gin.Engine) {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
