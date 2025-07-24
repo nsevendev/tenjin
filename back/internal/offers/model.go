@@ -6,7 +6,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Model struct {
+// Offer - Représente une offre d'emploi
+type Offer struct {
 	ID            primitive.ObjectID  `bson:"_id,omitempty" json:"id"`
 	RecruiterID   primitive.ObjectID  `bson:"recruiter_id" json:"recruiterId" validate:"required"`
 	CompanyID     primitive.ObjectID  `bson:"company_id" json:"companyId" validate:"required"`
@@ -26,7 +27,7 @@ type Model struct {
 }
 
 // OfferSent - Table intermédiaire : représente l'envoi d'une offre à un candidat spécifique
-type ModelSent struct {
+type OfferSent struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	OfferID     primitive.ObjectID `bson:"offer_id" json:"offerId" validate:"required"`
 	CandidateID primitive.ObjectID `bson:"candidate_id" json:"candidateId" validate:"required"`
@@ -42,7 +43,7 @@ type ModelSent struct {
 }
 
 // OfferResponse - Réponse du candidat à une offre spécifique
-type ModelResponse struct {
+type OfferResponse struct {
 	ID           primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	OfferSentID  primitive.ObjectID `bson:"offer_sent_id" json:"offerSentId" validate:"required"`
 	OfferID      primitive.ObjectID `bson:"offer_id" json:"offerId" validate:"required"`
