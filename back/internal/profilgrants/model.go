@@ -1,4 +1,4 @@
-package profilgrant
+package profilgrants
 
 import (
 	"time"

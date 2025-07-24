@@ -3,5 +3,5 @@ package constantes
 type Country string
 
 const (
-	France Country = "france"
+	CountryFrance Country = "france"
 )
