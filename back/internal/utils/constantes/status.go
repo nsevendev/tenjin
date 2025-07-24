@@ -1,26 +1,26 @@
 package constantes
 
-type StatusActivate string
+type StatusState string
 
 const (
-	Enable    StatusActivate = "enable"
-	Disable   StatusActivate = "disable"
-	Suspended StatusActivate = "suspended"
-	Expired   StatusActivate = "expired"
-	Archived  StatusActivate = "archived"
+	StateEnable    StatusState = "enable"
+	StateDisable   StatusState = "disable"
+	StateSuspended StatusState = "suspended"
+	StateExpired   StatusState = "expired"
+	StateArchived  StatusState = "archived"
 )
 
 type StatusMessage string
 
 const (
-	Sent      StatusMessage = "sent"
-	Viewed    StatusMessage = "viewed"
-	Responded StatusMessage = "responded"
+	MessageSent      StatusMessage = "sent"
+	MessageViewed    StatusMessage = "viewed"
+	MessageResponded StatusMessage = "responded"
 )
 
 type StatusOfferResponse string
 
 const (
-	Accepted StatusOfferResponse = "accepted"
-	Declined StatusOfferResponse = "declined"
+	OfferResponseAccepted StatusOfferResponse = "accepted"
+	OfferResponseDeclined StatusOfferResponse = "declined"
 )
