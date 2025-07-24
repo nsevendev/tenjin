@@ -3,12 +3,12 @@ package constantes
 type LabelPhone string
 
 const (
-	Director        LabelPhone = "directeur"
-	Secretary       LabelPhone = "secretaire"
-	Reception       LabelPhone = "reception"
-	Administration  LabelPhone = "administration"
-	LabelPhoneOther LabelPhone = "autre"
-	General         LabelPhone = "general"
-	Technical       LabelPhone = "technique"
-	Support         LabelPhone = "support"
+	LabelPhoneDirector       LabelPhone = "directeur"
+	LabelPhoneSecretary      LabelPhone = "secretaire"
+	LabelPhoneReception      LabelPhone = "reception"
+	LabelPhoneAdministration LabelPhone = "administration"
+	LabelPhoneOther          LabelPhone = "autre"
+	LabelPhoneGeneral        LabelPhone = "general"
+	LabelPhoneTechnical      LabelPhone = "technique"
+	LabelPhoneSupport        LabelPhone = "support"
 )
