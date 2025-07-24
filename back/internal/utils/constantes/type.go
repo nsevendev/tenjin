@@ -8,12 +8,20 @@ const (
 	Association TypeInstitute = "association"
 )
 
-type TypeProfile string
+type TypeScope string
 
 const (
-	Recruiter TypeProfile = "recruiter"
-	Institute TypeProfile = "institute"
-	Compagny  TypeProfile = "company"
-	Public    TypeProfile = "public"
-	Audience  TypeProfile = "audience"
+	ScopeRecruiter TypeScope = "recruiter"
+	ScopeInstitute TypeScope = "institute"
+	ScopeCompagny  TypeScope = "company"
+	ScopeAudience  TypeScope = "audience"
+)
+
+type TypeAudience string
+
+const (
+	AudienceRecruiter TypeAudience = "recruiter"
+	AudienceInstitute TypeAudience = "institute"
+	AudienceCompagny  TypeAudience = "company"
+	AudiencePublic    TypeAudience = "public"
 )
