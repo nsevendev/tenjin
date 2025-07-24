@@ -25,3 +25,13 @@ const (
 	AudienceCompagny  TypeAudience = "company"
 	AudiencePublic    TypeAudience = "public"
 )
+
+type TypeEmploi string
+
+const (
+	Cdi        TypeEmploi = "CDI"
+	Cdd        TypeEmploi = "CDD"
+	Alternance TypeEmploi = "Alternance"
+	Stage      TypeEmploi = "Stage"
+	Freelance  TypeEmploi = "Freelance"
+)
