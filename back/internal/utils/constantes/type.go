@@ -3,9 +3,9 @@ package constantes
 type TypeInstitute string
 
 const (
-	Public      TypeInstitute = "public"
-	Private     TypeInstitute = "private"
-	Association TypeInstitute = "association"
+	InstitutePublic      TypeInstitute = "public"
+	InstitutePrivate     TypeInstitute = "private"
+	InstituteAssociation TypeInstitute = "association"
 )
 
 type TypeScope string
@@ -29,9 +29,41 @@ const (
 type TypeEmploi string
 
 const (
-	Cdi        TypeEmploi = "CDI"
-	Cdd        TypeEmploi = "CDD"
-	Alternance TypeEmploi = "Alternance"
-	Stage      TypeEmploi = "Stage"
-	Freelance  TypeEmploi = "Freelance"
+	EmploiCdi        TypeEmploi = "CDI"
+	EmploiCdd        TypeEmploi = "CDD"
+	EmploiAlternance TypeEmploi = "Alternance"
+	EmploiStage      TypeEmploi = "Stage"
+	EmploiFreelance  TypeEmploi = "Freelance"
+)
+
+type TypeAddress string
+
+const (
+	AddressInvoice    TypeAddress = "invoice"
+	AddressShipping   TypeAddress = "shipping"
+	AddressHeadOffice TypeAddress = "headOffice"
+	AddressOther      TypeAddress = "other"
+	AddressTemporary  TypeAddress = "temporaire"
+)
+
+// TypeAccessLevel - Niveaux d'accès possibles
+type TypeAccessLevel string
+
+const (
+	AccessPrivate  TypeAccessLevel = "private"
+	AccessTeachers TypeAccessLevel = "teachers"
+	AccessSession  TypeAccessLevel = "session"
+)
+
+type TypeCourseContentBlock string
+
+const (
+	ContentBlockText  TypeCourseContentBlock = "text"
+	ContentBlockFile  TypeCourseContentBlock = "file"
+	ContentBlockEmbed TypeCourseContentBlock = "embed"
+	ContentBlockQuiz  TypeCourseContentBlock = "quiz"
+	ContentBlockLink  TypeCourseContentBlock = "link"
+	ContentBlockCode  TypeCourseContentBlock = "code"
+	ContentBlockAudio TypeCourseContentBlock = "audio"
+	ContentBlockOther TypeCourseContentBlock = "other"
 )
