@@ -19,7 +19,7 @@ type Model struct {
 	Salary        string              `bson:"salary" json:"salary" validate:"required"`
 	ExpiredAt     time.Time           `bson:"expired_at" json:"expiredAt" validate:"required"`
 	EndDate       time.Time           `bson:"end_date" json:"endDate" validate:"required"`
-	Status        string              `bson:"status" json:"status" validate:"required,oneof=enabled expired disabled archived"`
+	Status        string              `bson:"status" json:"status" validate:"required,oneof=enable expired disable archived"`
 	EmploiType    string              `bson:"emploi_type" json:"emploiType" validate:"required,oneof=CDI CDD Alternance Stage Freelance"`
 	CreatedAt     time.Time           `bson:"created_at" json:"createdAt"`
 	UpdatedAt     time.Time           `bson:"updated_at" json:"updatedAt"`
