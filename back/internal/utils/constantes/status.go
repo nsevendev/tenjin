@@ -10,17 +10,17 @@ const (
 	Archived  StatusActivate = "archived"
 )
 
-type MessageStatus string
+type StatusMessage string
 
 const (
-	Sent      MessageStatus = "sent"
-	Viewed    MessageStatus = "viewed"
-	Responded MessageStatus = "responded"
+	Sent      StatusMessage = "sent"
+	Viewed    StatusMessage = "viewed"
+	Responded StatusMessage = "responded"
 )
 
-type OfferResponseStatus string
+type StatusOfferResponse string
 
 const (
-	Accepted OfferResponseStatus = "accepted"
-	Declined OfferResponseStatus = "declined"
+	Accepted StatusOfferResponse = "accepted"
+	Declined StatusOfferResponse = "declined"
 )

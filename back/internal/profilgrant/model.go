@@ -11,8 +11,8 @@ type ProfileGrant struct {
 	CandidateID   primitive.ObjectID  `bson:"candidate_id" validate:"required"`
 	RecruiterID   *primitive.ObjectID `bson:"recruiter_id" json:"recruiterID"`
 	CompanyID     *primitive.ObjectID `bson:"company_id" json:"companyID"`
-	Audience      *string             `bson:"audience" json:"audience" validate:"omitempty,oneof=recruiter institute company public"`     // CONSTANTE
-	ScopeType     string              `bson:"scope_type" json:"scopeType" validate:"required,oneof=recruiter institute company audience"` // CONSTANTE
+	Audience      *string             `bson:"audience" json:"audience" validate:"omitempty,oneof=recruiter institute company public"`
+	ScopeType     string              `bson:"scope_type" json:"scopeType" validate:"required,oneof=recruiter institute company audience"`
 	GrantedFields []string            `bson:"granted_fields" json:"grantedFields" validate:"required,dive,oneof=email cv"`
 	Revoked       bool                `bson:"revoked" json:"revoked" validate:"required"`
 	ExpiresAt     *time.Time          `bson:"expires_at" json:"expiresAt"`
