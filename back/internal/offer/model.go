@@ -12,13 +12,13 @@ type Model struct {
 	CompanyID     primitive.ObjectID  `bson:"company_id" json:"companyId" validate:"required"`
 	Title         string              `bson:"title" json:"title" validate:"required"`
 	Description   string              `bson:"description" json:"description" validate:"required"`
-	AttachmentURL *string             `bson:"attachment_url" json:"attachmentUrl"`
+	AttachmentURL *string             `bson:"attachment_url" json:"attachmentUrl" validate:"omitempty,url"` // si présent, doit être une URL valide
 	QuizID        *primitive.ObjectID `bson:"quiz_id" json:"quizId"`
 	QuizRequired  *bool               `bson:"quiz_required" json:"quizRequired" validate:"required"`
 	StartDateJob  time.Time           `bson:"start_date_job" json:"startDateJob" validate:"required"`
 	Salary        string              `bson:"salary" json:"salary" validate:"required"`
 	ExpiredAt     time.Time           `bson:"expired_at" json:"expiredAt" validate:"required"`
-	EndDate       time.Time           `bson:"end_date" json:"endDate" validate:"required"`
+	EndDate       time.Time           `bson:"end_date" json:"endDate" validate:"required,gtfield=StartDateJob"` // EndDate doit être après StartDateJob
 	Status        string              `bson:"status" json:"status" validate:"required,oneof=enable expired disable archived"`
 	EmploiType    string              `bson:"emploi_type" json:"emploiType" validate:"required,oneof=CDI CDD Alternance Stage Freelance"`
 	CreatedAt     time.Time           `bson:"created_at" json:"createdAt"`
