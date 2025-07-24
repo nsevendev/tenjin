@@ -6,32 +6,19 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// Model de Base d'une ressource
+// Model  d'une ressource
 type Model struct {
-	ID         primitive.ObjectID `bson:"_id" json:"id"`
-	URL        string             `bson:"url" json:"url" validate:"required,url"`
-	Name       string             `bson:"name" json:"name" validate:"required"`
-	UploadedBy primitive.ObjectID `bson:"uploaded_by" json:"uploaded_by" validate:"required"`
-	CreatedAt  time.Time          `bson:"created_at" json:"created_at" validate:"required"`
-}
-
-type ModelUser struct {
-	Model `bson:",inline"`
-
-	Type   string             `bson:"type" json:"type" validate:"required, oneof=cv cover_letter portfolio identity certificate photo"` // les ressources du profil ou des éléments en liens avec le User (constantes/fields.FieldsProfile)
-	UserID primitive.ObjectID `bson:"user_id" json:"userId" validate:"required"`
-}
-
-type ModelTraining struct {
-	Model `bson:",inline"`
-
-	Type      string             `bson:"type" json:"type" validate:"required,oneof=pdf video slide exercise other"` // les ressources des cours ou d'une session
-	SessionID primitive.ObjectID `bson:"session_id,omitempty" json:"sessionId,omitempty"`
-}
-
-type ModelInstitute struct {
-	Model `bson:",inline"`
-
-	Type        string             `bson:"type" json:"type" validate:"required,oneof=logo regulation legal marketing guide report"` // les ressources lié à un Organisme
-	InstituteID primitive.ObjectID `bson:"institute_id,omitempty" json:"instituteId,omitempty" validate:"required"`
+	ID             primitive.ObjectID `bson:"_id" json:"id"`
+	URL            string             `bson:"url" json:"url" validate:"required,url"`
+	Name           string             `bson:"name" json:"name" validate:"required"`
+	Size           int64              `bson:"size" json:"size" validate:"required"`          // en octets
+	MimeType       string             `bson:"mime_type" json:"mimeType" validate:"required"` // ex: image/png
+	Type           string             `bson:"type" json:"type" validate:"required,oneof=pdf video img"`
+	AssociatedTo   primitive.ObjectID `bson:"associated_to" json:"associatedTo" validate:"required"`                                        // ID de l'entité liée
+	AssociatedType string             `bson:"associated_type" json:"associatedType" validate:"required,oneof=user session institute offer"` // Type de lien
+	UploadedBy     primitive.ObjectID `bson:"uploaded_by" json:"uploadedBy" validate:"required"`
+	CreatedAt      time.Time          `bson:"created_at" json:"createdAt" validate:"required"`
+	// ajouter la taille
+	// ajouter à qui ou quoi il a été associé
+	// le type : pdf, video image etc
 }
