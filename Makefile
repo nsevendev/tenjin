@@ -48,7 +48,7 @@ stop: ## Arrête tous les services
 	$(DOCKER_COMPOSE) stop
 
 cm: ## créé un fichier de migration - usage: make cm file=nom_du_fichier
-	docker exec -it tenjin_$(APP_ENV) migrationcreate $(file)
+	docker exec -it tenjin_$(APP_ENV)_api migrationcreate $(file)
 
 logs: ## Affiche les logs de tous les services
 	$(DOCKER_COMPOSE) logs -f
