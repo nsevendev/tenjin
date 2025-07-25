@@ -1,4 +1,4 @@
-package inseetype
+package insee
 
 import (
 	"time"
