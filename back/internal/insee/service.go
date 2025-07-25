@@ -13,7 +13,7 @@ type companyService struct {
 }
 
 type CompanyServiceInterface interface {
-	Create(ctx context.Context, companyCreateDto CompanyCreateDto) (*Company, error)
+	Create(ctx context.Context, companyCreateDto *CompanyCreateDto) (*Company, error)
 }
 
 func NewCompanyService(db *mongo.Database) CompanyServiceInterface {
@@ -22,13 +22,13 @@ func NewCompanyService(db *mongo.Database) CompanyServiceInterface {
 	}
 }
 
-func (s *companyService) Create(ctx context.Context, companyCreateDto CompanyCreateDto) (*Company, error) {
+func (s *companyService) Create(ctx context.Context, companyCreateDto *CompanyCreateDto) (*Company, error) {
 	company := &Company{
-		Address:   companyCreateDto.Address,
+		Address:      companyCreateDto.Address,
 		BusinessName: companyCreateDto.BusinessName,
-		City:   companyCreateDto.City,
-		Siret: companyCreateDto.Siret,
-		ZipCode:   companyCreateDto.ZipCode,
+		City:         companyCreateDto.City,
+		Siret:        companyCreateDto.Siret,
+		ZipCode:      companyCreateDto.ZipCode,
 	}
 
 	result, err := s.collection.InsertOne(ctx, company)

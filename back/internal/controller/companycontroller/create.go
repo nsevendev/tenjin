@@ -15,7 +15,7 @@ import (
 // @Tags company
 // @Accept json
 // @Produce json
-// @Param company body company.CompanyCreateDto true "Informations de la company à créer"
+// @Param company body insee.CompanyCreateDto true "Informations de la company à créer"
 // @Success 201 {object} ginresponse.JsonFormatterSwag "Company créée avec succès"
 // @Failure 400 {object} ginresponse.JsonFormatterSwag "Erreur de validation"
 // @Failure 500 {object} ginresponse.JsonFormatterSwag "Erreur interne"
@@ -32,7 +32,7 @@ func (p *companyController) Create(c *gin.Context) {
 		return
 	}
 
-	_, err := p.companyService.Create(c, companyCreateDto)
+	_, err := p.companyService.Create(c, &companyCreateDto)
 	if err != nil {
 		logger.Ef("%v", err)
 		ginresponse.InternalServerError(c, err.Error(), err.Error())
