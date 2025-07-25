@@ -2,6 +2,8 @@ package companycontroller
 
 import (
 	"tenjin/back/internal/insee"
+
+	"github.com/gin-gonic/gin"
 )
 
 type companyController struct {
@@ -9,6 +11,7 @@ type companyController struct {
 }
 
 type CompanyControllerInterface interface {
+	Create(*gin.Context)
 }
 
 func NewCompanyController(companyService insee.CompanyServiceInterface) CompanyControllerInterface {
