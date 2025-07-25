@@ -16,3 +16,11 @@ type Company struct {
 	CreatedAt     time.Time            `bson:"created_at" json:"created_at"`
 	UpdatedAt     time.Time            `bson:"updated_at" json:"updated_at"`
 }
+
+type CompanyCreateDto struct {
+	BusinessName  string               `bson:"business_name" json:"business_name" validate:"required"`
+	Siret         string               `bson:"siret" json:"siret" validate:"required"`
+	Address       string               `bson:"address" json:"address" validate:"required"`
+	ZipCode       string               `bson:"zip_code" json:"zip_code" validate:"required"`
+	City          string               `bson:"city" json:"city" validate:"required"`
+}
