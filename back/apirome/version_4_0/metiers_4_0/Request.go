@@ -1,4 +1,4 @@
-package metiers40
+package metiers_4_0
 
 import (
 	"fmt"
