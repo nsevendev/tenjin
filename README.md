@@ -42,6 +42,8 @@ et de **récupérer, stocker, enrichir** toutes les fiches métiers, compétence
 * Le binaire `oapi-codegen` (installer : `go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest`)
 > le docker l'install automatiquement
 * Avoir accès à l’API ROME France Travail (token/credentials) tout est dans le `.env` du projet coté back
+* les fichiers json pour lancer l'ajout dans la bdd. il faut mettre les fichiers dans les dossier : demander les fichiers à l'équipe dev
+* `./apirome/version40/data/listmetierdetail/` pour les détails des métiers
 
 ---
 
