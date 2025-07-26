@@ -17,6 +17,7 @@ func main() {
 	rootCmd.AddCommand(cmd.GenerateModelCmd)
 	rootCmd.AddCommand(cmd.SyncAndWriteInFileListMetierSummary)
 	rootCmd.AddCommand(cmd.SyncAndWriteInFileListMetierDetail)
+	rootCmd.AddCommand(cmd.ImportDataListMetiersDetailCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		logger.Ff("erreur lors de l'exécution de la commande : %v", err)
