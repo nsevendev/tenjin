@@ -36,7 +36,6 @@ func LoadToken() error {
 	return nil
 }
 
-
 func SaveToken() error {
 	return os.WriteFile(tokenFile, []byte(token), 0644)
 }
