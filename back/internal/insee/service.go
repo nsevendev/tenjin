@@ -5,8 +5,16 @@ package insee
 // doit également appellé la premiere fonction si échec de l'appel a cause d'un token expiré puis mettre a jour le token de l'appli ?
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"strings"
+
+	"github.com/nsevenpack/env/env"
 )
 
 var (
@@ -37,3 +45,46 @@ func GetToken() string {
 	return token
 }
 
+func RefreshToken() (string, error) {
+	clientID := env.Get("SIRENE_CLIENT_KEY")
+	clientSecret := env.Get("SIRENE_CLIENT_SECRET")
+
+	if clientID == "" || clientSecret == "" {
+		return "", errors.New("SIRENE_CLIENT_KEY ou SIRENE_CLIENT_SECRET introuvable dans .env")
+	}
+
+	url := "https://api.insee.fr/token"
+	data := []byte("grant_type=client_credentials")
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
+	if err != nil {
+		return "", err
+	}
+	req.SetBasicAuth(clientID, clientSecret)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		body, _ := io.ReadAll(resp.Body)
+		return "", fmt.Errorf("erreur lors de la récupération du token: %s", string(body))
+	}
+
+	var tokenRes AccessToken
+	if err := json.NewDecoder(resp.Body).Decode(&tokenRes); err != nil {
+		return "", err
+	}
+
+	token = tokenRes.AccessToken
+
+	if err := SaveToken(); err != nil {
+		return "", err
+	}
+
+	return token, nil
+}
