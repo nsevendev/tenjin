@@ -1,16 +1,17 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/nsevenpack/env/env"
-	"github.com/nsevenpack/ginresponse"
-	"github.com/nsevenpack/logger/v2/logger"
-	"github.com/nsevenpack/mignosql"
 	"strings"
 	"tenjin/back/docs"
 	"tenjin/back/internal/utils/db"
 	"tenjin/back/migration"
 	"tenjin/back/router"
+
+	"github.com/gin-gonic/gin"
+	"github.com/nsevenpack/env/env"
+	"github.com/nsevenpack/ginresponse"
+	"github.com/nsevenpack/logger/v2/logger"
+	"github.com/nsevenpack/mignosql"
 )
 
 func init() {
@@ -68,6 +69,7 @@ func initDbAndMigNosql(appEnv string) {
 	// EXAMPLE => migrator.Add(migration.<namefile>)
 	migrator.Add(migration.CreateCompanyCollection)
 	// ajouter les migrations ici ...
+	migrator.Add(migration.CreateCompanyCollection)
 	if err := migrator.Apply(); err != nil {
 		logger.Ff("Erreur lors de l'application des migrations : %v", err)
 	}
