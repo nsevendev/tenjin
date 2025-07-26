@@ -19,7 +19,7 @@ var SyncAndWriteInFileListMetierDetail = &cobra.Command{
 			Libelle string `json:"libelle"`
 		}
 
-		file := libs.GetLastFileByDate("./apirome/version40/data/listmetiersummary")
+		file := libs.GetLastFileByDate("./apirome/version_4_0/data/listmetiersummary")
 		fileData, err := os.Open(file)
 		if err != nil {
 			logger.Ff("erreur lors de l'ouverture du fichier %s : %v", file, err)
@@ -46,7 +46,7 @@ var SyncAndWriteInFileListMetierDetail = &cobra.Command{
 		}
 
 		// Sauvegarder tous le tableau de body dans un fichier JSON
-		libs.PrintSliceBrutInFile("./apirome/version40/data/listmetierdetail", allBodies)
+		libs.PrintSliceBrutInFile("./apirome/version_4_0/data/listmetierdetail", allBodies)
 		logger.If("Détails des métiers sauvegardés dans ./apirome/version40/data/listmetierdetail")
 	},
 }

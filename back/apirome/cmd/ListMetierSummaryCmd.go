@@ -20,6 +20,6 @@ var SyncAndWriteInFileListMetierSummary = &cobra.Command{
 
 		bodyListMetierSummary := libs.ExecuteRequest(req)
 
-		libs.PrintBrutInFile("./apirome/version40/data/listmetiersummary", bodyListMetierSummary)
+		libs.PrintBrutInFile("./apirome/version_4_0/data/listmetiersummary", bodyListMetierSummary)
 	},
 }
