@@ -2,3 +2,5 @@ tmp/*
 !tmp/.gitkeep
 .idea
 .vscode
+apirome/version_4_0/data/*
+!apirome/version_4_0/data/docapi
