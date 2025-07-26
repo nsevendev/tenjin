@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN go install github.com/air-verse/air@latest
 RUN go install github.com/swaggo/swag/cmd/swag@latest
 RUN go install github.com/nsevenpack/mignosql/cmd/migrationcreate@latest
+RUN go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
 RUN mkdir -p /app/tmp/air
 WORKDIR /app
 COPY go.mod go.sum ./
