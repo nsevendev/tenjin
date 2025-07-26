@@ -91,3 +91,6 @@ tf: ## Lance tous les tests front
 
 tfv: ## Lance tous les tests front en mode verbose
 	docker exec -i tenjin_dev_app npm run test.unit -- --run --reporter=verbose
+
+apir: ## execute commande package api rome (usage: make apir cmd=help)
+	$(DOCKER_COMPOSE) exec api bash -c "go run ./apirome/main.go $(cmd)"
