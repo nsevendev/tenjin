@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"tenjin/back/apirome/libs"
-	"tenjin/back/apirome/version40/metiers40"
+	"tenjin/back/apirome/version_4_0/metiers_4_0"
 )
 
 // SyncAndWriteInFileListMetierSummary est la commande pour télécharger le résumé des métiers et l'enregistrer en JSON dans un fichier
@@ -16,10 +16,10 @@ var SyncAndWriteInFileListMetierSummary = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		token := libs.GetToken()
 
-		req := metiers40.RequestGetListMetier(token)
+		req := metiers_4_0.RequestGetListMetier(token)
 
 		bodyListMetierSummary := libs.ExecuteRequest(req)
 
-		libs.PrintBrutInFile("./apirome/version40/data/listmetier", bodyListMetierSummary)
+		libs.PrintBrutInFile("./apirome/version40/data/listmetiersummary", bodyListMetierSummary)
 	},
 }

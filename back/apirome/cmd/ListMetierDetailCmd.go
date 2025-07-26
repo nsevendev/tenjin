@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"tenjin/back/apirome/libs"
-	"tenjin/back/apirome/version40/metiers40"
+	"tenjin/back/apirome/version_4_0/metiers_4_0"
 	"time"
 )
 
@@ -19,7 +19,7 @@ var SyncAndWriteInFileListMetierDetail = &cobra.Command{
 			Libelle string `json:"libelle"`
 		}
 
-		file := libs.GetLastFileByDate("./apirome/version40/data/listmetier")
+		file := libs.GetLastFileByDate("./apirome/version40/data/listmetiersummary")
 		fileData, err := os.Open(file)
 		if err != nil {
 			logger.Ff("erreur lors de l'ouverture du fichier %s : %v", file, err)
@@ -37,7 +37,7 @@ var SyncAndWriteInFileListMetierDetail = &cobra.Command{
 			token := libs.GetToken()
 			time.Sleep(2 * time.Second) // contrainte du serveur api, limite de temops par requête
 
-			req := metiers40.RequestGetOneMetier(token, metier.Code)
+			req := metiers_4_0.RequestGetOneMetier(token, metier.Code)
 			body := libs.ExecuteRequest(req)
 
 			// on ajoute le body en cours dans le tableau allBodies
@@ -46,7 +46,7 @@ var SyncAndWriteInFileListMetierDetail = &cobra.Command{
 		}
 
 		// Sauvegarder tous le tableau de body dans un fichier JSON
-		libs.PrintSliceBrutInFile("./apirome/version40/data/metierdetail", allBodies)
-		logger.If("Détails des métiers sauvegardés dans ./apirome/version40/data/metierdetail")
+		libs.PrintSliceBrutInFile("./apirome/version40/data/listmetierdetail", allBodies)
+		logger.If("Détails des métiers sauvegardés dans ./apirome/version40/data/listmetierdetail")
 	},
 }
