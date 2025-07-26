@@ -4,7 +4,6 @@ import (
 	"strings"
 	"tenjin/back/docs"
 	"tenjin/back/internal/db"
-	"tenjin/back/migration"
 	"tenjin/back/router"
 
 	"github.com/gin-gonic/gin"
@@ -67,9 +66,9 @@ func initDbAndMigNosql(appEnv string) {
 	db.ConnexionDatabase(appEnv)
 	migrator := mignosql.New(db.Db)
 	// EXAMPLE => migrator.Add(migration.<namefile>)
-	migrator.Add(migration.CreateCompanyCollection)
+
 	// ajouter les migrations ici ...
-	migrator.Add(migration.CreateCompanyCollection)
+
 	if err := migrator.Apply(); err != nil {
 		logger.Ff("Erreur lors de l'application des migrations : %v", err)
 	}
