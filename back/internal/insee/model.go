@@ -1,5 +1,5 @@
 package insee
 
-type Token struct {
+type AccessToken struct {
 	AccessToken string `json:"access_token"`
 }
