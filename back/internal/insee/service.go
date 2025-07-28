@@ -19,7 +19,7 @@ import (
 
 var (
 	token     string
-	tokenFile = "token.txt"
+	tokenFile = "internal/insee/token.txt"
 )
 
 func LoadToken() error {
