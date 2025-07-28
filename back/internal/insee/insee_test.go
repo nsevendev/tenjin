@@ -54,6 +54,18 @@ func TestLoadToken_ReadFromFile(t *testing.T) {
 	assert.Equal(t, expected, token)
 }
 
+func TestLoadToken_FileDoesNotExist(t *testing.T) {
+	nonExistentFile := tempTokenFile + "_missing"
+
+	oldTokenFile := tokenFile
+	tokenFile = nonExistentFile
+	defer func() { tokenFile = oldTokenFile }()
+
+	err := LoadToken()
+	assert.Nil(t, err)
+	assert.Equal(t, "", token)
+}
+
 func TestGetToken_ReturnsInMemoryToken(t *testing.T) {
 	token = "in-memory-token"
 	actual := GetToken()
