@@ -114,3 +114,21 @@ func findCompanyBySiret(siret string) (bool, error) {
 		return false, fmt.Errorf("erreur API Sirene: %d - %s", resp.StatusCode, string(body))
 	}
 }
+
+func CheckSiretExists(siret string) (bool, error) {
+	exists, err := findCompanyBySiret(siret)
+	if err == nil {
+		return exists, nil
+	}
+
+	if strings.Contains(err.Error(), "unauthorized") {
+		_, refreshErr := RefreshToken()
+		if refreshErr != nil {
+			return false, fmt.Errorf("échec du refresh token après 401: %w", refreshErr)
+		}
+
+		return findCompanyBySiret(siret)
+	}
+
+	return false, err
+}
