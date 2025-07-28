@@ -2,4 +2,4 @@ tmp/*
 !tmp/.gitkeep
 .idea
 .vscode
-/internal/insee/token.go
+/internal/insee/token.txt
