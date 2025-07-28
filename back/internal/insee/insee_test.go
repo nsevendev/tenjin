@@ -18,7 +18,7 @@ func TestMain(m *testing.M) {
 
 	tmpFile, err := os.CreateTemp("", "token_test_*.txt")
 	if err != nil {
-		panic("Erreur lors de la création du fichier temporaire : " + err.Error())
+		panic("Erreur lors de la creation du fichier temporaire : " + err.Error())
 	}
 	tempTokenFile = tmpFile.Name()
 	tmpFile.Close()
@@ -128,3 +128,58 @@ func TestFindCompanyBySiret_Unauthorized(t *testing.T) {
 	assert.False(t, exists)
 }
 
+func TestCheckSiretExists_Success(t *testing.T) {
+	err := LoadToken()
+	assert.Nil(t, err)
+
+	siret := "94503764600011"
+
+	exists, err := CheckSiretExists(siret)
+
+	assert.Nil(t, err)
+	assert.True(t, exists)
+}
+
+func TestCheckSiretExists_NotFound(t *testing.T) {
+	err := LoadToken()
+	assert.Nil(t, err)
+
+	siret := "00000000000000"
+
+	exists, err := CheckSiretExists(siret)
+
+	assert.Nil(t, err)
+	assert.False(t, exists)
+}
+
+func TestCheckSiretExists_UnauthorizedWithSuccessfulRefresh(t *testing.T) {
+	token = "invalid-token"
+
+	siret := "94503764600011"
+
+	exists, err := CheckSiretExists(siret)
+
+	assert.Nil(t, err)
+	assert.True(t, exists)
+}
+
+func TestCheckSiretExists_UnauthorizedWithFailedRefresh(t *testing.T) {
+	token = "invalid-token"
+
+	origClientID := os.Getenv("SIRENE_CLIENT_KEY")
+	origClientSecret := os.Getenv("SIRENE_CLIENT_SECRET")
+	os.Unsetenv("SIRENE_CLIENT_KEY")
+	os.Unsetenv("SIRENE_CLIENT_SECRET")
+	defer func() {
+		os.Setenv("SIRENE_CLIENT_KEY", origClientID)
+		os.Setenv("SIRENE_CLIENT_SECRET", origClientSecret)
+	}()
+
+	siret := "94503764600011"
+
+	exists, err := CheckSiretExists(siret)
+
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "echec du refresh token")
+	assert.False(t, exists)
+}

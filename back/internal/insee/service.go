@@ -67,7 +67,7 @@ func RefreshToken() (string, error) {
 
 	if resp.StatusCode != 200 {
 		body, _ := io.ReadAll(resp.Body)
-		return "", fmt.Errorf("erreur lors de la récupération du token: %s", string(body))
+		return "", fmt.Errorf("erreur lors de la recuperation du token: %s", string(body))
 	}
 
 	var tokenRes AccessToken
@@ -124,7 +124,7 @@ func CheckSiretExists(siret string) (bool, error) {
 	if strings.Contains(err.Error(), "unauthorized") {
 		_, refreshErr := RefreshToken()
 		if refreshErr != nil {
-			return false, fmt.Errorf("échec du refresh token après 401: %w", refreshErr)
+			return false, fmt.Errorf("echec du refresh token apres 401: %w", refreshErr)
 		}
 
 		return findCompanyBySiret(siret)
