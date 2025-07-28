@@ -85,7 +85,7 @@ func RefreshToken() (string, error) {
 }
 
 func findCompanyBySiret(siret string) (bool, error) {
-	url := fmt.Sprintf("https://api.insee.fr/entreprises/siret/%s", siret)
+	url := fmt.Sprintf("https://api.insee.fr/entreprises/sirene/V3.11/siret/%s", siret)
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

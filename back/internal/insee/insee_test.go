@@ -89,3 +89,42 @@ func TestRefreshToken_RefreshToken(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, newToken, string(content))
 }
+
+func TestFindCompanyBySiret_Success(t *testing.T) {
+	err := LoadToken()
+	assert.Nil(t, err)
+
+	siret := "94503764600011"
+
+	exists, err := findCompanyBySiret(siret)
+
+	assert.Nil(t, err)
+	assert.True(t, exists)
+}
+
+func TestFindCompanyBySiret_NotFound(t *testing.T) {
+	err := LoadToken()
+	assert.Nil(t, err)
+
+	siret := "00000000000000"
+
+	exists, err := findCompanyBySiret(siret)
+
+	assert.Nil(t, err)
+	assert.False(t, exists)
+}
+
+func TestFindCompanyBySiret_Unauthorized(t *testing.T) {
+	token = "invalid-token"
+
+	siret := "94503764600011"
+
+	exists, err := findCompanyBySiret(siret)
+
+	assert.Error(t, err)
+	if err != nil {
+		assert.Contains(t, err.Error(), "unauthorized")
+	}
+	assert.False(t, exists)
+}
+
