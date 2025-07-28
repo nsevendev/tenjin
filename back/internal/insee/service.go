@@ -83,3 +83,34 @@ func RefreshToken() (string, error) {
 
 	return token, nil
 }
+
+func findCompanyBySiret(siret string) (bool, error) {
+	url := fmt.Sprintf("https://api.insee.fr/entreprises/siret/%s", siret)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return false, err
+	}
+
+	req.Header.Set("Authorization", "Bearer " + GetToken())
+	req.Header.Set("Accept", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	switch resp.StatusCode {
+	case 200:
+		return true, nil
+	case 404:
+		return false, nil
+	case 401:
+		return false, fmt.Errorf("unauthorized")
+	default:
+		body, _ := io.ReadAll(resp.Body)
+		return false, fmt.Errorf("erreur API Sirene: %d - %s", resp.StatusCode, string(body))
+	}
+}
