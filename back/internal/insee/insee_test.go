@@ -39,7 +39,7 @@ func TestSaveToken_WriteToFile(t *testing.T) {
 	err := SaveToken()
 	assert.Nil(t, err)
 
-	content, err := os.ReadFile(tokenFile) // utilise bien `tokenFile`
+	content, err := os.ReadFile(tokenFile)
 	assert.Nil(t, err)
 	assert.Equal(t, testToken, string(content))
 }
@@ -58,4 +58,22 @@ func TestGetToken_ReturnsInMemoryToken(t *testing.T) {
 	token = "in-memory-token"
 	actual := GetToken()
 	assert.Equal(t, "in-memory-token", actual)
+}
+
+func TestRefreshToken_RefreshToken(t *testing.T) {
+	clientID := os.Getenv("SIRENE_CLIENT_KEY")
+	clientSecret := os.Getenv("SIRENE_CLIENT_SECRET")
+
+	if clientID == "" || clientSecret == "" {
+		t.Fatal("SIRENE_CLIENT_KEY ou SIRENE_CLIENT_SECRET non définis")
+	}
+
+	newToken, err := RefreshToken()
+	assert.Nil(t, err)
+	assert.NotEmpty(t, newToken)
+	assert.Equal(t, newToken, GetToken())
+
+	content, err := os.ReadFile(tokenFile)
+	assert.Nil(t, err)
+	assert.Equal(t, newToken, string(content))
 }
