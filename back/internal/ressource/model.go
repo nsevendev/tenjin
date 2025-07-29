@@ -13,8 +13,8 @@ type Ressource struct {
 	Size           int64              `bson:"size" json:"size" validate:"required"`
 	MimeType       string             `bson:"mime_type" json:"mimeType" validate:"required"`
 	Type           string             `bson:"type" json:"type" validate:"required"`
-	AssociatedTo   primitive.ObjectID `bson:"associated_to" json:"associatedTo" validate:"required"`
+	AssociationID  primitive.ObjectID `bson:"association_id" json:"associationId" validate:"required"`
 	AssociatedType string             `bson:"associated_type" json:"associatedType" validate:"required,oneof=user session institute offer quiz recruiter evaluation competence "`
-	UploadedBy     primitive.ObjectID `bson:"uploaded_by" json:"uploadedBy" validate:"required"`
+	UploaderID     primitive.ObjectID `bson:"uploader_id" json:"uploaderId" validate:"required"`
 	CreatedAt      time.Time          `bson:"created_at" json:"createdAt" validate:"required"`
 }

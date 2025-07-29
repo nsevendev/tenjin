@@ -27,12 +27,12 @@ type FormationSession struct {
 	FormationID       primitive.ObjectID   `bson:"formation_id" json:"formationId" validate:"required"`
 	Title             string               `bson:"title" json:"title" validate:"required"`
 	IsActive          bool                 `bson:"is_active" json:"isActive"` // disable seulement teacher_admin et teacher_user
-	Students          []primitive.ObjectID `bson:"student_ids" json:"studentIds"`
-	Teachers          []primitive.ObjectID `bson:"teacher_ids" json:"teacherIds"`
-	CreateBy          primitive.ObjectID   `bson:"create_by" json:"createBy" validate:"required"` // ID de l'utilisateur qui a créé la session
+	StudentIDs        []primitive.ObjectID `bson:"student_ids" json:"studentIds"`
+	TeacherIDs        []primitive.ObjectID `bson:"teacher_ids" json:"teacherIds"`
+	CreatorID         primitive.ObjectID   `bson:"creator_id" json:"creatorId" validate:"required"` // ID de l'utilisateur qui a créé la session
 	CourseIDs         []primitive.ObjectID `bson:"course_ids" json:"courseIds"`
 	ChatID            primitive.ObjectID   `bson:"chat_id" json:"chatId"`
-	CalendarId        primitive.ObjectID   `bson:"calendar_id" json:"calendarId"`
+	CalendarID        primitive.ObjectID   `bson:"calendar_id" json:"calendarId"`
 	AttendanceSheetID primitive.ObjectID   `bson:"attendance_sheet_id" json:"attendanceSheetId"`
 	StartDate         time.Time            `bson:"start_date" json:"startDate" validate:"required"`
 	EndDate           time.Time            `bson:"end_date" json:"endDate" validate:"required"`
