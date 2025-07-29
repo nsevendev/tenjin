@@ -16,5 +16,6 @@ type Ressource struct {
 	AssociationID  primitive.ObjectID `bson:"association_id" json:"associationId" validate:"required"`
 	AssociatedType string             `bson:"associated_type" json:"associatedType" validate:"required,oneof=user session institute offer quiz recruiter evaluation competence "`
 	UploaderID     primitive.ObjectID `bson:"uploader_id" json:"uploaderId" validate:"required"`
-	CreatedAt      time.Time          `bson:"created_at" json:"createdAt" validate:"required"`
+	CreatedAt      time.Time          `bson:"created_at" json:"createdAt"`
+	UpdatedAt      *time.Time         `bson:"updated_at" json:"updatedAt"`
 }
