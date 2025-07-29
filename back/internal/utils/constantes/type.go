@@ -67,3 +67,16 @@ const (
 	ContentBlockAudio TypeCourseContentBlock = "audio"
 	ContentBlockOther TypeCourseContentBlock = "other"
 )
+
+type TypeRessourceAssociated string
+
+const (
+	User       TypeRessourceAssociated = "user"
+	Session    TypeRessourceAssociated = "session"
+	Institute  TypeRessourceAssociated = "institute"
+	Offer      TypeRessourceAssociated = "offer"
+	Quiz       TypeRessourceAssociated = "quiz"
+	Recruiter  TypeRessourceAssociated = "recruiter"
+	Evaluation TypeRessourceAssociated = "evaluation"
+	Competence TypeRessourceAssociated = "competence"
+)
