@@ -53,4 +53,5 @@ type OfferResponse struct {
 	Status       string             `bson:"status" json:"status" validate:"required,oneof=accepted declined"`
 	SharedFields []string           `bson:"shared_fields" json:"sharedFields" validate:"dive,oneof=email phone cv linkedin github skills experience location identity"`
 	CreatedAt    time.Time          `bson:"created_at" json:"createdAt"`
+	UpdatedAt    time.Time          `bson:"updated_at" json:"updatedAt"`
 }
