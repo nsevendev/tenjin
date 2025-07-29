@@ -84,51 +84,65 @@ func RefreshToken() (string, error) {
 	return token, nil
 }
 
-func findCompanyBySiret(siret string) (bool, error) {
+func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error) {
 	url := fmt.Sprintf("https://api.insee.fr/entreprises/sirene/V3.11/siret/%s", siret)
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
-	req.Header.Set("Authorization", "Bearer " + GetToken())
+	req.Header.Set("Authorization", "Bearer "+GetToken())
 	req.Header.Set("Accept", "application/json")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	switch resp.StatusCode {
 	case 200:
-		return true, nil
+		var response struct {
+			CompanyInfo CompanyInfo `json:"etablissement"`
+		}
+		if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+			return nil, err
+		}
+
+		etab := response.CompanyInfo
+		if etab.Siren != siren {
+			return nil, fmt.Errorf("siren mismatch: attendu %s, trouvé %s", siren, etab.Siren)
+		}
+
+		return &etab, nil
+
 	case 404:
-		return false, nil
+		return nil, nil
 	case 401:
-		return false, fmt.Errorf("unauthorized")
+		return nil, fmt.Errorf("unauthorized")
 	default:
 		body, _ := io.ReadAll(resp.Body)
-		return false, fmt.Errorf("erreur API Sirene: %d - %s", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("erreur API Sirene: %d - %s", resp.StatusCode, string(body))
 	}
 }
 
-func CheckSiretExists(siret string) (bool, error) {
-	exists, err := findCompanyBySiret(siret)
+
+func CheckSiretExists(siret string, siren string) (*CompanyInfo, error) {
+	companyInfo, err := findCompanyBySiretAndSiren(siret, siren)
 	if err == nil {
-		return exists, nil
+		return companyInfo, nil
 	}
 
 	if strings.Contains(err.Error(), "unauthorized") {
 		_, refreshErr := RefreshToken()
 		if refreshErr != nil {
-			return false, fmt.Errorf("echec du refresh token apres 401: %w", refreshErr)
+			return nil, fmt.Errorf("echec du refresh token apres 401: %w", refreshErr)
 		}
 
-		return findCompanyBySiret(siret)
+		return findCompanyBySiretAndSiren(siret, siren)
 	}
 
-	return false, err
+	return companyInfo, err
 }
