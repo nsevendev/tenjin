@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	tempTokenFile      string
-	originalTokenFile  string
-	testToken          = "token-test"
+	tempTokenFile     string
+	originalTokenFile string
+	testToken         = "token-test"
 )
 
 func TestMain(m *testing.M) {
@@ -90,42 +90,59 @@ func TestRefreshToken_RefreshToken(t *testing.T) {
 	assert.Equal(t, newToken, string(content))
 }
 
-func TestFindCompanyBySiret_Success(t *testing.T) {
+func TestFindCompanyBySiretAndSiren_Success(t *testing.T) {
 	err := LoadToken()
 	assert.Nil(t, err)
 
 	siret := "94503764600011"
+	siren := "945037646"
 
-	exists, err := findCompanyBySiret(siret)
+	info, err := findCompanyBySiretAndSiren(siret, siren)
 
 	assert.Nil(t, err)
-	assert.True(t, exists)
+	assert.NotNil(t, info)
+	assert.Equal(t, siret, info.Siret)
+	assert.Equal(t, siren, info.Siren)
 }
 
-func TestFindCompanyBySiret_NotFound(t *testing.T) {
+func TestFindCompanyBySiretAndSiren_NotFound(t *testing.T) {
 	err := LoadToken()
 	assert.Nil(t, err)
 
 	siret := "00000000000000"
+	siren := "000000000"
 
-	exists, err := findCompanyBySiret(siret)
+	info, err := findCompanyBySiretAndSiren(siret, siren)
 
 	assert.Nil(t, err)
-	assert.False(t, exists)
+	assert.Nil(t, info)
 }
 
-func TestFindCompanyBySiret_Unauthorized(t *testing.T) {
+func TestFindCompanyBySiretAndSiren_SirenMismatch(t *testing.T) {
+	err := LoadToken()
+	assert.Nil(t, err)
+
+	siret := "94503764600011"
+	wrongSiren := "123456789"
+
+	info, err := findCompanyBySiretAndSiren(siret, wrongSiren)
+
+	assert.Nil(t, info)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "siren mismatch")
+}
+
+func TestFindCompanyBySiretAndSiren_Unauthorized(t *testing.T) {
 	token = "invalid-token"
 
 	siret := "94503764600011"
+	siren := "945037646"
 
-	exists, err := findCompanyBySiret(siret)
+	info, err := findCompanyBySiretAndSiren(siret, siren)
 
+	assert.Nil(t, info)
 	assert.Error(t, err)
-	if err != nil {
-		assert.Contains(t, err.Error(), "unauthorized")
-	}
-	assert.False(t, exists)
+	assert.Contains(t, err.Error(), "unauthorized")
 }
 
 func TestCheckSiretExists_Success(t *testing.T) {
@@ -133,11 +150,14 @@ func TestCheckSiretExists_Success(t *testing.T) {
 	assert.Nil(t, err)
 
 	siret := "94503764600011"
+	siren := "945037646"
 
-	exists, err := CheckSiretExists(siret)
+	info, err := CheckSiretExists(siret, siren)
 
 	assert.Nil(t, err)
-	assert.True(t, exists)
+	assert.NotNil(t, info)
+	assert.Equal(t, siret, info.Siret)
+	assert.Equal(t, siren, info.Siren)
 }
 
 func TestCheckSiretExists_NotFound(t *testing.T) {
@@ -145,22 +165,25 @@ func TestCheckSiretExists_NotFound(t *testing.T) {
 	assert.Nil(t, err)
 
 	siret := "00000000000000"
+	siren := "000000000"
 
-	exists, err := CheckSiretExists(siret)
+	info, err := CheckSiretExists(siret, siren)
 
 	assert.Nil(t, err)
-	assert.False(t, exists)
+	assert.Nil(t, info)
 }
 
 func TestCheckSiretExists_UnauthorizedWithSuccessfulRefresh(t *testing.T) {
 	token = "invalid-token"
 
 	siret := "94503764600011"
+	siren := "945037646"
 
-	exists, err := CheckSiretExists(siret)
+	info, err := CheckSiretExists(siret, siren)
 
 	assert.Nil(t, err)
-	assert.True(t, exists)
+	assert.NotNil(t, info)
+	assert.Equal(t, siret, info.Siret)
 }
 
 func TestCheckSiretExists_UnauthorizedWithFailedRefresh(t *testing.T) {
@@ -176,10 +199,11 @@ func TestCheckSiretExists_UnauthorizedWithFailedRefresh(t *testing.T) {
 	}()
 
 	siret := "94503764600011"
+	siren := "945037646"
 
-	exists, err := CheckSiretExists(siret)
+	info, err := CheckSiretExists(siret, siren)
 
+	assert.Nil(t, info)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "echec du refresh token")
-	assert.False(t, exists)
 }
