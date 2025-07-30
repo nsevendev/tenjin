@@ -106,6 +106,14 @@ func buildAddressFromSireneData(a sireneAdresseEtablissement) string {
 	return strings.Join(strings.Fields(addr), " ")
 }
 
+func deriveSector(cj string) string {
+	cj = strings.TrimSpace(cj)
+	if cj != "" && strings.HasPrefix(cj, "7") {
+		return "public"
+	}
+	return "private"
+}
+
 func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error) {
 	url := fmt.Sprintf("https://api.insee.fr/entreprises/sirene/V3.11/siret/%s", siret)
 
