@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/nsevenpack/env/env"
 )
@@ -137,11 +138,10 @@ func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error
 	if err != nil {
 		return nil, err
 	}
-
 	req.Header.Set("Authorization", "Bearer "+GetToken())
 	req.Header.Set("Accept", "application/json")
 
-	client := &http.Client{}
+	client := &http.Client{Timeout: 15 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
@@ -150,19 +150,40 @@ func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error
 
 	switch resp.StatusCode {
 	case 200:
-		var response struct {
-			CompanyInfo CompanyInfo `json:"etablissement"`
-		}
-		if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		var sr sireneResponse
+		if err := json.NewDecoder(resp.Body).Decode(&sr); err != nil {
 			return nil, err
 		}
+		etab := sr.Etablissement
 
-		etab := response.CompanyInfo
-		if etab.Siren != siren {
-			return nil, fmt.Errorf("siren mismatch: attendu %s, trouvé %s", siren, etab.Siren)
+		if siren != "" && etab.UniteLegale.Siren != "" && etab.UniteLegale.Siren != siren {
+			return nil, fmt.Errorf("siren mismatch: attendu %s, trouvé %s", siren, etab.UniteLegale.Siren)
 		}
 
-		return &etab, nil
+		name := strings.TrimSpace(etab.UniteLegale.DenominationUniteLegale)
+		if name == "" {
+			name = strings.TrimSpace(etab.Enseigne1Etablissement)
+		}
+
+		addr := buildAddressFromSireneData(etab.AdresseEtablissement)
+		zip := strings.TrimSpace(etab.AdresseEtablissement.CodePostalEtablissement)
+		city := strings.TrimSpace(etab.AdresseEtablissement.LibelleCommuneEtablissement)
+
+		ape := strings.TrimSpace(etab.UniteLegale.ActivitePrincipaleUniteLegale)
+		cj := strings.TrimSpace(etab.UniteLegale.CategorieJuridiqueUniteLegale)
+
+		ci := &CompanyInfo{
+			BusinessName:       name,
+			Siret:              strings.TrimSpace(etab.Siret),
+			Address:            addr,
+			ZipCode:            zip,
+			City:               city,
+			Ape:                ape,
+			CategorieJuridique: cj,
+			Sector:             deriveSector(cj),
+			CompType:           mapAPEtoCompType(ape),
+		}
+		return ci, nil
 
 	case 404:
 		return nil, nil
