@@ -114,6 +114,22 @@ func deriveSector(cj string) string {
 	return "private"
 }
 
+func mapAPEtoCompType(ape string) string {
+	ape = strings.TrimSpace(ape)
+	if len(ape) < 2 {
+		return "company"
+	}
+	prefix := ape[:2]
+	switch prefix {
+	case "85":
+		return "training_center"
+	case "78":
+		return "recruiting_agency"
+	default:
+		return "company"
+	}
+}
+
 func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error) {
 	url := fmt.Sprintf("https://api.insee.fr/entreprises/sirene/V3.11/siret/%s", siret)
 
