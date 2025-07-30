@@ -18,6 +18,8 @@ var (
 	tokenFile = "internal/insee/token.txt"
 )
 
+// token
+
 func LoadToken() error {
 	data, err := os.ReadFile(tokenFile)
 	if err != nil {
@@ -83,6 +85,8 @@ func RefreshToken() (string, error) {
 
 	return token, nil
 }
+
+// check siret/siren + return basic company infos
 
 func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error) {
 	url := fmt.Sprintf("https://api.insee.fr/entreprises/sirene/V3.11/siret/%s", siret)
