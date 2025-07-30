@@ -105,6 +105,12 @@ func Test_buildAddressFromSireneData(t *testing.T) {
 	assert.Equal(t, "10 rue des Écoles Bât A", addr)
 }
 
+func Test_deriveSector(t *testing.T) {
+	assert.Equal(t, "public", deriveSector("7210"))
+	assert.Equal(t, "private", deriveSector("5498"))
+	assert.Equal(t, "private", deriveSector(""))
+}
+
 func TestFindCompanyBySiretAndSiren_Success(t *testing.T) {
 	err := LoadToken()
 	assert.Nil(t, err)
