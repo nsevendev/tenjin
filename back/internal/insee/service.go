@@ -88,6 +88,24 @@ func RefreshToken() (string, error) {
 
 // check siret/siren + return basic company infos
 
+func buildAddressFromSireneData(a sireneAdresseEtablissement) string {
+	parts := []string{
+		a.NumeroVoieEtablissement,
+		a.TypeVoieEtablissement,
+		a.LibelleVoieEtablissement,
+		a.ComplementAdresseEtablissement,
+	}
+	var out []string
+	for _, p := range parts {
+		p = strings.TrimSpace(p)
+		if p != "" {
+			out = append(out, p)
+		}
+	}
+	addr := strings.Join(out, " ")
+	return strings.Join(strings.Fields(addr), " ")
+}
+
 func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error) {
 	url := fmt.Sprintf("https://api.insee.fr/entreprises/sirene/V3.11/siret/%s", siret)
 
