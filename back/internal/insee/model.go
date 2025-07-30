@@ -7,6 +7,7 @@ type AccessToken struct {
 type CompanyInfo struct {
     BusinessName            string `json:"business_name"`
     Siret                   string `json:"siret"`
+	Siren                   string `json:"siren"`
     Sector                  string `json:"sector"`
 	CompType                string `json:"comp_type"`
     Address                 string `json:"adress"`

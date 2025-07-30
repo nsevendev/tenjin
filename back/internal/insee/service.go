@@ -175,6 +175,7 @@ func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error
 		ci := &CompanyInfo{
 			BusinessName:       name,
 			Siret:              strings.TrimSpace(etab.Siret),
+			Siren:              siren,
 			Address:            addr,
 			ZipCode:            zip,
 			City:               city,

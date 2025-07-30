@@ -33,6 +33,8 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
+// token
+
 func TestSaveToken_WriteToFile(t *testing.T) {
 	token = testToken
 
@@ -88,6 +90,19 @@ func TestRefreshToken_RefreshToken(t *testing.T) {
 	content, err := os.ReadFile(tokenFile)
 	assert.Nil(t, err)
 	assert.Equal(t, newToken, string(content))
+}
+
+// siret/siren
+
+func Test_buildAddressFromSireneData(t *testing.T) {
+	a := sireneAdresseEtablissement{
+		NumeroVoieEtablissement:        "10",
+		TypeVoieEtablissement:          "rue",
+		LibelleVoieEtablissement:       "des Écoles",
+		ComplementAdresseEtablissement: "Bât A",
+	}
+	addr := buildAddressFromSireneData(a)
+	assert.Equal(t, "10 rue des Écoles Bât A", addr)
 }
 
 func TestFindCompanyBySiretAndSiren_Success(t *testing.T) {
