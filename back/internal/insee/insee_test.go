@@ -2,6 +2,7 @@ package insee
 
 import (
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -201,7 +202,28 @@ func TestCheckSiretExists_NotFound(t *testing.T) {
 	assert.Nil(t, info)
 }
 
-func TestCheckSiretExists_UnauthorizedWithSuccessfulRefresh(t *testing.T) {
+func TestFindCompanyBySiretAndSiren_BadRequest_DefaultBranch(t *testing.T) {
+    err := LoadToken()
+    assert.Nil(t, err)
+
+    if GetToken() == "" {
+        if os.Getenv("SIRENE_CLIENT_KEY") == "" || os.Getenv("SIRENE_CLIENT_SECRET") == "" {
+            t.Skip("Pas de token ni de credentials pour obtenir un 400 réel")
+        }
+        _, _ = RefreshToken()
+    }
+
+    badSiret := "ABC"
+    info, err := findCompanyBySiretAndSiren(badSiret, "")
+    if err != nil && strings.Contains(err.Error(), "unauthorized") {
+        t.Skip("Token invalide — test 400 ignoré")
+    }
+    assert.Nil(t, info)
+    assert.Error(t, err)
+    assert.Contains(t, err.Error(), "erreur API Sirene: 400")
+}
+
+func TestCheckSiretExists_UnauthorizedWithSuccessRefresh(t *testing.T) {
 	token = "invalid-token"
 
 	siret := "94503764600011"
