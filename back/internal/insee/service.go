@@ -160,6 +160,16 @@ func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error
 			return nil, fmt.Errorf("siren mismatch: attendu %s, trouvé %s", siren, etab.UniteLegale.Siren)
 		}
 
+		apiSiren := strings.TrimSpace(etab.UniteLegale.Siren)
+
+        if apiSiren == "" && len(siret) >= 9 {
+            apiSiren = siret[:9]
+        }
+
+        if siren != "" && apiSiren != "" && apiSiren != siren {
+            return nil, fmt.Errorf("siren mismatch: attendu %s, trouvé %s", siren, apiSiren)
+        }
+
 		name := strings.TrimSpace(etab.UniteLegale.DenominationUniteLegale)
 		if name == "" {
 			name = strings.TrimSpace(etab.Enseigne1Etablissement)
@@ -175,7 +185,7 @@ func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error
 		ci := &CompanyInfo{
 			BusinessName:       name,
 			Siret:              strings.TrimSpace(etab.Siret),
-			Siren:              siren,
+			Siren:              apiSiren,
 			Address:            addr,
 			ZipCode:            zip,
 			City:               city,
