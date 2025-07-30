@@ -111,6 +111,13 @@ func Test_deriveSector(t *testing.T) {
 	assert.Equal(t, "private", deriveSector(""))
 }
 
+func Test_mapAPEtoCompType(t *testing.T) {
+	assert.Equal(t, "training_center", mapAPEtoCompType("8510Z"))
+	assert.Equal(t, "recruiting_agency", mapAPEtoCompType("7820Z"))
+	assert.Equal(t, "company", mapAPEtoCompType("6202A"))
+	assert.Equal(t, "company", mapAPEtoCompType(""))
+}
+
 func TestFindCompanyBySiretAndSiren_Success(t *testing.T) {
 	err := LoadToken()
 	assert.Nil(t, err)
