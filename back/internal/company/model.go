@@ -6,10 +6,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Organization struct {
+type Company struct {
 	ID            primitive.ObjectID   `bson:"_id,omitempty" json:"id"`
 	BusinessName  string               `bson:"business_name" json:"business_name" validate:"required"`
 	Siret         string               `bson:"siret" json:"siret" validate:"required"`
+	Siren         string               `bson:"siren" json:"siren" validate:"required"`
+	Sector        string               `bson:"sector" json:"sector" validate:"required"`
+	CompType      string               `bson:"comp_type" json:"comp_type" validate:"required"`
 	Address       string               `bson:"address" json:"address" validate:"required"`
 	ZipCode       string               `bson:"zip_code" json:"zip_code" validate:"required"`
 	City          string               `bson:"city" json:"city" validate:"required"`
