@@ -124,8 +124,8 @@ func TestFindCompanyBySiretAndSiren_Success(t *testing.T) {
 	err := LoadToken()
 	assert.Nil(t, err)
 
-	siret := "94503764600011"
-	siren := "945037646"
+	siret := "67205008502051"
+	siren := "672050085"
 
 	info, err := findCompanyBySiretAndSiren(siret, siren)
 
