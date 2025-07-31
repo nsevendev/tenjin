@@ -1,6 +1,7 @@
 package insee
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -127,6 +128,8 @@ func TestFindCompanyBySiretAndSiren_Success(t *testing.T) {
 	siren := "945037646"
 
 	info, err := findCompanyBySiretAndSiren(siret, siren)
+
+	fmt.Printf("Résultat CompanyInfo : %+v\n", info)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, info)
