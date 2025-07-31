@@ -80,6 +80,9 @@ clean-all: ## Supprime tout (conteneurs, réseaux, volumes et images)
 ta: ## Lance tous les tests api
 	docker exec -i -e APP_ENV=test tenjin_dev_api go test ./...
 
+ta-logs: ## Lance tous les tests api avec logs fmt-print
+	docker exec -i -e APP_ENV=test tenjin_dev_api go test -v ./...
+
 tap: ## Lance les tests api pour un path spécifique (usage: make tap path=monpath)
 	docker exec -i -e APP_ENV=test tenjin_dev_api go test ./$(path)
 
