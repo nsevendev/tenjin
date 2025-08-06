@@ -20,7 +20,7 @@ import (
 // @Failure 400 {object} ginresponse.JsonFormatterSwag "Paramètres invalides"
 // @Failure 500 {object} ginresponse.JsonFormatterSwag "Erreur interne lors de l'appel à l'API INSEE"
 // @Router /company/retrieve-infos [post]
-func (cc *companyController) Retrieve(c *gin.Context) {
+func (cc *companyController) RetrieveCompanyInfo(c *gin.Context) {
 	var dto company.CompanyRetrieveDto
 
 	if err := c.ShouldBindJSON(&dto); err != nil {
