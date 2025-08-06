@@ -9,7 +9,105 @@
         "contact": {},
         "version": "1.0"
     },
-    "paths": {},
+    "paths": {
+        "/company/retrieve-infos": {
+            "post": {
+                "description": "Utilise l'API INSEE pour retrouver les informations d'une entreprise",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "company"
+                ],
+                "summary": "Récupère les infos d'une entreprise via SIRET/SIREN",
+                "parameters": [
+                    {
+                        "description": "SIRET et SIREN de l'entreprise",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/company.CompanyRetrieveDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Entreprise trouvée",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    },
+                    "400": {
+                        "description": "Paramètres invalides",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne lors de l'appel à l'API INSEE",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "company.CompanyRetrieveDto": {
+            "type": "object",
+            "required": [
+                "siren",
+                "siret"
+            ],
+            "properties": {
+                "siren": {
+                    "type": "string"
+                },
+                "siret": {
+                    "type": "string"
+                }
+            }
+        },
+        "ginresponse.JsonFormatterSwag": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "error": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "meta": {
+                    "$ref": "#/definitions/ginresponse.JsonSwagMeta"
+                }
+            }
+        },
+        "ginresponse.JsonSwagMeta": {
+            "type": "object",
+            "properties": {
+                "method": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "timestamp": {
+                    "type": "string"
+                }
+            }
+        }
+    },
     "securityDefinitions": {
         "BearerAuth": {
             "type": "apiKey",

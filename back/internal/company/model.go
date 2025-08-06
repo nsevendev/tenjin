@@ -23,6 +23,11 @@ type Company struct {
 	UpdatedAt     time.Time            `bson:"updated_at" json:"updated_at"`
 }
 
+type CompanyRetrieveDto struct {
+	Siret string `json:"siret" binding:"required" validate:"required"`
+	Siren string `json:"siren" binding:"required" validate:"required"`
+}
+
 type CompanyCreateDto struct {
 	BusinessName  string               `bson:"business_name" json:"business_name" validate:"required"`
 	Siret         string               `bson:"siret" json:"siret" validate:"required"`
