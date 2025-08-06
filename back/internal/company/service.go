@@ -14,6 +14,7 @@ type companyService struct {
 }
 
 type CompanyServiceInterface interface {
+	RetrieveCompanyInfo(ctx context.Context, siret string, siren string) (*insee.CompanyInfo, error)
 }
 
 func NewCompanyService(db *mongo.Database) CompanyServiceInterface {
