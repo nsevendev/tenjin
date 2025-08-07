@@ -21,6 +21,10 @@ var (
 
 // token
 
+func SetTokenFile(path string) {
+	tokenFile = path
+}
+
 func LoadToken() error {
 	data, err := os.ReadFile(tokenFile)
 	if err != nil {
