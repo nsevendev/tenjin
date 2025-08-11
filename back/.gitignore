@@ -2,3 +2,10 @@ tmp/*
 !tmp/.gitkeep
 .idea
 .vscode
+/internal/insee/token.go
+apirome/version_4_0/data/listmetierdetail/*
+apirome/version_4_0/data/listmetiersummary/*
+!apirome/version_4_0/data/docapi
+!apirome/version_4_0/data/listmetierdetail/.gitkeep
+!apirome/version_4_0/data/listmetiersummary/.gitkeep
+/internal/insee/token.txt
