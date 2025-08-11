@@ -6,6 +6,7 @@ import (
 
 	"tenjin/back/internal/insee"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -22,22 +23,6 @@ func NewCompanyService(db *mongo.Database) CompanyServiceInterface {
 		collection: db.Collection("companys"),
 	}
 }
-
-/* func (s *companyService) Create(ctx context.Context, companyCreateDto CompanyCreateDto) (*Company, error) {
-	company := &Company{
-		BusinessName:   companyCreateDto.BusinessName,
-		Siret: companyCreateDto.Siret,
-		Siren: companyCreateDto.Siren,
-		Sector: companyCreateDto.Sector,
-		CompType: companyCreateDto.CompType,
-		Address: companyCreateDto.Address,
-		ZipCode: companyCreateDto.ZipCode,
-		City: companyCreateDto.City,
-		ContactEmails: companyCreateDto.ContactEmails,
-		Formations: companyCreateDto.Formations,
-		Users: companyCreateDto.Users,
-	}
-} */
 
 func (s *companyService) RetrieveCompanyInfo(ctx context.Context, siret string, siren string) (*insee.CompanyInfo, error) {
 	if siret == "" {
@@ -58,4 +43,29 @@ func (s *companyService) RetrieveCompanyInfo(ctx context.Context, siret string, 
 	}
 
 	return companyInfo, nil
+}
+
+func (s *companyService) Create(ctx context.Context, dto CompanyCreateDto) (*Company, error) {
+	company := &Company{
+		BusinessName:  dto.BusinessName,
+		Siret:         dto.Siret,
+		Siren:         dto.Siren,
+		Sector:        dto.Sector,
+		CompType:      dto.CompType,
+		Address:       dto.Address,
+		ZipCode:       dto.ZipCode,
+		City:          dto.City,
+		ContactEmails: dto.ContactEmails,
+		Formations:    dto.Formations,
+		Users:         dto.Users,
+	}
+
+	result, err := s.collection.InsertOne(ctx, company)
+	if err != nil {
+		return nil, fmt.Errorf("erreur lors de la creation de l'entreprise : %w", err)
+	}
+
+	company.ID = result.InsertedID.(primitive.ObjectID)
+	
+	return company, nil
 }
