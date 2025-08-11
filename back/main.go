@@ -1,15 +1,17 @@
 package main
 
 import (
+	"strings"
+	"tenjin/back/docs"
+	"tenjin/back/internal/utils/db"
+	"tenjin/back/migration"
+	"tenjin/back/router"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nsevenpack/env/env"
 	"github.com/nsevenpack/ginresponse"
 	"github.com/nsevenpack/logger/v2/logger"
 	"github.com/nsevenpack/mignosql"
-	"strings"
-	"tenjin/back/docs"
-	"tenjin/back/internal/db"
-	"tenjin/back/router"
 )
 
 func init() {
@@ -34,7 +36,7 @@ func main() {
 	port := env.Get("PORT")
 	setSwaggerOpt(hostTraefikApi)             // config option swagger
 	infoServer(hostTraefikApi, hostTraefikDb) // log info server
-	router.New(s)
+	router.Routes(s)
 
 	if err := s.Run(host + ":" + port); err != nil {
 		logger.Ef("Une erreur est survenue au lancement du serveur : %v", err)
@@ -66,6 +68,8 @@ func initDbAndMigNosql(appEnv string) {
 	migrator := mignosql.New(db.Db)
 	// EXAMPLE => migrator.Add(migration.<namefile>)
 	// ajouter les migrations ici ...
+		migrator.Add(migration.CreateCompanyCollection)
+
 	if err := migrator.Apply(); err != nil {
 		logger.Ff("Erreur lors de l'application des migrations : %v", err)
 	}

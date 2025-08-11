@@ -1,0 +1,94 @@
+package company
+
+import (
+	"context"
+	"os"
+	"testing"
+
+	"tenjin/back/internal/insee"
+
+	"github.com/stretchr/testify/assert"
+)
+
+var originalTokenFile string
+
+func TestMain(m *testing.M) {
+	tmpFile, err := os.CreateTemp("", "token_test_*.txt")
+	if err != nil {
+		panic("Erreur lors de la création du fichier temporaire : " + err.Error())
+	}
+
+	dummyToken := []byte("dummy_test_token")
+	if _, err := tmpFile.Write(dummyToken); err != nil {
+		panic("Erreur lors de l’écriture dans le fichier temporaire : " + err.Error())
+	}
+	tmpFile.Close()
+
+	insee.SetTokenFile(tmpFile.Name())
+
+	code := m.Run()
+
+	_ = os.Remove(tmpFile.Name())
+
+	os.Exit(code)
+}
+
+func TestRetrieveCompanyInfo_Success(t *testing.T) {
+	service := &companyService{}
+
+	siret := "94503764600011"
+	siren := "945037646"
+
+	info, err := service.RetrieveCompanyInfo(context.Background(), siret, siren)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, info)
+	assert.Equal(t, siret, info.Siret)
+	assert.Equal(t, siren, info.Siren)
+}
+
+func TestRetrieveCompanyInfo_NotFound(t *testing.T) {
+	service := &companyService{}
+
+	siret := "00000000000000"
+	siren := "000000000"
+
+	info, err := service.RetrieveCompanyInfo(context.Background(), siret, siren)
+
+	assert.Nil(t, info)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "aucune entreprise trouvee")
+}
+
+func TestRetrieveCompanyInfo_MissingSiret(t *testing.T) {
+	service := &companyService{}
+
+	info, err := service.RetrieveCompanyInfo(context.Background(), "", "123456789")
+
+	assert.Nil(t, info)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "le SIRET est requis")
+}
+
+func TestRetrieveCompanyInfo_MissingSiren(t *testing.T) {
+	service := &companyService{}
+
+	info, err := service.RetrieveCompanyInfo(context.Background(), "12345678900000", "")
+
+	assert.Nil(t, info)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "le SIREN est requis")
+}
+
+func TestRetrieveCompanyInfo_InvalidSiret(t *testing.T) {
+	service := &companyService{}
+
+	siret := "abc"
+	siren := "123456789"
+
+	info, err := service.RetrieveCompanyInfo(context.Background(), siret, siren)
+
+	assert.Nil(t, info)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "echec lors de la recuperation des donnees INSEE")
+}
