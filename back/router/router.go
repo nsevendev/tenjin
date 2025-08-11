@@ -25,6 +25,7 @@ func Routes(r *gin.Engine) {
 
 	v1Company := v1.Group("/company")
 	v1Company.POST("/retrieve-infos", companyController.RetrieveCompanyInfo)
+	v1Company.POST("/register", companyController.Create)
 
 	r.NoRoute(func(ctx *gin.Context) {
 		logger.Wf("Route inconnue : %s %s", ctx.Request.Method, ctx.Request.URL.Path)
