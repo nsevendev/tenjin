@@ -15,6 +15,52 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/company/register": {
+            "post": {
+                "description": "Crée une entreprise dans la base de données MongoDB",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "company"
+                ],
+                "summary": "Crée une entreprise",
+                "parameters": [
+                    {
+                        "description": "Informations de l'entreprise à créer",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/company.CompanyCreateDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Entreprise créée",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    },
+                    "400": {
+                        "description": "Paramètres invalides",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne lors de la création",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    }
+                }
+            }
+        },
         "/company/retrieve-infos": {
             "post": {
                 "description": "Utilise l'API INSEE pour retrouver les informations d'une entreprise",
@@ -63,6 +109,64 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "company.CompanyCreateDto": {
+            "type": "object",
+            "required": [
+                "address",
+                "business_name",
+                "city",
+                "comp_type",
+                "sector",
+                "siren",
+                "siret",
+                "users",
+                "zip_code"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "business_name": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "comp_type": {
+                    "type": "string"
+                },
+                "contact_emails": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "formations": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "sector": {
+                    "type": "string"
+                },
+                "siren": {
+                    "type": "string"
+                },
+                "siret": {
+                    "type": "string"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "zip_code": {
+                    "type": "string"
+                }
+            }
+        },
         "company.CompanyRetrieveDto": {
             "type": "object",
             "required": [

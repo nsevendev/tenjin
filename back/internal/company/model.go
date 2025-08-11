@@ -19,8 +19,8 @@ type Company struct {
 	ContactEmails []string             `bson:"contact_emails" json:"contact_emails"`
 	Formations    []primitive.ObjectID `bson:"formations" json:"formations"`
 	Users         []primitive.ObjectID `bson:"users" json:"users" validate:"required"`
-	CreatedAt     time.Time            `bson:"created_at" json:"created_at"`
-	UpdatedAt     time.Time            `bson:"updated_at" json:"updated_at"`
+	CreatedAt     primitive.DateTime   `bson:"created_at" json:"created_at"`
+	UpdatedAt     primitive.DateTime   `bson:"updated_at" json:"updated_at"`
 }
 
 type CompanyRetrieveDto struct {
@@ -40,4 +40,12 @@ type CompanyCreateDto struct {
 	ContactEmails []string             `bson:"contact_emails" json:"contact_emails"`
 	Formations    []primitive.ObjectID `bson:"formations" json:"formations"`
 	Users         []primitive.ObjectID `bson:"users" json:"users" validate:"required"`
+}
+
+func (c *Company) SetTimeStamps() {
+	now := primitive.NewDateTimeFromTime(time.Now())
+	if c.CreatedAt == 0 {
+		c.CreatedAt = now
+	}
+	c.UpdatedAt = now
 }

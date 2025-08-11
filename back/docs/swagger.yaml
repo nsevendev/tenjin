@@ -1,4 +1,45 @@
 definitions:
+  company.CompanyCreateDto:
+    properties:
+      address:
+        type: string
+      business_name:
+        type: string
+      city:
+        type: string
+      comp_type:
+        type: string
+      contact_emails:
+        items:
+          type: string
+        type: array
+      formations:
+        items:
+          type: string
+        type: array
+      sector:
+        type: string
+      siren:
+        type: string
+      siret:
+        type: string
+      users:
+        items:
+          type: string
+        type: array
+      zip_code:
+        type: string
+    required:
+    - address
+    - business_name
+    - city
+    - comp_type
+    - sector
+    - siren
+    - siret
+    - users
+    - zip_code
+    type: object
   company.CompanyRetrieveDto:
     properties:
       siren:
@@ -37,6 +78,36 @@ info:
   title: tenjin api
   version: "1.0"
 paths:
+  /company/register:
+    post:
+      consumes:
+      - application/json
+      description: Crée une entreprise dans la base de données MongoDB
+      parameters:
+      - description: Informations de l'entreprise à créer
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/company.CompanyCreateDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Entreprise créée
+          schema:
+            $ref: '#/definitions/ginresponse.JsonFormatterSwag'
+        "400":
+          description: Paramètres invalides
+          schema:
+            $ref: '#/definitions/ginresponse.JsonFormatterSwag'
+        "500":
+          description: Erreur interne lors de la création
+          schema:
+            $ref: '#/definitions/ginresponse.JsonFormatterSwag'
+      summary: Crée une entreprise
+      tags:
+      - company
   /company/retrieve-infos:
     post:
       consumes:
