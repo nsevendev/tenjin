@@ -16,6 +16,7 @@ type companyService struct {
 
 type CompanyServiceInterface interface {
 	RetrieveCompanyInfo(ctx context.Context, siret string, siren string) (*insee.CompanyInfo, error)
+	Create(ctx context.Context, dto CompanyCreateDto) (*Company, error)
 }
 
 func NewCompanyService(db *mongo.Database) CompanyServiceInterface {
@@ -66,6 +67,6 @@ func (s *companyService) Create(ctx context.Context, dto CompanyCreateDto) (*Com
 	}
 
 	company.ID = result.InsertedID.(primitive.ObjectID)
-	
+
 	return company, nil
 }
