@@ -21,7 +21,7 @@ type CompanyServiceInterface interface {
 
 func NewCompanyService(db *mongo.Database) CompanyServiceInterface {
 	return &companyService{
-		collection: db.Collection("companys"),
+		collection: db.Collection("company"),
 	}
 }
 
@@ -60,6 +60,8 @@ func (s *companyService) Create(ctx context.Context, dto CompanyCreateDto) (*Com
 		Formations:    dto.Formations,
 		Users:         dto.Users,
 	}
+
+	company.SetTimeStamps()
 
 	result, err := s.collection.InsertOne(ctx, company)
 	if err != nil {
