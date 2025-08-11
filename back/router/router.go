@@ -10,7 +10,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	initializer "tenjin/back/internal/db"
+	initializer "tenjin/back/internal/utils/db"
 )
 
 const pathApiV1 = "api/v1"
