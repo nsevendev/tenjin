@@ -1,3 +1,5 @@
+//go:build integration
+
 package company
 
 import (
@@ -10,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var originalTokenFile string
+var companyServiceTest *companyService
 
 func TestMain(m *testing.M) {
 	tmpFile, err := os.CreateTemp("", "token_test_*.txt")
@@ -26,6 +28,8 @@ func TestMain(m *testing.M) {
 
 	insee.SetTokenFile(tmpFile.Name())
 
+	companyServiceTest = &companyService{}
+
 	code := m.Run()
 
 	_ = os.Remove(tmpFile.Name())
@@ -34,12 +38,10 @@ func TestMain(m *testing.M) {
 }
 
 func TestRetrieveCompanyInfo_Success(t *testing.T) {
-	service := &companyService{}
-
 	siret := "94503764600011"
 	siren := "945037646"
 
-	info, err := service.RetrieveCompanyInfo(context.Background(), siret, siren)
+	info, err := companyServiceTest.RetrieveCompanyInfo(context.Background(), siret, siren)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, info)
@@ -48,12 +50,10 @@ func TestRetrieveCompanyInfo_Success(t *testing.T) {
 }
 
 func TestRetrieveCompanyInfo_NotFound(t *testing.T) {
-	service := &companyService{}
-
 	siret := "00000000000000"
 	siren := "000000000"
 
-	info, err := service.RetrieveCompanyInfo(context.Background(), siret, siren)
+	info, err := companyServiceTest.RetrieveCompanyInfo(context.Background(), siret, siren)
 
 	assert.Nil(t, info)
 	assert.Error(t, err)
@@ -61,9 +61,7 @@ func TestRetrieveCompanyInfo_NotFound(t *testing.T) {
 }
 
 func TestRetrieveCompanyInfo_MissingSiret(t *testing.T) {
-	service := &companyService{}
-
-	info, err := service.RetrieveCompanyInfo(context.Background(), "", "123456789")
+	info, err := companyServiceTest.RetrieveCompanyInfo(context.Background(), "", "123456789")
 
 	assert.Nil(t, info)
 	assert.Error(t, err)
@@ -71,9 +69,7 @@ func TestRetrieveCompanyInfo_MissingSiret(t *testing.T) {
 }
 
 func TestRetrieveCompanyInfo_MissingSiren(t *testing.T) {
-	service := &companyService{}
-
-	info, err := service.RetrieveCompanyInfo(context.Background(), "12345678900000", "")
+	info, err := companyServiceTest.RetrieveCompanyInfo(context.Background(), "12345678900000", "")
 
 	assert.Nil(t, info)
 	assert.Error(t, err)
@@ -81,12 +77,10 @@ func TestRetrieveCompanyInfo_MissingSiren(t *testing.T) {
 }
 
 func TestRetrieveCompanyInfo_InvalidSiret(t *testing.T) {
-	service := &companyService{}
-
 	siret := "abc"
 	siren := "123456789"
 
-	info, err := service.RetrieveCompanyInfo(context.Background(), siret, siren)
+	info, err := companyServiceTest.RetrieveCompanyInfo(context.Background(), siret, siren)
 
 	assert.Nil(t, info)
 	assert.Error(t, err)
