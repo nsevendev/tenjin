@@ -1,4 +1,4 @@
-package cmd
+package metier
 
 import (
 	"encoding/json"
