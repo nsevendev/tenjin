@@ -65,10 +65,10 @@ func setSwaggerOpt(hostTraefikApi string) {
 
 func initDbAndMigNosql(appEnv string) {
 	db.ConnexionDatabase(appEnv)
-	migrator := mignosql.New(db.Db)
+	migrator := mignosql.New(db.Client)
 	// EXAMPLE => migrator.Add(migration.<namefile>)
 	// ajouter les migrations ici ...
-		migrator.Add(migration.CreateCompanyCollection)
+	migrator.Add(migration.CreateCompanyCollection)
 
 	if err := migrator.Apply(); err != nil {
 		logger.Ff("Erreur lors de l'application des migrations : %v", err)

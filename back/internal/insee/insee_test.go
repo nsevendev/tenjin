@@ -1,10 +1,39 @@
 package insee
 
 import (
+	"github.com/nsevenpack/logger/v2/logger"
 	"github.com/nsevenpack/testup"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
+
+var (
+	tempTokenFile     string
+	originalTokenFile string
+	testToken         = "token-test"
+)
+
+func TestMain(m *testing.M) {
+	originalTokenFile = tokenFile
+
+	tmpFile, err := os.CreateTemp("", "token_test_*.txt")
+	if err != nil {
+		logger.Ef("Erreur lors de la creation du fichier temporaire : %v", err)
+		panic("Erreur lors de la creation du fichier temporaire : " + err.Error())
+	}
+	tempTokenFile = tmpFile.Name()
+	tmpFile.Close()
+
+	tokenFile = tempTokenFile
+
+	code := m.Run()
+
+	_ = os.Remove(tempTokenFile)
+	tokenFile = originalTokenFile
+
+	os.Exit(code)
+}
 
 func Test_buildAddressFromSireneData(t *testing.T) {
 	testup.LogNameTestInfo(t, "Test build address from sirene data")

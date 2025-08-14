@@ -24,8 +24,8 @@
 
 ## Lancement des tests
 > partie backend (api)
-- creer un .env.test à la racine du dossier `back` mettre les variables APP_ENV=test et VARIABLE_TEST=test  
-- utiliser les commandes `make` taper `make` taper dans le terminal pour voir toute les commandes  
+- à la racine du dossier `back` copier/coller le `.env.test.dist` et renommer le en `.env.test`, renseigner les variables vide  
+- utiliser les commandes `make` => taper `make` dans le terminal pour voir toute les commandes de test disponibles   
 
 > partie frontend
 
