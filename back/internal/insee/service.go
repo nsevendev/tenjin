@@ -27,11 +27,11 @@ func SetTokenFile(path string) {
 func LoadToken() error {
 	data, err := os.ReadFile(tokenFile)
 	if err != nil {
-		logger.Ef("Une erreur est survenue lors de la lecture du fichier %v: %v", tokenFile, err)
 		if os.IsNotExist(err) {
 			token = ""
 			return nil
 		}
+		logger.Ef("Une erreur est survenue lors de la lecture du fichier %v: %v", tokenFile, err)
 		return err
 	}
 
@@ -239,11 +239,17 @@ func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error
 
 func CheckSiretExists(siret string, siren string) (*CompanyInfo, error) {
 	companyInfo, err := findCompanyBySiretAndSiren(siret, siren)
+
+	// pas d'erreur (avec ou sans résultat)
 	if err == nil {
-		logger.If("Entreprise trouvée: %s, SIRET: %s, SIREN: %s", companyInfo.BusinessName, companyInfo.Siret, companyInfo.Siren)
+		if companyInfo != nil {
+			logger.If("Entreprise trouvée: %s, SIRET: %s, SIREN: %s",
+				companyInfo.BusinessName, companyInfo.Siret, companyInfo.Siren)
+		}
 		return companyInfo, nil
 	}
 
+	// si erreur on test le cas 401 Unauthorized
 	if strings.Contains(err.Error(), "unauthorized") {
 		_, refreshErr := RefreshToken()
 		if refreshErr != nil {
@@ -254,5 +260,6 @@ func CheckSiretExists(siret string, siren string) (*CompanyInfo, error) {
 		return findCompanyBySiretAndSiren(siret, siren)
 	}
 
-	return companyInfo, err
+	// autre erreur voir si besoin de les gerer....
+	return nil, err
 }

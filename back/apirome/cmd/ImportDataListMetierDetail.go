@@ -14,7 +14,7 @@ var ImportDataListMetiersDetailCmd = &cobra.Command{
 	Short: "Importe tous les métiers détaillés en base MongoDB",
 	Run: func(cmd *cobra.Command, args []string) {
 		db.ConnexionDatabase("dev")
-		collection := db.Db.Collection("metiers")
+		collection := db.Client.Collection("metiers")
 
 		// 1. Ouvre le fichier JSON généré
 		file := libs.GetLastFileByDate("./apirome/version_4_0/data/listmetierdetail")
