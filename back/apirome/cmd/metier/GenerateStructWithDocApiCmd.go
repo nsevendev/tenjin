@@ -1,4 +1,4 @@
-package cmd
+package metier
 
 import (
 	"github.com/spf13/cobra"
