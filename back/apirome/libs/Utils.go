@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -163,6 +164,61 @@ func GetLastFileByDate(dir string) string {
 	if len(datedFiles) == 0 {
 		logger.Wf("Aucun fichier JSON trouvé dans le dossier %s", dir)
 		logger.Ff("Vérifiez que les fichiers sont nommés correctement avec le format YYYYMMDD_HHMMSS.json %v", os.ErrNotExist)
+	}
+
+	// Trie par date décroissante
+	sort.Slice(datedFiles, func(i, j int) bool {
+		return datedFiles[i].date.After(datedFiles[j].date)
+	})
+
+	return datedFiles[0].name
+}
+
+// GetLastXMLFileByDate Récupère le dernier fichier XML dans le dossier donné
+func GetLastXMLFileByDate(dir string) string {
+	files, err := os.ReadDir(dir)
+	if err != nil {
+		logger.Ff("Erreur lors de la lecture du dossier %s : %v", dir, err)
+	}
+
+	// Regex pour fichiers XML avec date (ex: rncp_2024-01-15.xml ou rncp_20240115.xml)
+	re := regexp.MustCompile(`(\d{4}-\d{2}-\d{2}|\d{8})\.xml$`)
+
+	type datedFile struct {
+		name string
+		date time.Time
+	}
+
+	var datedFiles []datedFile
+
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+		matches := re.FindStringSubmatch(file.Name())
+		if len(matches) != 2 {
+			continue
+		}
+
+		var parsed time.Time
+		var err error
+
+		// Essayer les deux formats
+		if strings.Contains(matches[1], "-") {
+			parsed, err = time.Parse("2006-01-02", matches[1])
+		} else {
+			parsed, err = time.Parse("20060102", matches[1])
+		}
+
+		if err != nil {
+			continue
+		}
+		datedFiles = append(datedFiles, datedFile{filepath.Join(dir, file.Name()), parsed})
+	}
+
+	if len(datedFiles) == 0 {
+		logger.Wf("Aucun fichier XML trouvé dans le dossier %s", dir)
+		logger.Ff("Vérifiez que les fichiers sont nommés correctement avec une date")
 	}
 
 	// Trie par date décroissante
