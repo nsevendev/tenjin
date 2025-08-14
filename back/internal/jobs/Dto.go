@@ -1,49 +1,51 @@
 package jobs
 
-// JobDTO représente un métier complet selon l'API ROME metier
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
+// JobDTO Structure complète d'un métier ROME
 type JobDTO struct {
-	ID                               string                  `json:"_id"`
-	AccesEmploi                      string                  `json:"accesEmploi"`
-	Appellations                     []AppellationDTO        `json:"appellations"`
-	CentresInterets                  []CentreInteretDTO      `json:"centresInterets"`
-	CentresInteretsLies              []CentreInteretLieDTO   `json:"centresInteretsLies"`
-	Code                             string                  `json:"code"`
-	CodeIsco                         string                  `json:"codeIsco"`
-	CompetencesMobilisees            []CompetenceDTO         `json:"competencesMobilisees"`
-	CompetencesMobiliseesEmergentes  []CompetenceDTO         `json:"competencesMobiliseesEmergentes"`
-	CompetencesMobiliseesPrincipales []CompetenceDTO         `json:"competencesMobiliseesPrincipales"`
-	ContextesTravail                 []ContexteTravailDTO    `json:"contextesTravail"`
-	Definition                       string                  `json:"definition"`
-	DivisionsNaf                     []DivisionNafDTO        `json:"divisionsNaf"`
-	DomaineProfessionnel             DomaineProfessionnelDTO `json:"domaineProfessionnel"`
-	EmploiCadre                      bool                    `json:"emploiCadre"`
-	EmploiReglemente                 bool                    `json:"emploiReglemente"`
-	Formacodes                       []FormacodeDTO          `json:"formacodes"`
-	Libelle                          string                  `json:"libelle"`
-	Obsolete                         bool                    `json:"obsolete"`
-	RiasecMajeur                     string                  `json:"riasecMajeur"`
-	RiasecMineur                     string                  `json:"riasecMineur"`
-	SecteursActivites                []SecteurActiviteDTO    `json:"secteursActivites"`
-	SecteursActivitesLies            []SecteurActiviteLieDTO `json:"secteursActivitesLies"`
-	Themes                           []ThemeDTO              `json:"themes"`
-	TransitionDemographique          bool                    `json:"transitionDemographique"`
-	TransitionEcologique             bool                    `json:"transitionEcologique"`
-	TransitionEcologiqueDetaillee    string                  `json:"transitionEcologiqueDetaillee"`
-	TransitionNumerique              bool                    `json:"transitionNumerique"`
+	ID                               primitive.ObjectID      `json:"id" bson:"_id,omitempty"`
+	AccesEmploi                      string                  `json:"accesEmploi" bson:"accesEmploi"`
+	Appellations                     []AppellationDTO        `json:"appellations" bson:"appellations"`
+	CentresInterets                  []CentreInteretDTO      `json:"centresInterets" bson:"centresInterets"`
+	CentresInteretsLies              []CentreInteretLieDTO   `json:"centresInteretsLies" bson:"centresInteretsLies"`
+	Code                             string                  `json:"code" bson:"code"`
+	CodeIsco                         string                  `json:"codeIsco" bson:"codeIsco"`
+	CompetencesMobilisees            []CompetenceDTO         `json:"competencesMobilisees" bson:"competencesMobilisees"`
+	CompetencesMobiliseesEmergentes  []CompetenceDTO         `json:"competencesMobiliseesEmergentes" bson:"competencesMobiliseesEmergentes"`
+	CompetencesMobiliseesPrincipales []CompetenceDTO         `json:"competencesMobiliseesPrincipales" bson:"competencesMobiliseesPrincipales"`
+	ContextesTravail                 []ContexteTravailDTO    `json:"contextesTravail" bson:"contextesTravail"`
+	Definition                       string                  `json:"definition" bson:"definition"`
+	DivisionsNaf                     []DivisionNafDTO        `json:"divisionsNaf" bson:"divisionsNaf"`
+	DomaineProfessionnel             DomaineProfessionnelDTO `json:"domaineProfessionnel" bson:"domaineProfessionnel"`
+	EmploiCadre                      bool                    `json:"emploiCadre" bson:"emploiCadre"`
+	EmploiReglemente                 bool                    `json:"emploiReglemente" bson:"emploiReglemente"`
+	Formacodes                       []FormacodeDTO          `json:"formacodes" bson:"formacodes"`
+	Libelle                          string                  `json:"libelle" bson:"libelle"`
+	Obsolete                         bool                    `json:"obsolete" bson:"obsolete"`
+	RiasecMajeur                     string                  `json:"riasecMajeur" bson:"riasecMajeur"`
+	RiasecMineur                     string                  `json:"riasecMineur" bson:"riasecMineur"`
+	SecteursActivites                []SecteurActiviteDTO    `json:"secteursActivites" bson:"secteursActivites"`
+	SecteursActivitesLies            []SecteurActiviteLieDTO `json:"secteursActivitesLies" bson:"secteursActivitesLies"`
+	Themes                           []ThemeDTO              `json:"themes" bson:"themes"`
+	TransitionDemographique          bool                    `json:"transitionDemographique" bson:"transitionDemographique"`
+	TransitionEcologique             bool                    `json:"transitionEcologique" bson:"transitionEcologique"`
+	TransitionEcologiqueDetaillee    string                  `json:"transitionEcologiqueDetaillee" bson:"transitionEcologiqueDetaillee"`
+	TransitionNumerique              bool                    `json:"transitionNumerique" bson:"transitionNumerique"`
 }
 
-// JobSummaryDTO représente une version courte d'un métier (pour les recherches et listes)
-// TODO : peut etre a modifier au besoin
+// JobSummaryDTO Version résumée pour les listes
 type JobSummaryDTO struct {
-	ID                      string `json:"_id"`
-	Code                    string `json:"code"`
-	Libelle                 string `json:"libelle"`
-	Definition              string `json:"definition"`
-	RiasecMajeur            string `json:"riasecMajeur"`
-	RiasecMineur            string `json:"riasecMineur"`
-	TransitionEcologique    bool   `json:"transitionEcologique"`
-	TransitionNumerique     bool   `json:"transitionNumerique"`
-	TransitionDemographique bool   `json:"transitionDemographique"`
-	EmploiCadre             bool   `json:"emploiCadre"`
-	EmploiReglemente        bool   `json:"emploiReglemente"`
+	ID                      primitive.ObjectID      `json:"id" bson:"_id,omitempty"`
+	Code                    string                  `json:"code" bson:"code"`
+	Libelle                 string                  `json:"libelle" bson:"libelle"`
+	Definition              string                  `json:"definition" bson:"definition"`
+	RiasecMajeur            string                  `json:"riasecMajeur" bson:"riasecMajeur"`
+	RiasecMineur            string                  `json:"riasecMineur" bson:"riasecMineur"`
+	TransitionEcologique    bool                    `json:"transitionEcologique" bson:"transitionEcologique"`
+	TransitionNumerique     bool                    `json:"transitionNumerique" bson:"transitionNumerique"`
+	TransitionDemographique bool                    `json:"transitionDemographique" bson:"transitionDemographique"`
+	EmploiCadre             bool                    `json:"emploiCadre" bson:"emploiCadre"`
+	EmploiReglemente        bool                    `json:"emploiReglemente" bson:"emploiReglemente"`
+	DomaineProfessionnel    DomaineProfessionnelDTO `json:"domaineProfessionnel" bson:"domaineProfessionnel"`
 }

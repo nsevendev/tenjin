@@ -5,6 +5,7 @@ import (
 	"github.com/nsevenpack/logger/v2/logger"
 	"github.com/spf13/cobra"
 	"tenjin/back/apirome/cmd/metier"
+	"tenjin/back/apirome/cmd/rncpcmd"
 )
 
 func init() {
@@ -18,6 +19,8 @@ func main() {
 	rootCmd.AddCommand(metier.SyncAndWriteInFileListMetierSummary)
 	rootCmd.AddCommand(metier.SyncAndWriteInFileListMetierDetail)
 	rootCmd.AddCommand(metier.ImportDataListMetiersDetailCmd)
+	rootCmd.AddCommand(rncpcmd.ConvertXMLToJSONCmd)
+	rootCmd.AddCommand(rncpcmd.ImportDataRNCPCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		logger.Ff("erreur lors de l'exécution de la commande : %v", err)

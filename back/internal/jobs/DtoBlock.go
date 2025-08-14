@@ -1,90 +1,91 @@
 package jobs
 
-// AppellationDTO représente une appellation de métier
+// AppellationDTO Structure pour les appellations métier
 type AppellationDTO struct {
-	Code                          string             `json:"code"`
-	Libelle                       string             `json:"libelle"`
-	LibelleCourt                  string             `json:"libelleCourt"`
-	TransitionEcologique          bool               `json:"transitionEcologique"`
-	TransitionEcologiqueDetaillee string             `json:"transitionEcologiqueDetaillee"`
-	Classification                string             `json:"classification"` // PRINCIPALE, SYNONYME
-	CompetencesCles               []CompetenceCleDTO `json:"competencesCles"`
+	Code                          string             `json:"code" bson:"code"`
+	Libelle                       string             `json:"libelle" bson:"libelle"`
+	LibelleCourt                  string             `json:"libelleCourt" bson:"libelleCourt"`
+	TransitionEcologique          bool               `json:"transitionEcologique" bson:"transitionEcologique"`
+	TransitionEcologiqueDetaillee string             `json:"transitionEcologiqueDetaillee" bson:"transitionEcologiqueDetaillee"`
+	Classification                string             `json:"classification" bson:"classification"`
+	CompetencesCles               []CompetenceCleDTO `json:"competencesCles" bson:"competencesCles"`
 }
 
-// CompetenceCleDTO représente une compétence clé avec sa fréquence
+// CompetenceCleDTO Structure pour les compétences clés d'une appellation
 type CompetenceCleDTO struct {
-	Competence CompetenceDTO `json:"competence"`
-	Frequence  int           `json:"frequence"`
+	Competence CompetenceDTO `json:"competence" bson:"competence"`
+	Frequence  int           `json:"frequence" bson:"frequence"`
 }
 
-// CompetenceDTO représente une compétence
+// CompetenceDTO Structure pour les compétences
 type CompetenceDTO struct {
-	Type         string `json:"type"` // COMPETENCE-DETAILLEE, MACRO-SAVOIR-FAIRE, SAVOIR, MACRO-SAVOIR-ETRE-PROFESSIONNEL
-	Code         string `json:"code"`
-	Libelle      string `json:"libelle"`
-	CodeOgr      string `json:"codeOgr"`
-	RiasecMajeur string `json:"riasecMajeur,omitempty"`
-	RiasecMineur string `json:"riasecMineur,omitempty"`
+	Type         string `json:"type" bson:"type"`
+	Code         string `json:"code" bson:"code"`
+	Libelle      string `json:"libelle" bson:"libelle"`
+	CodeOgr      string `json:"codeOgr" bson:"codeOgr"`
+	RiasecMajeur string `json:"riasecMajeur,omitempty" bson:"riasecMajeur,omitempty"`
+	RiasecMineur string `json:"riasecMineur,omitempty" bson:"riasecMineur,omitempty"`
 }
 
-// CentreInteretDTO représente un centre d'intérêt
+// CentreInteretDTO Structure pour les centres d'intérêt
 type CentreInteretDTO struct {
-	Code    string `json:"code"`
-	Libelle string `json:"libelle"`
+	Code    string `json:"code" bson:"code"`
+	Libelle string `json:"libelle" bson:"libelle"`
 }
 
-// CentreInteretLieDTO représente un centre d'intérêt lié avec son importance
+// CentreInteretLieDTO Structure pour les centres d'intérêt liés
 type CentreInteretLieDTO struct {
-	CentreInteret CentreInteretDTO `json:"centreInteret"`
-	Principal     bool             `json:"principal"`
+	CentreInteret CentreInteretDTO `json:"centreInteret" bson:"centreInteret"`
+	Principal     bool             `json:"principal" bson:"principal"`
 }
 
-// ContexteTravailDTO représente un contexte de travail
+// ContexteTravailDTO Structure pour les contextes de travail
 type ContexteTravailDTO struct {
-	Code      string `json:"code"`
-	Libelle   string `json:"libelle"`
-	Categorie string `json:"categorie"` // CONDITIONS_TRAVAIL, HORAIRE_ET_DUREE_TRAVAIL, STATUT_EMPLOI
+	Code      string `json:"code" bson:"code"`
+	Libelle   string `json:"libelle" bson:"libelle"`
+	Categorie string `json:"categorie" bson:"categorie"`
 }
 
-// DivisionNafDTO représente une division NAF
+// DivisionNafDTO Structure pour les divisions NAF
 type DivisionNafDTO struct {
-	Code    string `json:"code"`
-	Libelle string `json:"libelle"`
+	Code    string `json:"code" bson:"code"`
+	Libelle string `json:"libelle" bson:"libelle"`
 }
 
-// DomaineProfessionnelDTO représente un domaine professionnel
+// DomaineProfessionnelDTO Structure pour le domaine professionnel
 type DomaineProfessionnelDTO struct {
-	Code         string          `json:"code"`
-	Libelle      string          `json:"libelle"`
-	GrandDomaine GrandDomaineDTO `json:"grandDomaine"`
+	Code         string          `json:"code" bson:"code"`
+	Libelle      string          `json:"libelle" bson:"libelle"`
+	GrandDomaine GrandDomaineDTO `json:"grandDomaine" bson:"grandDomaine"`
 }
 
-// GrandDomaineDTO représente un grand domaine professionnel
+// GrandDomaineDTO Structure pour les grands domaines
 type GrandDomaineDTO struct {
-	Code    string `json:"code"`
-	Libelle string `json:"libelle"`
+	Code    string `json:"code" bson:"code"`
+	Libelle string `json:"libelle" bson:"libelle"`
 }
 
-// FormacodeDTO représente un code de formation
+// FormacodeDTO Structure pour les formacodes
 type FormacodeDTO struct {
-	Code    string `json:"code"`
-	Libelle string `json:"libelle"`
+	Code    string `json:"code" bson:"code"`
+	Libelle string `json:"libelle" bson:"libelle"`
 }
 
-// SecteurActiviteDTO représente un secteur d'activité
+// SecteurActiviteDTO Structure pour les secteurs d'activité
 type SecteurActiviteDTO struct {
-	Code    string `json:"code"`
-	Libelle string `json:"libelle"`
+	Code            string              `json:"code" bson:"code"`
+	Libelle         string              `json:"libelle" bson:"libelle"`
+	SecteurActivite *SecteurActiviteDTO `json:"secteurActivite,omitempty" bson:"secteurActivite,omitempty"`
 }
 
-// SecteurActiviteLieDTO représente un secteur d'activité lié avec son importance
+// SecteurActiviteLieDTO Structure pour les secteurs d'activité liés
 type SecteurActiviteLieDTO struct {
-	Principal       bool               `json:"principal"`
-	SecteurActivite SecteurActiviteDTO `json:"secteurActivite"`
+	SecteurActivite SecteurActiviteDTO `json:"secteurActivite" bson:"secteurActivite"`
+	Principal       bool               `json:"principal" bson:"principal"`
 }
 
-// ThemeDTO représente un thème de métier
+// ThemeDTO Structure pour les thèmes
 type ThemeDTO struct {
-	Code    string `json:"code"`
-	Libelle string `json:"libelle"`
+	Code    string `json:"code" bson:"code"`
+	Libelle string `json:"libelle" bson:"libelle"`
 }
