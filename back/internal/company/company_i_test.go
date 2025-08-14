@@ -4,6 +4,7 @@ package company
 
 import (
 	"context"
+	"github.com/nsevenpack/testup"
 	"os"
 	"testing"
 
@@ -21,7 +22,7 @@ func TestMain(m *testing.M) {
 	}
 
 	dummyToken := []byte("dummy_test_token")
-	if _, err := tmpFile.Write(dummyToken); err != nil {
+	if _, err = tmpFile.Write(dummyToken); err != nil {
 		panic("Erreur lors de l’écriture dans le fichier temporaire : " + err.Error())
 	}
 	tmpFile.Close()
@@ -38,6 +39,8 @@ func TestMain(m *testing.M) {
 }
 
 func TestRetrieveCompanyInfo_Success(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test Retrieve Company Info Success")
+
 	siret := "94503764600011"
 	siren := "945037646"
 
@@ -50,6 +53,8 @@ func TestRetrieveCompanyInfo_Success(t *testing.T) {
 }
 
 func TestRetrieveCompanyInfo_NotFound(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test Retrieve Company Info Not Found")
+
 	siret := "00000000000000"
 	siren := "000000000"
 
@@ -61,6 +66,8 @@ func TestRetrieveCompanyInfo_NotFound(t *testing.T) {
 }
 
 func TestRetrieveCompanyInfo_MissingSiret(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test Retrieve Company Info Missing Siret")
+
 	info, err := companyServiceTest.RetrieveCompanyInfo(context.Background(), "", "123456789")
 
 	assert.Nil(t, info)
@@ -69,6 +76,8 @@ func TestRetrieveCompanyInfo_MissingSiret(t *testing.T) {
 }
 
 func TestRetrieveCompanyInfo_MissingSiren(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test Retrieve Company Info Missing Siren")
+
 	info, err := companyServiceTest.RetrieveCompanyInfo(context.Background(), "12345678900000", "")
 
 	assert.Nil(t, info)
@@ -77,6 +86,8 @@ func TestRetrieveCompanyInfo_MissingSiren(t *testing.T) {
 }
 
 func TestRetrieveCompanyInfo_InvalidSiret(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test Retrieve Company Info Invalid Siret")
+
 	siret := "abc"
 	siren := "123456789"
 

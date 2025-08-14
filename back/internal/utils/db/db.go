@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var Db *mongo.Database
+var Client *mongo.Database
 
 func ConnexionDatabase(environement string) {
 	logger.I("Connexion à la base de données ...")
@@ -33,7 +33,7 @@ func ConnexionDatabase(environement string) {
 		logger.Ff("Erreur de connexion à la base de données: %v", err)
 	}
 
-	Db = client.Database(dbName)
+	Client = client.Database(dbName)
 	CDb := client.Database(dbName).Client()
 
 	res := CDb.Ping(ctx, nil)
