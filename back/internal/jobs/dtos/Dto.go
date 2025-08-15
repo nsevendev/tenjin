@@ -44,7 +44,7 @@ type JobDTO struct {
 	MetiersEnProximite               []MetierSimpleDTO       `json:"metiersEnProximite" bson:"metiersEnProximite"`
 }
 
-// JobSummaryDTO Version résumée pour les listes
+// JobSummaryDTO Version résumée pour les listes ou affichages simple
 type JobSummaryDTO struct {
 	ID                      primitive.ObjectID      `json:"id" bson:"_id,omitempty"`
 	Code                    string                  `json:"code" bson:"code"`
