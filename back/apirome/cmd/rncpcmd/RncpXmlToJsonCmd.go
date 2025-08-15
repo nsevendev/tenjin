@@ -14,6 +14,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// ConvertXMLToJSONCmd est la commande pour convertir le fichier XML RNCP en JSON
+// Elle lit le dernier fichier XML trouvé dans le répertoire spécifié, le parse, le convertit en structures MongoDB,
+// et sauvegarde le résultat en JSON dans le même répertoire avec un nom de fichier basé sur la date et l'heure actuelle.
 var ConvertXMLToJSONCmd = &cobra.Command{
 	Use:   "rncp-xml-to-json",
 	Short: "Convertit le fichier XML RNCP en format JSON",

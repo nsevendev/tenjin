@@ -11,8 +11,11 @@ import (
 	"tenjin/back/internal/utils/db"
 )
 
+// ImportDataRNCPCmd est la commande pour importer les certifications RNCP en base MongoDB
+// Elle lit le dernier fichier JSON généré, le parse, et insère les données dans la collection "certifications"
+// Optionnellement, elle peut vider la collection existante avant l'import
 var ImportDataRNCPCmd = &cobra.Command{
-	Use:   "rncp-import-json-in-bdd",
+	Use:   "import-rncp-database",
 	Short: "Importe toutes les certifications RNCP en base MongoDB",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Connexion à la base
