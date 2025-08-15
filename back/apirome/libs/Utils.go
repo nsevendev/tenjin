@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-// PrintBrutInFile enregistre un slice dans un fichier JSON avec un nom basé sur la date actuelle
+// PrintBrutInFile enregistre des données brut dans un fichier en JSON avec un nom basé sur la date actuelle
 func PrintBrutInFile(path string, body []byte) {
 	// 1. Créer le dossier path s'il n'existe pas
 	err := os.MkdirAll(path, 0755)
@@ -38,7 +38,7 @@ func PrintBrutInFile(path string, body []byte) {
 	}
 }
 
-// PrintSliceBrutInFile sauvegarde un slice en JSON dans un fichier
+// PrintSliceBrutInFile sauvegarde un slice en JSON dans un fichier avec un nom basé sur la date actuelle
 func PrintSliceBrutInFile(path string, slice any) {
 	// 1. Créer le dossier path s'il n'existe pas
 	err := os.MkdirAll(path, 0755)
