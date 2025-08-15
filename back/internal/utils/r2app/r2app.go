@@ -2,6 +2,7 @@ package r2app
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -10,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func R2Client(bucketName, accountId, accessKeyId, accessKeySecret string) *s3.Client{
+func NewR2Client(bucketName, accountId, accessKeyId, accessKeySecret string) *s3.Client{
   cfg, err := config.LoadDefaultConfig(context.TODO(),
     config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(accessKeyId, accessKeySecret, "")),
     config.WithRegion("auto"),
@@ -24,4 +25,16 @@ func R2Client(bucketName, accountId, accessKeyId, accessKeySecret string) *s3.Cl
     })
 
   return client
+}
+
+func (r *R2Client) ListBuckets() {
+    output, err := r.Client.ListBuckets(context.TODO(), &s3.ListBucketsInput{})
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    for _, object := range output.Buckets {
+        obj, _ := json.MarshalIndent(object, "", "\t")
+        fmt.Println(string(obj))
+    }
 }
