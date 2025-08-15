@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"tenjin/back/apirome/libs"
-	"tenjin/back/internal/utils/db"
+	"tenjin/back/internal/utils/database"
 )
 
 // ImportListCompetenceCompletInDatabaseCmd est la commande pour importer les compétences détaillées en JSON dans la base de données MongoDB
@@ -15,8 +15,8 @@ var ImportListCompetenceCompletInDatabaseCmd = &cobra.Command{
 	Use:   "import-competence-complet-database",
 	Short: "Importe toutes les compétences détaillées en JSON dans la base de données",
 	Run: func(cmd *cobra.Command, args []string) {
-		db.ConnexionDatabase("dev")
-		collection := db.Client.Collection("competences")
+		database.ConnexionDatabase("dev")
+		collection := database.Client.Collection("competences")
 
 		// 1. Ouvre le fichier JSON généré
 		file := libs.GetLastFileByDate("./apirome/version_4_0/data/listcompetencecomplet")
