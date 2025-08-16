@@ -42,7 +42,10 @@ services:
     env_file:
       - ../back/.env
     volumes:
-      - ../back:/app
+      - ../back/apirome:/app/apirome
+      - ../back/go.mod:/app/go.mod
+      - ../back/go.sum:/app/go.sum
+      - ../back/internal:/app/internal
     networks:
       - traefik-nseven
       - tenjin
