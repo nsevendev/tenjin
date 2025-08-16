@@ -1,5 +1,10 @@
 package insee
 
+import (
+	"tenjin/back/internal/addresses"
+	"tenjin/back/internal/utils/constantes"
+)
+
 type AccessToken struct {
 	AccessToken string `json:"access_token"`
 }
@@ -7,13 +12,9 @@ type AccessToken struct {
 type CompanyInfo struct {
     BusinessName            string `json:"business_name"`
     Siret                   string `json:"siret"`
-    Sector                  string `json:"sector"`
-	Type                	string `json:"type"`
-    Addresses               []sireneAdresseEtablissement `json:"adresses"`
-    ZipCode                 string `json:"zipCode"`
-    City                    string `json:"city"`
-    Ape                     string `json:"ape"`
-    CategorieJuridique      string `json:"categorie_juridique"`
+    Addresses               []addresses.Address `json:"adresses"`
+	Status                	string `json:"status"`
+	Type                	constantes.TypeInstitute `json:"type"`
 }
 
 type sireneResponse struct {
@@ -21,10 +22,11 @@ type sireneResponse struct {
 }
 
 type sireneEtablissement struct {
-	Siret                 string                   `json:"siret"`
-	UniteLegale           sireneUniteLegale        `json:"uniteLegale"`
-	AdresseEtablissement  sireneAdresseEtablissement `json:"adresseEtablissement"`
-	Enseigne1Etablissement string                  `json:"enseigne1Etablissement"`
+	Siret                  string                     `json:"siret"`
+	UniteLegale            sireneUniteLegale          `json:"uniteLegale"`
+	AdresseEtablissement   sireneAdresseEtablissement `json:"adresseEtablissement"`
+	Adresse2Etablissement  *sireneAdresseEtablissement `json:"adresse2Etablissement"`
+	Enseigne1Etablissement string                     `json:"enseigne1Etablissement"`
 }
 
 type sireneUniteLegale struct {
@@ -32,6 +34,7 @@ type sireneUniteLegale struct {
 	DenominationUniteLegale        string `json:"denominationUniteLegale"`
 	ActivitePrincipaleUniteLegale  string `json:"activitePrincipaleUniteLegale"`
 	CategorieJuridiqueUniteLegale  string `json:"categorieJuridiqueUniteLegale"`
+	StatutAdministratifUniteLegale string `json:"statutAdministratifUniteLegale"`
 }
 
 type sireneAdresseEtablissement struct {

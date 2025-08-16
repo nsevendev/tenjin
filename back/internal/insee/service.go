@@ -114,7 +114,7 @@ func RefreshToken() (string, error) {
 }
 
 // check siret/siren + return basic company infos
-func buildAddressFromSireneData(a *sireneAdresseEtablissement) addresses.Address {
+func buildAddressFromSireneData(a *sireneAdresseEtablissement, typeAdresse constantes.TypeAddress) addresses.Address {
     streetParts := []string{
         a.TypeVoieEtablissement,
         a.LibelleVoieEtablissement,
@@ -133,11 +133,11 @@ func buildAddressFromSireneData(a *sireneAdresseEtablissement) addresses.Address
         ZipCode:     strings.TrimSpace(a.CodePostalEtablissement),
         City:        strings.TrimSpace(a.LibelleCommuneEtablissement),
         Country:     constantes.Country(country),
-        TypeAddress: constantes.TypeAddress("temporaire"),
+        TypeAddress: constantes.TypeAddress(typeAdresse),
     }
 }
 
-func deriveSector(cj string) constantes.TypeInstitute {
+func deriveType(cj string) constantes.TypeInstitute {
 	cj = strings.TrimSpace(cj)
 
 	if cj == "" {
@@ -154,19 +154,23 @@ func deriveSector(cj string) constantes.TypeInstitute {
 	}
 }
 
-func mapAPEtoCompType(ape string) string {
-	ape = strings.TrimSpace(ape)
-	if len(ape) < 2 {
-		return "company"
-	}
-	prefix := ape[:2]
-	switch prefix {
-	case "85":
-		return "training_center"
-	case "78":
-		return "recruiting_agency"
+func isEmptyAddress(addr addresses.Address) bool {
+    return addr.Number == "" &&
+        addr.Street == "" &&
+        addr.ZipCode == "" &&
+        addr.City == ""
+}
+
+func mapSireneStatusToState(sireneStatus string) constantes.StatusState {
+	switch sireneStatus {
+	case "A":
+		return constantes.StateEnable
+	case "C":
+		return constantes.StateDisable
+	case "S":
+		return constantes.StateSuspended
 	default:
-		return "company"
+		return constantes.StateArchived
 	}
 }
 
@@ -208,19 +212,13 @@ func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error
 		logger.Ef("Erreur lors du décodage de la réponse JSON: %v", err)
 		return nil, err
 	}
+
 	etab := sr.Etablissement
 
-	if siren != "" && etab.UniteLegale.Siren != "" && etab.UniteLegale.Siren != siren {
-		logger.Ef("Siren mismatch: attendu %s, trouvé %s", siren, etab.UniteLegale.Siren)
-		return nil, fmt.Errorf("siren mismatch: attendu %s, trouvé %s", siren, etab.UniteLegale.Siren)
-	}
-
 	apiSiren := strings.TrimSpace(etab.UniteLegale.Siren)
-
 	if apiSiren == "" && len(siret) >= 9 {
 		apiSiren = siret[:9]
 	}
-
 	if siren != "" && apiSiren != "" && apiSiren != siren {
 		logger.Ef("Siren mismatch: attendu %s, trouvé %s", siren, apiSiren)
 		return nil, fmt.Errorf("siren mismatch: attendu %s, trouvé %s", siren, apiSiren)
@@ -231,42 +229,46 @@ func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error
 		name = strings.TrimSpace(etab.Enseigne1Etablissement)
 	}
 
-	addr := buildAddressFromSireneData(&etab.AdresseEtablissement)
-	zip := strings.TrimSpace(etab.AdresseEtablissement.CodePostalEtablissement)
-	city := strings.TrimSpace(etab.AdresseEtablissement.LibelleCommuneEtablissement)
-	ape := strings.TrimSpace(etab.UniteLegale.ActivitePrincipaleUniteLegale)
-	cj := strings.TrimSpace(etab.UniteLegale.CategorieJuridiqueUniteLegale)
+	var addrs []addresses.Address
+	addr1 := buildAddressFromSireneData(&etab.AdresseEtablissement, constantes.TypeAddress("headOffice"))
+	if !isEmptyAddress(addr1) {
+		addrs = append(addrs, addr1)
+	}
+	if etab.Adresse2Etablissement != nil {
+		addr2 := buildAddressFromSireneData(etab.Adresse2Etablissement, constantes.TypeAddress("other"))
+		if !isEmptyAddress(addr2) {
+			addrs = append(addrs, addr2)
+		}
+	}
 
-	logger.If("adresse: %s, zip: %s, city: %s, ape: %s, cj: %s", addr, zip, city, ape, cj)
+	cj := strings.TrimSpace(etab.UniteLegale.CategorieJuridiqueUniteLegale)
+	etype := deriveType(cj)
+
+	status := mapSireneStatusToState(etab.UniteLegale.StatutAdministratifUniteLegale)
 
 	ci := &CompanyInfo{
-		BusinessName:       name,
-		Siret:              strings.TrimSpace(etab.Siret),
-		Siren:              apiSiren,
-		Address:            addr,
-		ZipCode:            zip,
-		City:               city,
-		Ape:                ape,
-		CategorieJuridique: cj,
-		Sector:             deriveSector(cj),
-		CompType:           mapAPEtoCompType(ape),
+		BusinessName: name,
+		Siret:        strings.TrimSpace(etab.Siret),
+		Addresses:    addrs,
+		Status:       string(status),
+		Type:         etype,
 	}
+
 	return ci, nil
 }
+
 
 func CheckSiretExists(siret string, siren string) (*CompanyInfo, error) {
 	companyInfo, err := findCompanyBySiretAndSiren(siret, siren)
 
-	// pas d'erreur (avec ou sans résultat)
 	if err == nil {
 		if companyInfo != nil {
-			logger.If("Entreprise trouvée: %s, SIRET: %s, SIREN: %s",
-				companyInfo.BusinessName, companyInfo.Siret, companyInfo.Siren)
+			logger.If("Entreprise trouvée: %s, SIRET: %s",
+				companyInfo.BusinessName, companyInfo.Siret)
 		}
 		return companyInfo, nil
 	}
 
-	// si erreur on test le cas 401 Unauthorized
 	if strings.Contains(err.Error(), "unauthorized") {
 		_, refreshErr := RefreshToken()
 		if refreshErr != nil {
@@ -277,6 +279,5 @@ func CheckSiretExists(siret string, siren string) (*CompanyInfo, error) {
 		return findCompanyBySiretAndSiren(siret, siren)
 	}
 
-	// autre erreur voir si besoin de les gerer....
 	return nil, err
 }
