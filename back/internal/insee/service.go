@@ -137,13 +137,21 @@ func buildAddressFromSireneData(a *sireneAdresseEtablissement) addresses.Address
     }
 }
 
-
-func deriveSector(cj string) string {
+func deriveSector(cj string) constantes.TypeInstitute {
 	cj = strings.TrimSpace(cj)
-	if cj != "" && strings.HasPrefix(cj, "7") {
-		return "public"
+
+	if cj == "" {
+		return constantes.InstitutePrivate
 	}
-	return "private"
+
+	switch {
+	case strings.HasPrefix(cj, "7"):
+		return constantes.InstitutePublic
+	case strings.HasPrefix(cj, "8"):
+		return constantes.InstituteAssociation
+	default:
+		return constantes.InstitutePrivate
+	}
 }
 
 func mapAPEtoCompType(ape string) string {
