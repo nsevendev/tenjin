@@ -42,7 +42,7 @@ services:
     env_file:
       - ../back/.env
     volumes:
-      - ../back/apirome:/app/apirome
+      - ../back:/app
     networks:
       - traefik-nseven
       - tenjin
