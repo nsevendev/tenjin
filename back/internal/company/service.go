@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/nsevenpack/logger/v2/logger"
-	"tenjin/back/internal/utils/mongohelpers/Helper"
+	"tenjin/back/internal/utils/mongohelpers"
 
 	"tenjin/back/internal/insee"
 
@@ -14,7 +14,7 @@ import (
 
 type companyService struct {
 	collection  *mongo.Collection
-	mongoHelper Helper.Helper
+	mongoHelper mongohelpers.Helper
 }
 
 type CompanyServiceInterface interface {
@@ -22,7 +22,7 @@ type CompanyServiceInterface interface {
 	Create(ctx context.Context, dto CompanyCreateDto) (*Company, error)
 }
 
-func NewCompanyService(db *mongo.Database, helper Helper.Helper) CompanyServiceInterface {
+func NewCompanyService(db *mongo.Database, helper mongohelpers.Helper) CompanyServiceInterface {
 	return &companyService{
 		collection:  db.Collection("company"),
 		mongoHelper: helper,
