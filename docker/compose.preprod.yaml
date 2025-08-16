@@ -41,6 +41,8 @@ services:
       - "traefik.http.services.tenjin-api.loadbalancer.server.port=${PORT}"
     env_file:
       - ../back/.env
+    volumes:
+      - ../back/apirome:/app/apirome
     networks:
       - traefik-nseven
       - tenjin
