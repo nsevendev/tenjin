@@ -3,8 +3,9 @@ package company
 import (
 	"context"
 	"fmt"
-	"github.com/nsevenpack/logger/v2/logger"
 	"tenjin/back/internal/utils/mongoapp"
+
+	"github.com/nsevenpack/logger/v2/logger"
 
 	"tenjin/back/internal/insee"
 
@@ -60,15 +61,14 @@ func (s *companyService) Create(ctx context.Context, dto CompanyCreateDto) (*Com
 	company := &Company{
 		BusinessName:  dto.BusinessName,
 		Siret:         dto.Siret,
-		Siren:         dto.Siren,
-		Sector:        dto.Sector,
-		CompType:      dto.CompType,
-		Address:       dto.Address,
-		ZipCode:       dto.ZipCode,
-		City:          dto.City,
+		Addresses:     dto.Addresses,
 		ContactEmails: dto.ContactEmails,
-		Formations:    dto.Formations,
-		Users:         dto.Users,
+		Phones:        dto.Phones,
+		Status:        dto.Status,
+		Type:          dto.Type,
+		LogoUrl:       dto.LogoUrl,
+		FormationIDs:  dto.FormationIDs,
+		UserIDs:       dto.UserIDs,
 	}
 
 	s.mongoHelper.SetTimestamps(company)
