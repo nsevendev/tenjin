@@ -12,7 +12,8 @@ func RequestGetListMetier(token string) *http.Request {
 	apiUrl := "https://api.francetravail.io/partenaire/rome-metiers/v1/metiers/metier"
 	req, err := http.NewRequest("GET", apiUrl, nil)
 	if err != nil {
-		logger.Ff("erreur lors de la création de la requête Get list metier summary : %v", err)
+		logger.Ef("erreur lors de la création de la requête Get list metier summary : %v", err)
+		return nil
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 
@@ -26,7 +27,8 @@ func RequestGetOneMetier(token, codeMetier string) *http.Request {
 	apiUrl := fmt.Sprintf("https://api.francetravail.io/partenaire/rome-metiers/v1/metiers/metier/%s", codeMetier)
 	req, err := http.NewRequest("GET", apiUrl, nil)
 	if err != nil {
-		logger.Ff("erreur lors de la création de la requête get one metier detail : %v", err)
+		logger.Ef("erreur lors de la création de la requête get one metier detail : %v", err)
+		return nil
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 
@@ -38,7 +40,8 @@ func RequestGetListCompetence(token string) *http.Request {
 	apiUrl := "https://api.francetravail.io/partenaire/rome-competences/v1/competences/competence"
 	req, err := http.NewRequest("GET", apiUrl, nil)
 	if err != nil {
-		logger.Ff("erreur lors de la création de la requête Get list competence : %v", err)
+		logger.Ef("erreur lors de la création de la requête Get list competence : %v", err)
+		return nil
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 
@@ -50,7 +53,8 @@ func RequestGetOneCompetenceComplet(token, codeCompetence string) *http.Request 
 	apiUrl := fmt.Sprintf("https://api.francetravail.io/partenaire/rome-competences/v1/competences/competence/%v", codeCompetence)
 	req, err := http.NewRequest("GET", apiUrl, nil)
 	if err != nil {
-		logger.Ff("erreur lors de la création de la requête get one comeptence complet: %v", err)
+		logger.Ef("erreur lors de la création de la requête get one comeptence complet: %v", err)
+		return nil
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 

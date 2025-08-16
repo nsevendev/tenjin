@@ -71,7 +71,8 @@ func ExecuteRequest(req *http.Request) []byte {
 
 	resp, err := clientHTTP.Do(req)
 	if err != nil {
-		logger.Ff("erreur lors de l'appel : %v", err)
+		logger.Ef("erreur lors de l'appel : %v", err)
+		return nil
 	}
 
 	defer func(Body io.ReadCloser) {
@@ -81,12 +82,14 @@ func ExecuteRequest(req *http.Request) []byte {
 	}(resp.Body)
 
 	if resp.StatusCode != http.StatusOK {
-		logger.Ff("erreur retour status : %d %s", resp.StatusCode, resp.Status)
+		logger.Ef("erreur retour status : %d %s", resp.StatusCode, resp.Status)
+		return nil
 	}
 
 	body, errBody := io.ReadAll(resp.Body)
 	if errBody != nil {
-		logger.Ff("erreur lors de la lecture du corps de la réponse : %v", errBody)
+		logger.Ef("erreur lors de la lecture du corps de la réponse : %v", errBody)
+		return nil
 	}
 
 	return body
