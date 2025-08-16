@@ -4,9 +4,10 @@ package company
 
 import (
 	"context"
-	"github.com/nsevenpack/testup"
 	"os"
 	"testing"
+
+	"github.com/nsevenpack/testup"
 
 	"tenjin/back/internal/insee"
 
