@@ -5,12 +5,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/nsevenpack/logger/v2/logger"
 	"io"
 	"net/http"
 	"os"
 	"strings"
+	"tenjin/back/internal/addresses"
+	"tenjin/back/internal/utils/constantes"
 	"time"
+
+	"github.com/nsevenpack/logger/v2/logger"
 
 	"github.com/nsevenpack/env/env"
 )
@@ -111,23 +114,29 @@ func RefreshToken() (string, error) {
 }
 
 // check siret/siren + return basic company infos
-func buildAddressFromSireneData(a *sireneAdresseEtablissement) string {
-	parts := []string{
-		a.NumeroVoieEtablissement,
-		a.TypeVoieEtablissement,
-		a.LibelleVoieEtablissement,
-		a.ComplementAdresseEtablissement,
-	}
-	var out []string
-	for _, p := range parts {
-		p = strings.TrimSpace(p)
-		if p != "" {
-			out = append(out, p)
-		}
-	}
-	addr := strings.Join(out, " ")
-	return strings.Join(strings.Fields(addr), " ")
+func buildAddressFromSireneData(a *sireneAdresseEtablissement) addresses.Address {
+    streetParts := []string{
+        a.TypeVoieEtablissement,
+        a.LibelleVoieEtablissement,
+        a.ComplementAdresseEtablissement,
+    }
+    street := strings.Join(strings.Fields(strings.Join(streetParts, " ")), " ")
+
+    country := "france"
+    if a.LibellePaysEtrangerEtablissement != "" {
+        country = strings.ToLower(strings.TrimSpace(a.LibellePaysEtrangerEtablissement))
+    }
+
+    return addresses.Address{
+        Number:      strings.TrimSpace(a.NumeroVoieEtablissement),
+        Street:      street,
+        ZipCode:     strings.TrimSpace(a.CodePostalEtablissement),
+        City:        strings.TrimSpace(a.LibelleCommuneEtablissement),
+        Country:     constantes.Country(country),
+        TypeAddress: constantes.TypeAddress("temporaire"),
+    }
 }
+
 
 func deriveSector(cj string) string {
 	cj = strings.TrimSpace(cj)

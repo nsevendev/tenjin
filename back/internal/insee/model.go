@@ -7,10 +7,9 @@ type AccessToken struct {
 type CompanyInfo struct {
     BusinessName            string `json:"business_name"`
     Siret                   string `json:"siret"`
-	Siren                   string `json:"siren"`
     Sector                  string `json:"sector"`
-	CompType                string `json:"comp_type"`
-    Address                 string `json:"adress"`
+	Type                	string `json:"type"`
+    Addresses               []sireneAdresseEtablissement `json:"adresses"`
     ZipCode                 string `json:"zipCode"`
     City                    string `json:"city"`
     Ape                     string `json:"ape"`
@@ -36,10 +35,11 @@ type sireneUniteLegale struct {
 }
 
 type sireneAdresseEtablissement struct {
-	NumeroVoieEtablissement        string `json:"numeroVoieEtablissement"`
-	TypeVoieEtablissement          string `json:"typeVoieEtablissement"`
-	LibelleVoieEtablissement       string `json:"libelleVoieEtablissement"`
-	ComplementAdresseEtablissement string `json:"complementAdresseEtablissement"`
-	CodePostalEtablissement        string `json:"codePostalEtablissement"`
-	LibelleCommuneEtablissement    string `json:"libelleCommuneEtablissement"`
+	NumeroVoieEtablissement          string `json:"numeroVoieEtablissement"`
+	TypeVoieEtablissement            string `json:"typeVoieEtablissement"`
+	LibelleVoieEtablissement         string `json:"libelleVoieEtablissement"`
+	ComplementAdresseEtablissement   string `json:"complementAdresseEtablissement"`
+	CodePostalEtablissement          string `json:"codePostalEtablissement"`
+	LibelleCommuneEtablissement      string `json:"libelleCommuneEtablissement"`
+	LibellePaysEtrangerEtablissement string `json:"LibellePaysEtrangerEtablissement"`
 }
