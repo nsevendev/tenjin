@@ -1,44 +1,94 @@
 definitions:
-  company.CompanyCreateDto:
+  addresses.Address:
     properties:
-      address:
-        type: string
-      business_name:
-        type: string
       city:
+        maxLength: 100
+        minLength: 2
         type: string
-      comp_type:
+      country:
+        allOf:
+        - $ref: '#/definitions/constantes.Country'
+        enum:
+        - france
+      number:
         type: string
-      contact_emails:
-        items:
-          type: string
-        type: array
-      formations:
-        items:
-          type: string
-        type: array
-      sector:
+      street:
+        maxLength: 200
+        minLength: 5
         type: string
-      siren:
-        type: string
-      siret:
-        type: string
-      users:
-        items:
-          type: string
-        type: array
-      zip_code:
+      typeAddress:
+        allOf:
+        - $ref: '#/definitions/constantes.TypeAddress'
+        enum:
+        - invoice
+        - shipping
+        - headOffice
+        - other
+        - temporaire
+      zipCode:
         type: string
     required:
-    - address
-    - business_name
     - city
-    - comp_type
-    - sector
-    - siren
+    - country
+    - number
+    - street
+    - typeAddress
+    - zipCode
+    type: object
+  company.CompanyCreateDto:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/addresses.Address'
+        type: array
+      businessName:
+        maxLength: 200
+        minLength: 2
+        type: string
+      contactEmails:
+        items:
+          type: string
+        minItems: 1
+        type: array
+      formationIds:
+        items:
+          type: string
+        type: array
+      logoUrl:
+        type: string
+      phones:
+        items:
+          $ref: '#/definitions/phones.Phone'
+        minItems: 1
+        type: array
+      siret:
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/constantes.StatusState'
+        enum:
+        - enable
+        - disable
+        - suspended
+      type:
+        allOf:
+        - $ref: '#/definitions/constantes.TypeInstitute'
+        enum:
+        - public
+        - private
+        - association
+      userIds:
+        items:
+          type: string
+        type: array
+    required:
+    - addresses
+    - businessName
+    - contactEmails
+    - phones
     - siret
-    - users
-    - zip_code
+    - status
+    - type
     type: object
   company.CompanyRetrieveDto:
     properties:
@@ -50,6 +100,82 @@ definitions:
     - siren
     - siret
     type: object
+  constantes.Country:
+    enum:
+    - france
+    type: string
+    x-enum-varnames:
+    - CountryFrance
+  constantes.LabelPhone:
+    enum:
+    - directeur
+    - secretaire
+    - reception
+    - administration
+    - autre
+    - general
+    - technique
+    - support
+    type: string
+    x-enum-varnames:
+    - LabelPhoneDirector
+    - LabelPhoneSecretary
+    - LabelPhoneReception
+    - LabelPhoneAdministration
+    - LabelPhoneOther
+    - LabelPhoneGeneral
+    - LabelPhoneTechnical
+    - LabelPhoneSupport
+  constantes.PhoneNumberType:
+    enum:
+    - mobile
+    - fixe
+    - fax
+    - autre
+    type: string
+    x-enum-varnames:
+    - PhoneMobile
+    - PhoneFixe
+    - PhoneFax
+    - PhoneOther
+  constantes.StatusState:
+    enum:
+    - enable
+    - disable
+    - suspended
+    - expired
+    - archived
+    type: string
+    x-enum-varnames:
+    - StateEnable
+    - StateDisable
+    - StateSuspended
+    - StateExpired
+    - StateArchived
+  constantes.TypeAddress:
+    enum:
+    - invoice
+    - shipping
+    - headOffice
+    - other
+    - temporaire
+    type: string
+    x-enum-varnames:
+    - AddressInvoice
+    - AddressShipping
+    - AddressHeadOffice
+    - AddressOther
+    - AddressTemporary
+  constantes.TypeInstitute:
+    enum:
+    - public
+    - private
+    - association
+    type: string
+    x-enum-varnames:
+    - InstitutePublic
+    - InstitutePrivate
+    - InstituteAssociation
   ginresponse.JsonFormatterSwag:
     properties:
       data:
@@ -71,6 +197,35 @@ definitions:
         type: integer
       timestamp:
         type: string
+    type: object
+  phones.Phone:
+    properties:
+      label:
+        allOf:
+        - $ref: '#/definitions/constantes.LabelPhone'
+        enum:
+        - directeur
+        - secretaire
+        - reception
+        - administration
+        - autre
+        - technique
+        - support
+      number:
+        description: Format international
+        type: string
+      type:
+        allOf:
+        - $ref: '#/definitions/constantes.PhoneNumberType'
+        enum:
+        - mobile
+        - fix
+        - fax
+        - autre
+    required:
+    - label
+    - number
+    - type
     type: object
 info:
   contact: {}
