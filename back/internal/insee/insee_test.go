@@ -1,11 +1,13 @@
 package insee
 
 import (
+	"os"
+	"tenjin/back/internal/utils/constantes"
+	"testing"
+
 	"github.com/nsevenpack/logger/v2/logger"
 	"github.com/nsevenpack/testup"
 	"github.com/stretchr/testify/assert"
-	"os"
-	"testing"
 )
 
 var (
@@ -43,24 +45,35 @@ func Test_buildAddressFromSireneData(t *testing.T) {
 		TypeVoieEtablissement:          "rue",
 		LibelleVoieEtablissement:       "des Écoles",
 		ComplementAdresseEtablissement: "Bât A",
+		CodePostalEtablissement:        "75001",
+		LibelleCommuneEtablissement:    "Paris",
+		LibellePaysEtrangerEtablissement: "",
 	}
-	addr := buildAddressFromSireneData(&a)
-	assert.Equal(t, "10 rue des Écoles Bât A", addr)
+
+	addr := buildAddressFromSireneData(&a, constantes.TypeAddress("headOffice"))
+
+	assert.Equal(t, "10", addr.Number)
+	assert.Equal(t, "rue des Écoles Bât A", addr.Street)
+	assert.Equal(t, "75001", addr.ZipCode)
+	assert.Equal(t, "Paris", addr.City)
+	assert.Equal(t, "france", string(addr.Country))
+	assert.Equal(t, "headOffice", string(addr.TypeAddress))
 }
 
-func Test_deriveSector(t *testing.T) {
-	testup.LogNameTestInfo(t, "Test derive sector from code juridique")
+func Test_deriveType(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test derive type from code juridique")
 
-	assert.Equal(t, "public", deriveSector("7210"))
-	assert.Equal(t, "private", deriveSector("5498"))
-	assert.Equal(t, "private", deriveSector(""))
+	assert.Equal(t, constantes.InstitutePublic, deriveType("7210"))
+	assert.Equal(t, constantes.InstitutePrivate, deriveType("5498"))
+	assert.Equal(t, constantes.InstitutePrivate, deriveType(""))
+	assert.Equal(t, constantes.InstituteAssociation, deriveType("851"))
 }
 
-func Test_mapAPEtoCompType(t *testing.T) {
-	testup.LogNameTestInfo(t, "Test map APE to company type")
+func Test_mapSireneStatusToState(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test map sirene status to internal state")
 
-	assert.Equal(t, "training_center", mapAPEtoCompType("8510Z"))
-	assert.Equal(t, "recruiting_agency", mapAPEtoCompType("7820Z"))
-	assert.Equal(t, "company", mapAPEtoCompType("6202A"))
-	assert.Equal(t, "company", mapAPEtoCompType(""))
+	assert.Equal(t, constantes.StateEnable, mapSireneStatusToState("A"))
+	assert.Equal(t, constantes.StateDisable, mapSireneStatusToState("C"))
+	assert.Equal(t, constantes.StateSuspended, mapSireneStatusToState("S"))
+	assert.Equal(t, constantes.StateArchived, mapSireneStatusToState("X"))
 }

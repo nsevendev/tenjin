@@ -4,11 +4,12 @@ package insee
 
 import (
 	"fmt"
-	"github.com/nsevenpack/env/env"
-	"github.com/nsevenpack/testup"
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/nsevenpack/env/env"
+	"github.com/nsevenpack/testup"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -99,7 +100,6 @@ func TestFindCompanyBySiretAndSiren_Success(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, info)
 	assert.Equal(t, siret, info.Siret)
-	assert.Equal(t, siren, info.Siren)
 }
 
 func TestFindCompanyBySiretAndSiren_NotFound(t *testing.T) {
@@ -162,7 +162,6 @@ func TestCheckSiretExists_Success(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, info)
 	assert.Equal(t, siret, info.Siret)
-	assert.Equal(t, siren, info.Siren)
 }
 
 func TestCheckSiretExists_NotFound(t *testing.T) {

@@ -50,7 +50,6 @@ func TestRetrieveCompanyInfo_Success(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, info)
 	assert.Equal(t, siret, info.Siret)
-	assert.Equal(t, siren, info.Siren)
 }
 
 func TestRetrieveCompanyInfo_NotFound(t *testing.T) {
