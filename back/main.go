@@ -3,7 +3,7 @@ package main
 import (
 	"strings"
 	"tenjin/back/docs"
-	"tenjin/back/internal/utils/db"
+	"tenjin/back/internal/utils/database"
 	"tenjin/back/migration"
 	"tenjin/back/router"
 
@@ -64,8 +64,8 @@ func setSwaggerOpt(hostTraefikApi string) {
 }
 
 func initDbAndMigNosql(appEnv string) {
-	db.ConnexionDatabase(appEnv)
-	migrator := mignosql.New(db.Client)
+	database.ConnexionDatabase(appEnv)
+	migrator := mignosql.New(database.Client)
 	// EXAMPLE => migrator.Add(migration.<namefile>)
 	// ajouter les migrations ici ...
 	migrator.Add(migration.CreateCompanyCollection)

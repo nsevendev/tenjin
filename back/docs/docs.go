@@ -299,10 +299,10 @@ const docTemplate = `{
                 "autre"
             ],
             "x-enum-varnames": [
-                "PhoneMobile",
-                "PhoneFixe",
-                "PhoneFax",
-                "PhoneOther"
+                "PhoneNumberMobile",
+                "PhoneNumberFixe",
+                "PhoneNumberFax",
+                "PhoneNumberOther"
             ]
         },
         "constantes.StatusState": {
@@ -315,11 +315,11 @@ const docTemplate = `{
                 "archived"
             ],
             "x-enum-varnames": [
-                "StateEnable",
-                "StateDisable",
-                "StateSuspended",
-                "StateExpired",
-                "StateArchived"
+                "StatusStateEnable",
+                "StatusStateDisable",
+                "StatusStateSuspended",
+                "StatusStateExpired",
+                "StatusStateArchived"
             ]
         },
         "constantes.TypeAddress": {
@@ -332,11 +332,11 @@ const docTemplate = `{
                 "temporaire"
             ],
             "x-enum-varnames": [
-                "AddressInvoice",
-                "AddressShipping",
-                "AddressHeadOffice",
-                "AddressOther",
-                "AddressTemporary"
+                "TypeAddressInvoice",
+                "TypeAddressShipping",
+                "TypeAddressHeadOffice",
+                "TypeAddressOther",
+                "TypeAddressTemporary"
             ]
         },
         "constantes.TypeInstitute": {

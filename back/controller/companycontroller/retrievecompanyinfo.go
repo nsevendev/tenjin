@@ -9,7 +9,7 @@ import (
 	"github.com/nsevenpack/logger/v2/logger"
 )
 
-// Retrieve godoc
+// RetrieveCompanyInfo Retrieve godoc
 // @Summary Récupère les infos d'une entreprise via SIRET/SIREN
 // @Description Utilise l'API INSEE pour retrouver les informations d'une entreprise
 // @Tags company

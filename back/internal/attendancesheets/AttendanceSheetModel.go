@@ -1,4 +1,4 @@
-package attendancesheet
+package attendancesheets
 
 import (
 	"time"

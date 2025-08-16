@@ -134,10 +134,10 @@ definitions:
     - autre
     type: string
     x-enum-varnames:
-    - PhoneMobile
-    - PhoneFixe
-    - PhoneFax
-    - PhoneOther
+    - PhoneNumberMobile
+    - PhoneNumberFixe
+    - PhoneNumberFax
+    - PhoneNumberOther
   constantes.StatusState:
     enum:
     - enable
@@ -147,11 +147,11 @@ definitions:
     - archived
     type: string
     x-enum-varnames:
-    - StateEnable
-    - StateDisable
-    - StateSuspended
-    - StateExpired
-    - StateArchived
+    - StatusStateEnable
+    - StatusStateDisable
+    - StatusStateSuspended
+    - StatusStateExpired
+    - StatusStateArchived
   constantes.TypeAddress:
     enum:
     - invoice
@@ -161,11 +161,11 @@ definitions:
     - temporaire
     type: string
     x-enum-varnames:
-    - AddressInvoice
-    - AddressShipping
-    - AddressHeadOffice
-    - AddressOther
-    - AddressTemporary
+    - TypeAddressInvoice
+    - TypeAddressShipping
+    - TypeAddressHeadOffice
+    - TypeAddressOther
+    - TypeAddressTemporary
   constantes.TypeInstitute:
     enum:
     - public

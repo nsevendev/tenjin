@@ -1,4 +1,4 @@
-package cmd
+package metier
 
 import (
 	"encoding/json"
@@ -6,15 +6,17 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"tenjin/back/apirome/libs"
-	"tenjin/back/internal/utils/db"
+	"tenjin/back/internal/utils/database"
 )
 
-var ImportDataListMetiersDetailCmd = &cobra.Command{
-	Use:   "import-metier-detail",
-	Short: "Importe tous les métiers détaillés en base MongoDB",
+// ImportListMetiersDetailInDatabaseCmd est la commande pour importer les métiers détaillés en JSON dans la base de données MongoDB
+// Cette commande lit un fichier JSON contenant les détails des métiers et les insère dans la collection "metiers"
+var ImportListMetiersDetailInDatabaseCmd = &cobra.Command{
+	Use:   "import-metier-detail-database",
+	Short: "Importe tous les métiers détaillés en json dans la database",
 	Run: func(cmd *cobra.Command, args []string) {
-		db.ConnexionDatabase("dev")
-		collection := db.Client.Collection("metiers")
+		database.ConnexionDatabase("dev")
+		collection := database.Client.Collection("metiers")
 
 		// 1. Ouvre le fichier JSON généré
 		file := libs.GetLastFileByDate("./apirome/version_4_0/data/listmetierdetail")

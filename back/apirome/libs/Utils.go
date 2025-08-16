@@ -13,10 +13,11 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strings"
 	"time"
 )
 
-// PrintBrutInFile enregistre un slice dans un fichier JSON avec un nom basé sur la date actuelle
+// PrintBrutInFile enregistre des données brut dans un fichier en JSON avec un nom basé sur la date actuelle
 func PrintBrutInFile(path string, body []byte) {
 	// 1. Créer le dossier path s'il n'existe pas
 	err := os.MkdirAll(path, 0755)
@@ -37,7 +38,7 @@ func PrintBrutInFile(path string, body []byte) {
 	}
 }
 
-// PrintSliceBrutInFile sauvegarde un slice en JSON dans un fichier
+// PrintSliceBrutInFile sauvegarde un slice en JSON dans un fichier avec un nom basé sur la date actuelle
 func PrintSliceBrutInFile(path string, slice any) {
 	// 1. Créer le dossier path s'il n'existe pas
 	err := os.MkdirAll(path, 0755)
@@ -70,7 +71,8 @@ func ExecuteRequest(req *http.Request) []byte {
 
 	resp, err := clientHTTP.Do(req)
 	if err != nil {
-		logger.Ff("erreur lors de l'appel : %v", err)
+		logger.Ef("erreur lors de l'appel : %v", err)
+		return nil
 	}
 
 	defer func(Body io.ReadCloser) {
@@ -80,12 +82,14 @@ func ExecuteRequest(req *http.Request) []byte {
 	}(resp.Body)
 
 	if resp.StatusCode != http.StatusOK {
-		logger.Ff("erreur retour status : %d %s", resp.StatusCode, resp.Status)
+		logger.Ef("erreur retour status : %d %s", resp.StatusCode, resp.Status)
+		return nil
 	}
 
 	body, errBody := io.ReadAll(resp.Body)
 	if errBody != nil {
-		logger.Ff("erreur lors de la lecture du corps de la réponse : %v", errBody)
+		logger.Ef("erreur lors de la lecture du corps de la réponse : %v", errBody)
+		return nil
 	}
 
 	return body
@@ -163,6 +167,61 @@ func GetLastFileByDate(dir string) string {
 	if len(datedFiles) == 0 {
 		logger.Wf("Aucun fichier JSON trouvé dans le dossier %s", dir)
 		logger.Ff("Vérifiez que les fichiers sont nommés correctement avec le format YYYYMMDD_HHMMSS.json %v", os.ErrNotExist)
+	}
+
+	// Trie par date décroissante
+	sort.Slice(datedFiles, func(i, j int) bool {
+		return datedFiles[i].date.After(datedFiles[j].date)
+	})
+
+	return datedFiles[0].name
+}
+
+// GetLastXMLFileByDate Récupère le dernier fichier XML dans le dossier donné
+func GetLastXMLFileByDate(dir string) string {
+	files, err := os.ReadDir(dir)
+	if err != nil {
+		logger.Ff("Erreur lors de la lecture du dossier %s : %v", dir, err)
+	}
+
+	// Regex pour fichiers XML avec date (ex: rncp_2024-01-15.xml ou rncp_20240115.xml)
+	re := regexp.MustCompile(`(\d{4}-\d{2}-\d{2}|\d{8})\.xml$`)
+
+	type datedFile struct {
+		name string
+		date time.Time
+	}
+
+	var datedFiles []datedFile
+
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+		matches := re.FindStringSubmatch(file.Name())
+		if len(matches) != 2 {
+			continue
+		}
+
+		var parsed time.Time
+		var err error
+
+		// Essayer les deux formats
+		if strings.Contains(matches[1], "-") {
+			parsed, err = time.Parse("2006-01-02", matches[1])
+		} else {
+			parsed, err = time.Parse("20060102", matches[1])
+		}
+
+		if err != nil {
+			continue
+		}
+		datedFiles = append(datedFiles, datedFile{filepath.Join(dir, file.Name()), parsed})
+	}
+
+	if len(datedFiles) == 0 {
+		logger.Wf("Aucun fichier XML trouvé dans le dossier %s", dir)
+		logger.Ff("Vérifiez que les fichiers sont nommés correctement avec une date")
 	}
 
 	// Trie par date décroissante
