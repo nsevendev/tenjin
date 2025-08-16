@@ -1,62 +1,66 @@
 #!/bin/bash
 
 echo "=== 🔍 Status Compétences ==="
-echo "$(date)"
+echo "📅 $(date)"
 echo ""
 
-# Status du processus
-PIDS=$(ps aux | grep "list-competence-complet" | grep -v grep | grep -v "check_process" | awk '{print $2}' | xargs)
-
-if [ -n "$PIDS" ]; then
-    echo "✅ Processus en cours (PID: $PIDS)"
-    # Compter le nombre de processus
-    NB_PROCESS=$(echo $PIDS | wc -w)
-    if [ "$NB_PROCESS" -gt 1 ]; then
-        echo "⚠️  Attention: $NB_PROCESS processus détectés (peut-être des doublons)"
-    fi
+# Vérification propre avec pgrep
+if pgrep -f "list-competence-complet" > /dev/null; then
+    PID=$(pgrep -f "list-competence-complet" | head -1)  # ← Prendre seulement le premier
+    echo "✅ Processus en cours (PID: $PID)"
 else
     echo "❌ Processus arrêté"
 fi
 
 echo ""
 
-# Vérifier si le fichier log existe
-if [ -f competences.log ]; then
-    echo "Statistiques du log :"
-    echo "Lignes totales: $(wc -l < competences.log)"
-    echo "Taille du fichier: $(du -h competences.log | cut -f1)"
+if [ -f competences.log ]; then  # ← Changé selon votre fichier
+    echo "📊 Statistiques :"
+    LIGNES=$(wc -l < competences.log)
+    TAILLE=$(du -h competences.log | cut -f1)
+    echo "  📄 Lignes: $LIGNES"
+    echo "  📈 Taille: $TAILLE"
     echo ""
-
-    # Compteurs d'erreurs et de succès
+    
     echo "🎯 Progression :"
-    ERREURS=$(grep -c "Erreur\|FATAL\|ERROR" competences.log 2>/dev/null || echo "0")
-    SUCCES=$(grep -c "bien ajoutée" competences.log 2>/dev/null || echo "0")
-    PROGRESSION=$(grep "Progression:" competences.log | tail -1 2>/dev/null || echo "Aucune progression trouvée")
-
-    echo "Succès: $SUCCES"
-    echo "Erreurs: $ERREURS"
-    echo "Dernière progression: $PROGRESSION"
-
-    # Calcul du taux de succès si on a des données
-    if [ "$SUCCES" -gt 0 ] || [ "$ERREURS" -gt 0 ]; then
+    
+    # CORRECTION : Nettoyer les retours à la ligne
+    SUCCES=$(grep -c "bien ajoutée" competences.log 2>/dev/null | tr -d '\n' | head -1)
+    ERREURS=$(grep -c -E "(Erreur|FATAL|ERROR)" competences.log 2>/dev/null | tr -d '\n' | head -1)
+    
+    # Valeurs par défaut si vide
+    SUCCES=${SUCCES:-0}
+    ERREURS=${ERREURS:-0}
+    
+    echo "  ✅ Succès: $SUCCES"
+    echo "  ❌ Erreurs: $ERREURS"
+    
+    # Calcul sécurisé
+    if [ "$SUCCES" -gt 0 ] 2>/dev/null && [ "$ERREURS" -ge 0 ] 2>/dev/null; then
         TOTAL=$((SUCCES + ERREURS))
-        TAUX=$(echo "scale=1; $SUCCES * 100 / $TOTAL" | bc -l 2>/dev/null || echo "N/A")
-        echo "  📈 Taux de succès: ${TAUX}%"
+        if [ "$TOTAL" -gt 0 ]; then
+            TAUX=$((SUCCES * 100 / TOTAL))
+            echo "  📈 Taux de succès: ${TAUX}%"
+        fi
     fi
-
+    
     echo ""
-
-    # Dernières erreurs s'il y en a
-    DERNIERES_ERREURS=$(grep "Erreur\|FATAL\|ERROR" competences.log | tail -3)
+    echo "🔄 Dernière progression :"
+    tail -n 50 competences.log | grep "Progression:" | tail -1 | sed 's/^/  /' || echo "  Aucune progression trouvée"
+    
+    echo ""
+    echo "⚠️  Dernières erreurs :"
+    DERNIERES_ERREURS=$(tail -n 30 competences.log | grep -E "(Erreur|FATAL|ERROR)" | tail -3)
     if [ -n "$DERNIERES_ERREURS" ]; then
-        echo "Dernières erreurs :"
         echo "$DERNIERES_ERREURS" | sed 's/^/  /'
-        echo ""
+    else
+        echo "  Aucune erreur récente"
     fi
-
-    echo "Dernières lignes du log :"
-    tail -n 5 competences.log | sed 's/^/  /'
-
+    
+    echo ""
+    echo "📋 Dernières lignes :"
+    tail -n 3 competences.log | sed 's/^/  /'
+    
 else
-    echo "Fichier log (competences.log) introuvable"
+    echo "❌ Pas de fichier log (competences.log)"
 fi
