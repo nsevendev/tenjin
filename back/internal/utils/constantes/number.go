@@ -3,8 +3,8 @@ package constantes
 type PhoneNumberType string
 
 const (
-	PhoneMobile PhoneNumberType = "mobile"
-	PhoneFixe   PhoneNumberType = "fixe"
-	PhoneFax    PhoneNumberType = "fax"
-	PhoneOther  PhoneNumberType = "autre"
+	PhoneNumberMobile PhoneNumberType = "mobile"
+	PhoneNumberFixe   PhoneNumberType = "fixe"
+	PhoneNumberFax    PhoneNumberType = "fax"
+	PhoneNumberOther  PhoneNumberType = "autre"
 )

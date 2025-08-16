@@ -8,16 +8,19 @@ import (
 	"github.com/spf13/cobra"
 	"tenjin/back/apirome/libs"
 	"tenjin/back/apirome/rncp"
-	"tenjin/back/internal/utils/db"
+	"tenjin/back/internal/utils/database"
 )
 
+// ImportDataRNCPCmd est la commande pour importer les certifications RNCP en base MongoDB
+// Elle lit le dernier fichier JSON généré, le parse, et insère les données dans la collection "certifications"
+// Optionnellement, elle peut vider la collection existante avant l'import
 var ImportDataRNCPCmd = &cobra.Command{
-	Use:   "rncp-import-json-in-bdd",
+	Use:   "import-rncp-database",
 	Short: "Importe toutes les certifications RNCP en base MongoDB",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Connexion à la base
-		db.ConnexionDatabase("dev")
-		collection := db.Client.Collection("certifications")
+		database.ConnexionDatabase("dev")
+		collection := database.Client.Collection("certifications")
 
 		// 1. Trouve le dernier fichier JSON généré
 		file := libs.GetLastFileByDate("./apirome/rncp/data")

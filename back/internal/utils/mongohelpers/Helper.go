@@ -1,4 +1,4 @@
-package mongoapp
+package mongohelpers
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package ressource
+package ressources
 
 import (
 	"time"

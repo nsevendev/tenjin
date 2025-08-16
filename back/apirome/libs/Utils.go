@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-// PrintBrutInFile enregistre un slice dans un fichier JSON avec un nom basé sur la date actuelle
+// PrintBrutInFile enregistre des données brut dans un fichier en JSON avec un nom basé sur la date actuelle
 func PrintBrutInFile(path string, body []byte) {
 	// 1. Créer le dossier path s'il n'existe pas
 	err := os.MkdirAll(path, 0755)
@@ -38,7 +38,7 @@ func PrintBrutInFile(path string, body []byte) {
 	}
 }
 
-// PrintSliceBrutInFile sauvegarde un slice en JSON dans un fichier
+// PrintSliceBrutInFile sauvegarde un slice en JSON dans un fichier avec un nom basé sur la date actuelle
 func PrintSliceBrutInFile(path string, slice any) {
 	// 1. Créer le dossier path s'il n'existe pas
 	err := os.MkdirAll(path, 0755)
@@ -71,7 +71,8 @@ func ExecuteRequest(req *http.Request) []byte {
 
 	resp, err := clientHTTP.Do(req)
 	if err != nil {
-		logger.Ff("erreur lors de l'appel : %v", err)
+		logger.Ef("erreur lors de l'appel : %v", err)
+		return nil
 	}
 
 	defer func(Body io.ReadCloser) {
@@ -81,12 +82,14 @@ func ExecuteRequest(req *http.Request) []byte {
 	}(resp.Body)
 
 	if resp.StatusCode != http.StatusOK {
-		logger.Ff("erreur retour status : %d %s", resp.StatusCode, resp.Status)
+		logger.Ef("erreur retour status : %d %s", resp.StatusCode, resp.Status)
+		return nil
 	}
 
 	body, errBody := io.ReadAll(resp.Body)
 	if errBody != nil {
-		logger.Ff("erreur lors de la lecture du corps de la réponse : %v", errBody)
+		logger.Ef("erreur lors de la lecture du corps de la réponse : %v", errBody)
+		return nil
 	}
 
 	return body

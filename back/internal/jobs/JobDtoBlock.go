@@ -2,13 +2,38 @@ package jobs
 
 // AppellationDTO Structure pour les appellations métier
 type AppellationDTO struct {
-	Code                          string             `json:"code" bson:"code"`
-	Libelle                       string             `json:"libelle" bson:"libelle"`
-	LibelleCourt                  string             `json:"libelleCourt" bson:"libelleCourt"`
-	TransitionEcologique          bool               `json:"transitionEcologique" bson:"transitionEcologique"`
-	TransitionEcologiqueDetaillee string             `json:"transitionEcologiqueDetaillee" bson:"transitionEcologiqueDetaillee"`
-	Classification                string             `json:"classification" bson:"classification"`
-	CompetencesCles               []CompetenceCleDTO `json:"competencesCles" bson:"competencesCles"`
+	Code                          string                 `json:"code" bson:"code"`
+	Libelle                       string                 `json:"libelle" bson:"libelle"`
+	LibelleCourt                  string                 `json:"libelleCourt" bson:"libelleCourt"`
+	TransitionEcologique          bool                   `json:"transitionEcologique" bson:"transitionEcologique"`
+	TransitionEcologiqueDetaillee string                 `json:"transitionEcologiqueDetaillee" bson:"transitionEcologiqueDetaillee"`
+	Classification                string                 `json:"classification" bson:"classification"`
+	CompetencesCles               []CompetenceCleDTO     `json:"competencesCles" bson:"competencesCles"`
+	EmploiReglemente              bool                   `json:"emploiReglemente" bson:"emploiReglemente"`
+	Secondaire                    bool                   `json:"secondaire" bson:"secondaire"`
+	EmploiCadre                   bool                   `json:"emploiCadre" bson:"emploiCadre"`
+	TransitionNumerique           bool                   `json:"transitionNumerique" bson:"transitionNumerique"`
+	TransitionDemographique       bool                   `json:"transitionDemographique" bson:"transitionDemographique"`
+	AppellationsEnvisageables     []AppellationSimpleDTO `json:"appellationsEnvisageables" bson:"appellationsEnvisageables"`
+	MetiersProches                []MetierSimpleDTO      `json:"metiersProches" bson:"metiersProches"`
+	MetiersEnvisageables          []MetierSimpleDTO      `json:"metiersEnvisageables" bson:"metiersEnvisageables"`
+	AppellationsProches           []AppellationSimpleDTO `json:"appellationsProches" bson:"appellationsProches"`
+	RomeParent                    string                 `json:"romeParent" bson:"romeParent"`
+}
+
+// AppellationSimpleDTO Pour les références d'appellations
+type AppellationSimpleDTO struct {
+	Code    string           `json:"code" bson:"code"`
+	Libelle string           `json:"libelle" bson:"libelle"`
+	Metier  *MetierSimpleDTO `json:"metier,omitempty" bson:"metier,omitempty"`
+}
+
+// MetierSimpleDTO Pour les références de métiers
+type MetierSimpleDTO struct {
+	Code         string `json:"code" bson:"code"`
+	Libelle      string `json:"libelle" bson:"libelle"`
+	RiasecMineur string `json:"riasecMineur" bson:"riasecMineur"`
+	RiasecMajeur string `json:"riasecMajeur" bson:"riasecMajeur"`
 }
 
 // CompetenceCleDTO Structure pour les compétences clés d'une appellation
@@ -29,8 +54,9 @@ type CompetenceDTO struct {
 
 // CentreInteretDTO Structure pour les centres d'intérêt
 type CentreInteretDTO struct {
-	Code    string `json:"code" bson:"code"`
-	Libelle string `json:"libelle" bson:"libelle"`
+	Code       string `json:"code" bson:"code"`
+	Libelle    string `json:"libelle" bson:"libelle"`
+	Definition string `json:"definition,omitempty" bson:"definition,omitempty"`
 }
 
 // CentreInteretLieDTO Structure pour les centres d'intérêt liés
@@ -75,6 +101,7 @@ type FormacodeDTO struct {
 type SecteurActiviteDTO struct {
 	Code            string              `json:"code" bson:"code"`
 	Libelle         string              `json:"libelle" bson:"libelle"`
+	Definition      string              `json:"definition,omitempty" bson:"definition,omitempty"`
 	SecteurActivite *SecteurActiviteDTO `json:"secteurActivite,omitempty" bson:"secteurActivite,omitempty"`
 }
 

@@ -12,7 +12,7 @@ import (
 // c'est une commande assez rapide
 var SyncAndWriteInFileListMetierSummary = &cobra.Command{
 	Use:   "list-metier-summary",
-	Short: "Télécharge le résumé des métiers ('code', 'libelle') et l'enregistre en JSON dans un fichier",
+	Short: "Télécharge la liste des métiers résumé et enregistre en JSON dans un fichier",
 	Run: func(cmd *cobra.Command, args []string) {
 		token := libs.GetToken()
 

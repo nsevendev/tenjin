@@ -1,6 +1,9 @@
 package jobs
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
+)
 
 // JobDTO Structure complète d'un métier ROME
 type JobDTO struct {
@@ -32,9 +35,16 @@ type JobDTO struct {
 	TransitionEcologique             bool                    `json:"transitionEcologique" bson:"transitionEcologique"`
 	TransitionEcologiqueDetaillee    string                  `json:"transitionEcologiqueDetaillee" bson:"transitionEcologiqueDetaillee"`
 	TransitionNumerique              bool                    `json:"transitionNumerique" bson:"transitionNumerique"`
+	Label                            string                  `json:"label" bson:"label"`
+	DateFin                          *time.Time              `json:"dateFin,omitempty" bson:"dateFin,omitempty"`
+	AppellationsEnvisageables        []AppellationSimpleDTO  `json:"appellationsEnvisageables" bson:"appellationsEnvisageables"`
+	MetiersEnvisageables             []MetierSimpleDTO       `json:"metiersEnvisageables" bson:"metiersEnvisageables"`
+	MetiersProches                   []MetierSimpleDTO       `json:"metiersProches" bson:"metiersProches"`
+	AppellationsProches              []AppellationSimpleDTO  `json:"appellationsProches" bson:"appellationsProches"`
+	MetiersEnProximite               []MetierSimpleDTO       `json:"metiersEnProximite" bson:"metiersEnProximite"`
 }
 
-// JobSummaryDTO Version résumée pour les listes
+// JobSummaryDTO Version résumée pour les listes ou affichages simple
 type JobSummaryDTO struct {
 	ID                      primitive.ObjectID      `json:"id" bson:"_id,omitempty"`
 	Code                    string                  `json:"code" bson:"code"`

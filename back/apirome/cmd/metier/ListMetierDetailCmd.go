@@ -10,9 +10,12 @@ import (
 	"time"
 )
 
+// SyncAndWriteInFileListMetierDetail est la commande pour télécharger les détails de chaque métier et les enregistrer en JSON dans un fichier
+// Cette commande est plus longue car elle télécharge les détails de chaque métier un par un avec un delais de 2 secondes entre chaque requête
+// pour respecter la contrainte du serveur API france travail
 var SyncAndWriteInFileListMetierDetail = &cobra.Command{
 	Use:   "list-metier-detail",
-	Short: "Télécharge metier par metier avec leur detail, crée un tableau de metier et enregistre ce tableau en JSON dans un fichier",
+	Short: "Télécharge metier par metier avec leur detail et enregistre en JSON dans un fichier (long)",
 	Run: func(cmd *cobra.Command, args []string) {
 		type Metier struct {
 			Code    string `json:"code"`
@@ -47,6 +50,5 @@ var SyncAndWriteInFileListMetierDetail = &cobra.Command{
 
 		// Sauvegarder tous le tableau de body dans un fichier JSON
 		libs.PrintSliceBrutInFile("./apirome/version_4_0/data/listmetierdetail", allBodies)
-		logger.If("Détails des métiers sauvegardés dans ./apirome/version40/data/listmetierdetail")
 	},
 }
