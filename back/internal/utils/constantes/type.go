@@ -39,44 +39,53 @@ const (
 type TypeAddress string
 
 const (
-	AddressInvoice    TypeAddress = "invoice"
-	AddressShipping   TypeAddress = "shipping"
-	AddressHeadOffice TypeAddress = "headOffice"
-	AddressOther      TypeAddress = "other"
-	AddressTemporary  TypeAddress = "temporaire"
+	TypeAddressInvoice    TypeAddress = "invoice"
+	TypeAddressShipping   TypeAddress = "shipping"
+	TypeAddressHeadOffice TypeAddress = "headOffice"
+	TypeAddressOther      TypeAddress = "other"
+	TypeAddressTemporary  TypeAddress = "temporaire"
 )
 
 // TypeAccessLevel - Niveaux d'accès possibles
 type TypeAccessLevel string
 
 const (
-	AccessPrivate  TypeAccessLevel = "private"
-	AccessTeachers TypeAccessLevel = "teachers"
-	AccessSession  TypeAccessLevel = "session"
+	TypeAccessPrivate  TypeAccessLevel = "private"
+	TypeAccessTeachers TypeAccessLevel = "teachers"
+	TypeAccessSession  TypeAccessLevel = "session"
 )
 
 type TypeCourseContentBlock string
 
 const (
-	ContentBlockText  TypeCourseContentBlock = "text"
-	ContentBlockFile  TypeCourseContentBlock = "file"
-	ContentBlockEmbed TypeCourseContentBlock = "embed"
-	ContentBlockQuiz  TypeCourseContentBlock = "quiz"
-	ContentBlockLink  TypeCourseContentBlock = "link"
-	ContentBlockCode  TypeCourseContentBlock = "code"
-	ContentBlockAudio TypeCourseContentBlock = "audio"
-	ContentBlockOther TypeCourseContentBlock = "other"
+	TypeContentBlockText  TypeCourseContentBlock = "text"
+	TypeContentBlockFile  TypeCourseContentBlock = "file"
+	TypeContentBlockEmbed TypeCourseContentBlock = "embed"
+	TypeContentBlockQuiz  TypeCourseContentBlock = "quiz"
+	TypeContentBlockLink  TypeCourseContentBlock = "link"
+	TypeContentBlockCode  TypeCourseContentBlock = "code"
+	TypeContentBlockAudio TypeCourseContentBlock = "audio"
+	TypeContentBlockOther TypeCourseContentBlock = "other"
 )
 
 type TypeRessourceAssociated string
 
 const (
-	User       TypeRessourceAssociated = "user"
-	Session    TypeRessourceAssociated = "session"
-	Institute  TypeRessourceAssociated = "institute"
-	Offer      TypeRessourceAssociated = "offer"
-	Quiz       TypeRessourceAssociated = "quiz"
-	Recruiter  TypeRessourceAssociated = "recruiter"
-	Evaluation TypeRessourceAssociated = "evaluation"
-	Competence TypeRessourceAssociated = "competence"
+	TypeRessourceUser       TypeRessourceAssociated = "user"
+	TypeRessourceSession    TypeRessourceAssociated = "session"
+	TypeRessourceInstitute  TypeRessourceAssociated = "institute"
+	TypeRessourceOffer      TypeRessourceAssociated = "offer"
+	TypeRessourceQuiz       TypeRessourceAssociated = "quiz"
+	TypeRessourceRecruiter  TypeRessourceAssociated = "recruiter"
+	TypeRessourceEvaluation TypeRessourceAssociated = "evaluation"
+	TypeRessourceCompetence TypeRessourceAssociated = "competence"
+)
+
+type TypeChannel string
+
+const (
+	TypeChannelInfo      TypeChannel = "info"      // Salon d’info, pas de débat possible
+	TypeChannelPrivate   TypeChannel = "private"   // Salon privé, accès limité
+	TypeChannelModerated TypeChannel = "moderated" // Salon modéré, messages contrôlés par des modérateurs
+	TypeChannelRecruiter TypeChannel = "recruiter" // Salon spécial recruteur, avec auto-suppression après 1 mois
 )

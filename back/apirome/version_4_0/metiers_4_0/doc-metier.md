@@ -22,9 +22,9 @@
 
 ### 2. `transitionEcologique` et `transitionEcologiqueDetaillee`
 
-* **Définition :**
+* **Définition:**
 
-    * `transitionEcologique` : booléen, indique si le métier est concerné par la transition écologique (oui/non).
+    * `transitionEcologique`: booléen, indique si le métier est concerné par la transition écologique (oui/non).
     * `transitionEcologiqueDetaillee` : code ou libellé décrivant le **type d’impact** du métier sur la transition écologique (ex : “EMPLOI\_BLANC” = pas ou peu impacté, “EMPLOI\_VERT”, “EMPLOI\_VERT\_CROISSANT”, etc.).
 
 * **Utilité :**
