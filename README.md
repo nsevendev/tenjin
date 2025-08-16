@@ -135,3 +135,17 @@ go run main.go list-metier-detail
   * `go run main.go list-metier-detail`
 
 4. **Exploiter les fichiers JSON générés pour importer ou mapper dans l’app dans la bdd**
+
+---
+
+### Commande pour lancer la commande list competence complet en arriere plan
+```sh
+# lancer cette commande à la racine du projet
+nohup make apir cmd=list-competence-complet > competences.log 2>&1 < /dev/null &
+
+# pour voir les logs
+tail -f competences.log
+
+#ou pour voir toutes les stats
+./check_process_competence-cmd.sh
+```
