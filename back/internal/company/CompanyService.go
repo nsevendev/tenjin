@@ -4,14 +4,10 @@ import (
 	"context"
 	"fmt"
 	"github.com/nsevenpack/logger/v2/logger"
-	"tenjin/back/internal/utils/mongohelpers"
-
-	"github.com/nsevenpack/logger/v2/logger"
-
-	"tenjin/back/internal/insee"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"tenjin/back/internal/insee"
+	"tenjin/back/internal/utils/mongohelpers"
 )
 
 type companyService struct {

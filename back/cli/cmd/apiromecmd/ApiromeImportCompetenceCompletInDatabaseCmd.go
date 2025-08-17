@@ -64,7 +64,7 @@ var ApiromeImportListCompetenceCompletInDatabaseCmd = &cobra.Command{
 			logger.Ff("Erreur lors de l'écriture du log : %v", err)
 			return
 		}
-		logger.If(importSuccessString)
+		logger.If("%v", importSuccessString)
 	},
 }
 

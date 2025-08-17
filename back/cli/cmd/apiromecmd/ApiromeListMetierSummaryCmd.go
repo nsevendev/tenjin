@@ -47,7 +47,7 @@ var ApiromeListMetierSummaryCmd = &cobra.Command{
 				logger.Wf("%v", err)
 				return
 			}
-			logger.If(totalMetierString)
+			logger.If("%v", totalMetierString)
 		}
 
 		if _, err := fileManager.WriteData(json.RawMessage(bodyListMetierSummary), nil); err != nil {

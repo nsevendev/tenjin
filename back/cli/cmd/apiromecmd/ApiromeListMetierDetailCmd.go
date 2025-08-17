@@ -65,7 +65,7 @@ var ApiromeListMetierDetailCmd = &cobra.Command{
 			req, err := apirome.RequestGetOneMetier(token, metier.Code)
 			if err != nil {
 				errString := fmt.Sprintf("erreur lors de la création de la requête pour le métier %v : %v", metier.Code, err)
-				logger.Ef(errString)
+				logger.Ef("%v", errString)
 				errorCount++
 				errorsEntry = append(errorsEntry, errorEntry{
 					Code:      metier.Code,
@@ -77,7 +77,7 @@ var ApiromeListMetierDetailCmd = &cobra.Command{
 			body, err := httpclient.ExecuteRequest(req)
 			if err != nil {
 				errString := fmt.Sprintf("erreur lors de l'appel pour le métier %v : %v", metier.Code, err)
-				logger.Ef(errString)
+				logger.Ef("%v", errString)
 				errorCount++
 				errorsEntry = append(errorsEntry, errorEntry{
 					Code:      metier.Code,
@@ -116,7 +116,7 @@ var ApiromeListMetierDetailCmd = &cobra.Command{
 			return
 		}
 
-		logger.If(metierTraitesString)
-		logger.If(bodieString)
+		logger.If("%v", metierTraitesString)
+		logger.If("%v", bodieString)
 	},
 }
