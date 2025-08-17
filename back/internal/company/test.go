@@ -1,11 +1,20 @@
 package company
 
 import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"tenjin/back/internal/addresses"
 	"tenjin/back/internal/phones"
 	"tenjin/back/internal/utils/constantes"
+)
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
+package company
+
+import (
+"tenjin/back/internal/addresses"
+"tenjin/back/internal/phones"
+"tenjin/back/internal/utils/constantes"
+
+"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type CompanyRetrieveDto struct {
