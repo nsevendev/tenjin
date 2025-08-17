@@ -109,61 +109,137 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "addresses.Address": {
+            "type": "object",
+            "required": [
+                "city",
+                "country",
+                "number",
+                "street",
+                "typeAddress",
+                "zipCode"
+            ],
+            "properties": {
+                "city": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 2
+                },
+                "country": {
+                    "enum": [
+                        "france"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/constantes.Country"
+                        }
+                    ]
+                },
+                "number": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 5
+                },
+                "typeAddress": {
+                    "enum": [
+                        "invoice",
+                        "shipping",
+                        "headOffice",
+                        "other",
+                        "temporaire"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/constantes.TypeAddress"
+                        }
+                    ]
+                },
+                "zipCode": {
+                    "type": "string"
+                }
+            }
+        },
         "company.CompanyCreateDto": {
             "type": "object",
             "required": [
-                "address",
-                "business_name",
-                "city",
-                "comp_type",
-                "sector",
-                "siren",
+                "addresses",
+                "businessName",
+                "contactEmails",
+                "phones",
                 "siret",
-                "users",
-                "zip_code"
+                "status",
+                "type"
             ],
             "properties": {
-                "address": {
-                    "type": "string"
+                "addresses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/addresses.Address"
+                    }
                 },
-                "business_name": {
-                    "type": "string"
+                "businessName": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 2
                 },
-                "city": {
-                    "type": "string"
+                "contactEmails": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    }
                 },
-                "comp_type": {
-                    "type": "string"
-                },
-                "contact_emails": {
+                "formationIds": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                "formations": {
+                "logoUrl": {
+                    "type": "string"
+                },
+                "phones": {
                     "type": "array",
+                    "minItems": 1,
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/phones.Phone"
                     }
-                },
-                "sector": {
-                    "type": "string"
-                },
-                "siren": {
-                    "type": "string"
                 },
                 "siret": {
                     "type": "string"
                 },
-                "users": {
+                "status": {
+                    "enum": [
+                        "enable",
+                        "disable",
+                        "suspended"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/constantes.StatusState"
+                        }
+                    ]
+                },
+                "type": {
+                    "enum": [
+                        "public",
+                        "private",
+                        "association"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/constantes.TypeInstitute"
+                        }
+                    ]
+                },
+                "userIds": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
-                },
-                "zip_code": {
-                    "type": "string"
                 }
             }
         },
@@ -181,6 +257,100 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "constantes.Country": {
+            "type": "string",
+            "enum": [
+                "france"
+            ],
+            "x-enum-varnames": [
+                "CountryFrance"
+            ]
+        },
+        "constantes.LabelPhone": {
+            "type": "string",
+            "enum": [
+                "directeur",
+                "secretaire",
+                "reception",
+                "administration",
+                "autre",
+                "general",
+                "technique",
+                "support"
+            ],
+            "x-enum-varnames": [
+                "LabelPhoneDirector",
+                "LabelPhoneSecretary",
+                "LabelPhoneReception",
+                "LabelPhoneAdministration",
+                "LabelPhoneOther",
+                "LabelPhoneGeneral",
+                "LabelPhoneTechnical",
+                "LabelPhoneSupport"
+            ]
+        },
+        "constantes.PhoneNumberType": {
+            "type": "string",
+            "enum": [
+                "mobile",
+                "fixe",
+                "fax",
+                "autre"
+            ],
+            "x-enum-varnames": [
+                "PhoneNumberMobile",
+                "PhoneNumberFixe",
+                "PhoneNumberFax",
+                "PhoneNumberOther"
+            ]
+        },
+        "constantes.StatusState": {
+            "type": "string",
+            "enum": [
+                "enable",
+                "disable",
+                "suspended",
+                "expired",
+                "archived"
+            ],
+            "x-enum-varnames": [
+                "StatusStateEnable",
+                "StatusStateDisable",
+                "StatusStateSuspended",
+                "StatusStateExpired",
+                "StatusStateArchived"
+            ]
+        },
+        "constantes.TypeAddress": {
+            "type": "string",
+            "enum": [
+                "invoice",
+                "shipping",
+                "headOffice",
+                "other",
+                "temporaire"
+            ],
+            "x-enum-varnames": [
+                "TypeAddressInvoice",
+                "TypeAddressShipping",
+                "TypeAddressHeadOffice",
+                "TypeAddressOther",
+                "TypeAddressTemporary"
+            ]
+        },
+        "constantes.TypeInstitute": {
+            "type": "string",
+            "enum": [
+                "public",
+                "private",
+                "association"
+            ],
+            "x-enum-varnames": [
+                "InstitutePublic",
+                "InstitutePrivate",
+                "InstituteAssociation"
+            ]
         },
         "ginresponse.JsonFormatterSwag": {
             "type": "object",
@@ -213,6 +383,49 @@ const docTemplate = `{
                 },
                 "timestamp": {
                     "type": "string"
+                }
+            }
+        },
+        "phones.Phone": {
+            "type": "object",
+            "required": [
+                "label",
+                "number",
+                "type"
+            ],
+            "properties": {
+                "label": {
+                    "enum": [
+                        "directeur",
+                        "secretaire",
+                        "reception",
+                        "administration",
+                        "autre",
+                        "technique",
+                        "support"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/constantes.LabelPhone"
+                        }
+                    ]
+                },
+                "number": {
+                    "description": "Format international",
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "mobile",
+                        "fix",
+                        "fax",
+                        "autre"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/constantes.PhoneNumberType"
+                        }
+                    ]
                 }
             }
         }

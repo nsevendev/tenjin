@@ -1,11 +1,12 @@
 package insee
 
 import (
-	"fmt"
 	"os"
-	"strings"
+	"tenjin/back/internal/utils/constantes"
 	"testing"
 
+	"github.com/nsevenpack/logger/v2/logger"
+	"github.com/nsevenpack/testup"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,6 +21,7 @@ func TestMain(m *testing.M) {
 
 	tmpFile, err := os.CreateTemp("", "token_test_*.txt")
 	if err != nil {
+		logger.Ef("Erreur lors de la creation du fichier temporaire : %v", err)
 		panic("Erreur lors de la creation du fichier temporaire : " + err.Error())
 	}
 	tempTokenFile = tmpFile.Name()
@@ -35,228 +37,43 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-// token
-
-func TestSaveToken_WriteToFile(t *testing.T) {
-	token = testToken
-
-	err := SaveToken()
-	assert.Nil(t, err)
-
-	content, err := os.ReadFile(tokenFile)
-	assert.Nil(t, err)
-	assert.Equal(t, testToken, string(content))
-}
-
-func TestLoadToken_ReadFromFile(t *testing.T) {
-	expected := "token-du-fichier"
-	err := os.WriteFile(tokenFile, []byte(expected), 0644)
-	assert.Nil(t, err)
-
-	err = LoadToken()
-	assert.Nil(t, err)
-	assert.Equal(t, expected, token)
-}
-
-func TestLoadToken_FileDoesNotExist(t *testing.T) {
-	nonExistentFile := tempTokenFile + "_missing"
-
-	oldTokenFile := tokenFile
-	tokenFile = nonExistentFile
-	defer func() { tokenFile = oldTokenFile }()
-
-	err := LoadToken()
-	assert.Nil(t, err)
-	assert.Equal(t, "", token)
-}
-
-func TestGetToken_ReturnsInMemoryToken(t *testing.T) {
-	token = "in-memory-token"
-	actual := GetToken()
-	assert.Equal(t, "in-memory-token", actual)
-}
-
-func TestRefreshToken_RefreshToken(t *testing.T) {
-	clientID := os.Getenv("SIRENE_CLIENT_KEY")
-	clientSecret := os.Getenv("SIRENE_CLIENT_SECRET")
-
-	if clientID == "" || clientSecret == "" {
-		t.Fatal("SIRENE_CLIENT_KEY ou SIRENE_CLIENT_SECRET non définis")
-	}
-
-	newToken, err := RefreshToken()
-	assert.Nil(t, err)
-	assert.NotEmpty(t, newToken)
-	assert.Equal(t, newToken, GetToken())
-
-	content, err := os.ReadFile(tokenFile)
-	assert.Nil(t, err)
-	assert.Equal(t, newToken, string(content))
-}
-
-// siret/siren
-
 func Test_buildAddressFromSireneData(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test build address from sirene data")
+
 	a := sireneAdresseEtablissement{
-		NumeroVoieEtablissement:        "10",
-		TypeVoieEtablissement:          "rue",
-		LibelleVoieEtablissement:       "des Écoles",
-		ComplementAdresseEtablissement: "Bât A",
+		NumeroVoieEtablissement:          "10",
+		TypeVoieEtablissement:            "rue",
+		LibelleVoieEtablissement:         "des Écoles",
+		ComplementAdresseEtablissement:   "Bât A",
+		CodePostalEtablissement:          "75001",
+		LibelleCommuneEtablissement:      "Paris",
+		LibellePaysEtrangerEtablissement: "",
 	}
-	addr := buildAddressFromSireneData(a)
-	assert.Equal(t, "10 rue des Écoles Bât A", addr)
+
+	addr := buildAddressFromSireneData(&a, constantes.TypeAddress("headOffice"))
+
+	assert.Equal(t, "10", addr.Number)
+	assert.Equal(t, "rue des Écoles Bât A", addr.Street)
+	assert.Equal(t, "75001", addr.ZipCode)
+	assert.Equal(t, "Paris", addr.City)
+	assert.Equal(t, "france", string(addr.Country))
+	assert.Equal(t, "headOffice", string(addr.TypeAddress))
 }
 
-func Test_deriveSector(t *testing.T) {
-	assert.Equal(t, "public", deriveSector("7210"))
-	assert.Equal(t, "private", deriveSector("5498"))
-	assert.Equal(t, "private", deriveSector(""))
+func Test_deriveType(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test derive type from code juridique")
+
+	assert.Equal(t, constantes.InstitutePublic, deriveType("7210"))
+	assert.Equal(t, constantes.InstitutePrivate, deriveType("5498"))
+	assert.Equal(t, constantes.InstitutePrivate, deriveType(""))
+	assert.Equal(t, constantes.InstituteAssociation, deriveType("851"))
 }
 
-func Test_mapAPEtoCompType(t *testing.T) {
-	assert.Equal(t, "training_center", mapAPEtoCompType("8510Z"))
-	assert.Equal(t, "recruiting_agency", mapAPEtoCompType("7820Z"))
-	assert.Equal(t, "company", mapAPEtoCompType("6202A"))
-	assert.Equal(t, "company", mapAPEtoCompType(""))
-}
+func Test_mapSireneStatusToState(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test map sirene status to internal state")
 
-func TestFindCompanyBySiretAndSiren_Success(t *testing.T) {
-	err := LoadToken()
-	assert.Nil(t, err)
-
-	siret := "67205008502051"
-	siren := "672050085"
-
-	info, err := findCompanyBySiretAndSiren(siret, siren)
-
-	fmt.Printf("Résultat CompanyInfo : %+v\n", info)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, info)
-	assert.Equal(t, siret, info.Siret)
-	assert.Equal(t, siren, info.Siren)
-}
-
-func TestFindCompanyBySiretAndSiren_NotFound(t *testing.T) {
-	err := LoadToken()
-	assert.Nil(t, err)
-
-	siret := "00000000000000"
-	siren := "000000000"
-
-	info, err := findCompanyBySiretAndSiren(siret, siren)
-
-	assert.Nil(t, err)
-	assert.Nil(t, info)
-}
-
-func TestFindCompanyBySiretAndSiren_SirenMismatch(t *testing.T) {
-	err := LoadToken()
-	assert.Nil(t, err)
-
-	siret := "94503764600011"
-	wrongSiren := "123456789"
-
-	info, err := findCompanyBySiretAndSiren(siret, wrongSiren)
-
-	assert.Nil(t, info)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "siren mismatch")
-}
-
-func TestFindCompanyBySiretAndSiren_Unauthorized(t *testing.T) {
-	token = "invalid-token"
-
-	siret := "94503764600011"
-	siren := "945037646"
-
-	info, err := findCompanyBySiretAndSiren(siret, siren)
-
-	assert.Nil(t, info)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "unauthorized")
-}
-
-func TestCheckSiretExists_Success(t *testing.T) {
-	err := LoadToken()
-	assert.Nil(t, err)
-
-	siret := "94503764600011"
-	siren := "945037646"
-
-	info, err := CheckSiretExists(siret, siren)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, info)
-	assert.Equal(t, siret, info.Siret)
-	assert.Equal(t, siren, info.Siren)
-}
-
-func TestCheckSiretExists_NotFound(t *testing.T) {
-	err := LoadToken()
-	assert.Nil(t, err)
-
-	siret := "00000000000000"
-	siren := "000000000"
-
-	info, err := CheckSiretExists(siret, siren)
-
-	assert.Nil(t, err)
-	assert.Nil(t, info)
-}
-
-func TestFindCompanyBySiretAndSiren_BadRequest_DefaultBranch(t *testing.T) {
-    err := LoadToken()
-    assert.Nil(t, err)
-
-    if GetToken() == "" {
-        if os.Getenv("SIRENE_CLIENT_KEY") == "" || os.Getenv("SIRENE_CLIENT_SECRET") == "" {
-            t.Skip("Pas de token ni de credentials pour obtenir un 400 réel")
-        }
-        _, _ = RefreshToken()
-    }
-
-    badSiret := "ABC"
-    info, err := findCompanyBySiretAndSiren(badSiret, "")
-    if err != nil && strings.Contains(err.Error(), "unauthorized") {
-        t.Skip("Token invalide — test 400 ignoré")
-    }
-    assert.Nil(t, info)
-    assert.Error(t, err)
-    assert.Contains(t, err.Error(), "erreur API Sirene: 400")
-}
-
-func TestCheckSiretExists_UnauthorizedWithSuccessRefresh(t *testing.T) {
-	token = "invalid-token"
-
-	siret := "94503764600011"
-	siren := "945037646"
-
-	info, err := CheckSiretExists(siret, siren)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, info)
-	assert.Equal(t, siret, info.Siret)
-}
-
-func TestCheckSiretExists_UnauthorizedWithFailedRefresh(t *testing.T) {
-	token = "invalid-token"
-
-	origClientID := os.Getenv("SIRENE_CLIENT_KEY")
-	origClientSecret := os.Getenv("SIRENE_CLIENT_SECRET")
-	os.Unsetenv("SIRENE_CLIENT_KEY")
-	os.Unsetenv("SIRENE_CLIENT_SECRET")
-	defer func() {
-		os.Setenv("SIRENE_CLIENT_KEY", origClientID)
-		os.Setenv("SIRENE_CLIENT_SECRET", origClientSecret)
-	}()
-
-	siret := "94503764600011"
-	siren := "945037646"
-
-	info, err := CheckSiretExists(siret, siren)
-
-	assert.Nil(t, info)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "echec du refresh token")
+	assert.Equal(t, constantes.StatusStateEnable, mapSireneStatusToState("A"))
+	assert.Equal(t, constantes.StatusStateDisable, mapSireneStatusToState("C"))
+	assert.Equal(t, constantes.StatusStateSuspended, mapSireneStatusToState("S"))
+	assert.Equal(t, constantes.StatusStateArchived, mapSireneStatusToState("X"))
 }

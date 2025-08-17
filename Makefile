@@ -80,17 +80,26 @@ clean-all: ## Supprime tout (conteneurs, réseaux, volumes et images)
 ta: ## Lance tous les tests api
 	docker exec -i -e APP_ENV=test tenjin_dev_api go test ./...
 
-ta-logs: ## Lance tous les tests api avec logs fmt-print
-	docker exec -i -e APP_ENV=test tenjin_dev_api go test -v ./...
+tai: ## Lance tous les tests api d'integration avec logs (fmt-print)
+	docker exec -i -e APP_ENV=test tenjin_dev_api go test -tags=integration ./...
 
 tap: ## Lance les tests api pour un path spécifique (usage: make tap path=monpath)
 	docker exec -i -e APP_ENV=test tenjin_dev_api go test ./$(path)
 
-tav: ## Lance tous les tests api en mode verbose
+taip: ## Lance les tests api d'integration pour un path spécifique (usage: make tap path=monpath)
+	docker exec -i -e APP_ENV=test tenjin_dev_api go test -tags=integration ./$(path)
+
+tav: ## Lance tous les tests api en verbose
 	docker exec -i -e APP_ENV=test tenjin_dev_api go test -v ./...
 
-tavp: ## Lance les tests api en mode verbose pour un path spécifique (usage: make tavp path=monpath)
+taiv: ## Lance tous les tests api en verbose + integration
+	docker exec -i -e APP_ENV=test tenjin_dev_api go test -tags=integration -v ./...
+
+tavp: ## Lance les tests api en verbose pour un path (usage: make tavp path=monpath)
 	docker exec -i -e APP_ENV=test tenjin_dev_api go test -v ./$(path)
+
+taivp: ## Lance les tests api en verbose + integration pour un path (usage: make tavp path=monpath)
+	docker exec -i -e APP_ENV=test tenjin_dev_api go test -v -tags=integration ./$(path)
 
 tf: ## Lance tous les tests front
 	docker exec -i tenjin_dev_app npm run test.unit -- --run
@@ -98,5 +107,5 @@ tf: ## Lance tous les tests front
 tfv: ## Lance tous les tests front en mode verbose
 	docker exec -i tenjin_dev_app npm run test.unit -- --run --reporter=verbose
 
-apir: ## execute commande package api rome (usage: make apir cmd=help)
-	$(DOCKER_COMPOSE) exec api bash -c "go run ./apirome/main.go $(cmd)"
+cli: ## execute commande package api rome (usage: make apir cmd=help)
+	$(DOCKER_COMPOSE) exec api bash -c "go run ./cli/main.go $(cmd)"
