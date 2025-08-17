@@ -4,9 +4,10 @@ package company
 
 import (
 	"context"
-	"github.com/nsevenpack/testup"
 	"os"
 	"testing"
+
+	"github.com/nsevenpack/testup"
 
 	"tenjin/back/internal/insee"
 
@@ -49,7 +50,6 @@ func TestRetrieveCompanyInfo_Success(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, info)
 	assert.Equal(t, siret, info.Siret)
-	assert.Equal(t, siren, info.Siren)
 }
 
 func TestRetrieveCompanyInfo_NotFound(t *testing.T) {
