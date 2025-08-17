@@ -6,3 +6,4 @@
 .env.prod
 .env.preprod
 node_modules
+competences.log

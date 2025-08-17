@@ -41,6 +41,11 @@ services:
       - "traefik.http.services.tenjin-api.loadbalancer.server.port=${PORT}"
     env_file:
       - ../back/.env
+    volumes:
+      - ../back/cli:/app/cli
+      - ../back/go.mod:/app/go.mod
+      - ../back/go.sum:/app/go.sum
+      - ../back/internal:/app/internal
     networks:
       - traefik-nseven
       - tenjin
