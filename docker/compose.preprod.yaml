@@ -42,7 +42,7 @@ services:
     env_file:
       - ../back/.env
     volumes:
-      - ../back/apirome:/app/apirome
+      - ../back/cli:/app/cli
       - ../back/go.mod:/app/go.mod
       - ../back/go.sum:/app/go.sum
       - ../back/internal:/app/internal
