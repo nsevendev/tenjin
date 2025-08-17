@@ -115,26 +115,21 @@ func RefreshToken() (string, error) {
 
 // check siret/siren + return basic company infos
 func buildAddressFromSireneData(a *sireneAdresseEtablissement, typeAdresse constantes.TypeAddress) addresses.Address {
-    streetParts := []string{
-        a.TypeVoieEtablissement,
-        a.LibelleVoieEtablissement,
-        a.ComplementAdresseEtablissement,
-    }
-    street := strings.Join(strings.Fields(strings.Join(streetParts, " ")), " ")
+	streetParts := []string{
+		a.TypeVoieEtablissement,
+		a.LibelleVoieEtablissement,
+		a.ComplementAdresseEtablissement,
+	}
+	street := strings.Join(strings.Fields(strings.Join(streetParts, " ")), " ")
 
-    country := "france"
-    if a.LibellePaysEtrangerEtablissement != "" {
-        country = strings.ToLower(strings.TrimSpace(a.LibellePaysEtrangerEtablissement))
-    }
-
-    return addresses.Address{
-        Number:      strings.TrimSpace(a.NumeroVoieEtablissement),
-        Street:      street,
-        ZipCode:     strings.TrimSpace(a.CodePostalEtablissement),
-        City:        strings.TrimSpace(a.LibelleCommuneEtablissement),
-        Country:     constantes.Country(country),
-        TypeAddress: constantes.TypeAddress(typeAdresse),
-    }
+	return addresses.Address{
+		Number:      strings.TrimSpace(a.NumeroVoieEtablissement),
+		Street:      street,
+		ZipCode:     strings.TrimSpace(a.CodePostalEtablissement),
+		City:        strings.TrimSpace(a.LibelleCommuneEtablissement),
+		Country:     constantes.CountryFrance, // pour le debut que des adresses en France
+		TypeAddress: typeAdresse,
+	}
 }
 
 func deriveType(cj string) constantes.TypeInstitute {
@@ -155,22 +150,22 @@ func deriveType(cj string) constantes.TypeInstitute {
 }
 
 func isEmptyAddress(addr addresses.Address) bool {
-    return addr.Number == "" &&
-        addr.Street == "" &&
-        addr.ZipCode == "" &&
-        addr.City == ""
+	return addr.Number == "" &&
+		addr.Street == "" &&
+		addr.ZipCode == "" &&
+		addr.City == ""
 }
 
 func mapSireneStatusToState(sireneStatus string) constantes.StatusState {
 	switch sireneStatus {
 	case "A":
-		return constantes.StateEnable
+		return constantes.StatusStateEnable
 	case "C":
-		return constantes.StateDisable
+		return constantes.StatusStateDisable
 	case "S":
-		return constantes.StateSuspended
+		return constantes.StatusStateSuspended
 	default:
-		return constantes.StateArchived
+		return constantes.StatusStateArchived
 	}
 }
 
@@ -230,12 +225,12 @@ func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error
 	}
 
 	var addrs []addresses.Address
-	addr1 := buildAddressFromSireneData(&etab.AdresseEtablissement, constantes.TypeAddress("headOffice"))
+	addr1 := buildAddressFromSireneData(&etab.AdresseEtablissement, constantes.TypeAddressHeadOffice)
 	if !isEmptyAddress(addr1) {
 		addrs = append(addrs, addr1)
 	}
 	if etab.Adresse2Etablissement != nil {
-		addr2 := buildAddressFromSireneData(etab.Adresse2Etablissement, constantes.TypeAddress("other"))
+		addr2 := buildAddressFromSireneData(etab.Adresse2Etablissement, constantes.TypeAddressOther)
 		if !isEmptyAddress(addr2) {
 			addrs = append(addrs, addr2)
 		}
@@ -256,7 +251,6 @@ func findCompanyBySiretAndSiren(siret string, siren string) (*CompanyInfo, error
 
 	return ci, nil
 }
-
 
 func CheckSiretExists(siret string, siren string) (*CompanyInfo, error) {
 	companyInfo, err := findCompanyBySiretAndSiren(siret, siren)

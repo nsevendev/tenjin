@@ -41,12 +41,12 @@ func Test_buildAddressFromSireneData(t *testing.T) {
 	testup.LogNameTestInfo(t, "Test build address from sirene data")
 
 	a := sireneAdresseEtablissement{
-		NumeroVoieEtablissement:        "10",
-		TypeVoieEtablissement:          "rue",
-		LibelleVoieEtablissement:       "des Écoles",
-		ComplementAdresseEtablissement: "Bât A",
-		CodePostalEtablissement:        "75001",
-		LibelleCommuneEtablissement:    "Paris",
+		NumeroVoieEtablissement:          "10",
+		TypeVoieEtablissement:            "rue",
+		LibelleVoieEtablissement:         "des Écoles",
+		ComplementAdresseEtablissement:   "Bât A",
+		CodePostalEtablissement:          "75001",
+		LibelleCommuneEtablissement:      "Paris",
 		LibellePaysEtrangerEtablissement: "",
 	}
 
@@ -72,8 +72,8 @@ func Test_deriveType(t *testing.T) {
 func Test_mapSireneStatusToState(t *testing.T) {
 	testup.LogNameTestInfo(t, "Test map sirene status to internal state")
 
-	assert.Equal(t, constantes.StateEnable, mapSireneStatusToState("A"))
-	assert.Equal(t, constantes.StateDisable, mapSireneStatusToState("C"))
-	assert.Equal(t, constantes.StateSuspended, mapSireneStatusToState("S"))
-	assert.Equal(t, constantes.StateArchived, mapSireneStatusToState("X"))
+	assert.Equal(t, constantes.StatusStateEnable, mapSireneStatusToState("A"))
+	assert.Equal(t, constantes.StatusStateDisable, mapSireneStatusToState("C"))
+	assert.Equal(t, constantes.StatusStateSuspended, mapSireneStatusToState("S"))
+	assert.Equal(t, constantes.StatusStateArchived, mapSireneStatusToState("X"))
 }

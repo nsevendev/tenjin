@@ -67,7 +67,7 @@ var ApiromeImportListMetiersDetailInDatabaseCmd = &cobra.Command{
 			logger.Wf("%v", err)
 			return
 		}
-		logger.If(totalMetier)
+		logger.If("%v", totalMetier)
 	},
 }
 

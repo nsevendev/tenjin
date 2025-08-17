@@ -52,6 +52,6 @@ var RncpXmlToJsonCmd = &cobra.Command{
 			logger.Wf("%v", err)
 			return
 		}
-		logger.If(totalCertificationString)
+		logger.If("%v", totalCertificationString)
 	},
 }

@@ -45,7 +45,7 @@ var ApiromeListCompetenceSummaryCmd = &cobra.Command{
 				logger.Wf("%v", err)
 				return
 			}
-			logger.If(totalCompetenceString)
+			logger.If("%v", totalCompetenceString)
 		}
 
 		if _, err := fileManager.WriteData(json.RawMessage(bodyListCompetence), nil); err != nil {
