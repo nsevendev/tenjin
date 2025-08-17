@@ -109,3 +109,6 @@ tfv: ## Lance tous les tests front en mode verbose
 
 apir: ## execute commande package api rome (usage: make apir cmd=help)
 	$(DOCKER_COMPOSE) exec api bash -c "go run ./apirome/main.go $(cmd)"
+
+cli: ## execute commande package api rome (usage: make apir cmd=help)
+	$(DOCKER_COMPOSE) exec api bash -c "go run ./cli/main.go $(cmd)"

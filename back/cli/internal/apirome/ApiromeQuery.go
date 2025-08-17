@@ -1,4 +1,4 @@
-package metiers_4_0
+package apirome
 
 import (
 	"fmt"
@@ -23,16 +23,15 @@ func RequestGetListMetier(token string) *http.Request {
 // RequestGetOneMetier crée une requête HTTP pour récupérer les détails d'un métier spécifique
 // en utilisant son code. Cette requête est utilisée pour obtenir des informations détaillées sur un
 // métier particulier, comme sa description, ses compétences requises, etc.
-func RequestGetOneMetier(token, codeMetier string) *http.Request {
+func RequestGetOneMetier(token, codeMetier string) (*http.Request, error) {
 	apiUrl := fmt.Sprintf("https://api.francetravail.io/partenaire/rome-metiers/v1/metiers/metier/%s", codeMetier)
 	req, err := http.NewRequest("GET", apiUrl, nil)
 	if err != nil {
-		logger.Ef("erreur lors de la création de la requête get one metier detail : %v", err)
-		return nil
+		return nil, fmt.Errorf("erreur lors de la création de la requête get one metier detail : %v", err)
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 
-	return req
+	return req, nil
 }
 
 // RequestGetListCompetence crée une requête HTTP pour récupérer la liste des compétences sans details

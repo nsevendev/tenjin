@@ -48,7 +48,7 @@
 
 3.**Exploiter les fichiers JSON générés pour importer dans l’app dans la bdd**  
 
-  * `make apir cmd=import-competence-complet-database` commande moyenne  
+  * `make apir cmd=import-competence-complet-database` commande rapide  
 
 > pour les logs de la commande de l'étape 2 il y a un script à la racine du projet `check_process_competence-cmd.sh`   
-> qui permet de voir les logs de la commande en cours d'exécution.  
+> qui permet de voir les logs de la commande en cours d'exécution. 

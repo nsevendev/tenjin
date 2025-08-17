@@ -74,7 +74,7 @@ type XMLJury struct {
 	Composition string `xml:"COMPOSITION"`
 }
 
-// Structure finale pour MongoDB (format simplifié et optimisé)
+// Certification Structure finale pour MongoDB (format simplifié et optimisé)
 type Certification struct {
 	ID                    primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	IDFiche               string             `bson:"id_fiche" json:"id_fiche"`
@@ -115,58 +115,4 @@ type Certificateur struct {
 type CodeROME struct {
 	Code    string `bson:"code" json:"code"`
 	Libelle string `bson:"libelle" json:"libelle"`
-}
-
-// Fonction de conversion XML vers structure finale
-func ConvertXMLToMongo(xmlFiche XMLFiche) Certification {
-	// Conversion des codes NSF
-	var codesNSF []NSF
-	for _, nsf := range xmlFiche.CodesNSF {
-		codesNSF = append(codesNSF, NSF{
-			Code:    nsf.Code,
-			Libelle: nsf.Libelle,
-		})
-	}
-
-	// Conversion des certificateurs
-	var certificateurs []Certificateur
-	for _, cert := range xmlFiche.Certificateurs {
-		certificateurs = append(certificateurs, Certificateur{
-			Nom:          cert.NomCertificateur,
-			Etat:         cert.EtatCertificateur,
-			SiteInternet: cert.SiteInternet,
-		})
-	}
-
-	// Conversion des codes ROME
-	var codesROME []CodeROME
-	for _, rome := range xmlFiche.CodesROME {
-		codesROME = append(codesROME, CodeROME{
-			Code:    rome.Code,
-			Libelle: rome.Libelle,
-		})
-	}
-
-	return Certification{
-		IDFiche:     xmlFiche.IDFiche,
-		NumeroFiche: xmlFiche.NumeroFiche,
-		Intitule:    xmlFiche.Intitule,
-		Abrege: Abrege{
-			Code:    xmlFiche.Abrege.Code,
-			Libelle: xmlFiche.Abrege.Libelle,
-		},
-		EtatFiche:             xmlFiche.EtatFiche,
-		Niveau:                xmlFiche.NomenclatureEurope.Niveau,
-		NiveauLibelle:         xmlFiche.NomenclatureEurope.Libelle,
-		CodesNSF:              codesNSF,
-		Certificateurs:        certificateurs,
-		ActivitesVisees:       xmlFiche.ActivitesVisees,
-		CapacitesAttestees:    xmlFiche.CapacitesAttestees,
-		SecteursActivite:      xmlFiche.SecteursActivite,
-		TypeEmploiAccessibles: xmlFiche.TypeEmploiAccessibles,
-		CodesROME:             codesROME,
-		Actif:                 xmlFiche.Actif == "Oui",
-		ImportedAt:            time.Now(),
-		UpdatedAt:             time.Now(),
-	}
 }
