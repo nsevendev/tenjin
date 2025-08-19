@@ -34,11 +34,11 @@ type UploadResult struct {
 }
 
 type Service struct {
-	store  Storage
+	store  StorageInterface
 	config Config
 }
 
-func NewService(store Storage, cfg Config) *Service {
+func NewService(store StorageInterface, cfg Config) *Service {
 	return &Service{store: store, config: cfg}
 }
 
@@ -61,7 +61,7 @@ func (s *Service) UploadBytes(ctx context.Context, scope, filename string, data 
 			}
 		}
 	}
-
+	
 	// Filtrage MIME si configuré
 	if len(s.config.AllowedMIMEs) > 0 && !contains(s.config.AllowedMIMEs, mimeType) {
 		return nil, fmt.Errorf("mime n'est pas attribué: %s", mimeType)
@@ -70,7 +70,7 @@ func (s *Service) UploadBytes(ctx context.Context, scope, filename string, data 
 	key := s.buildKey(scope, filename)
 
 	// DEBUG: Ajouter des logs pour voir ce qui se passe
-	fmt.Printf("DEBUG Storage Service:\n")
+	fmt.Printf("DEBUG StorageInterface Service:\n")
 	fmt.Printf("  - scope: %q\n", scope)
 	fmt.Printf("  - filename: %q\n", filename)
 	fmt.Printf("  - config.KeyPrefix: %q\n", s.config.KeyPrefix)
