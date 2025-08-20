@@ -12,7 +12,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
-	"tenjin/back/internal/s3adapter"
+	"tenjin/back/internal/utils/s3adapter"
 	"time"
 )
 

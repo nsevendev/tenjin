@@ -20,7 +20,7 @@ import (
 // @Failure 400 {object} ginresponse.JsonFormatterSwag "Paramètres invalides"
 // @Failure 500 {object} ginresponse.JsonFormatterSwag "Erreur interne lors de la création"
 // @Router /company/register [post]
-func (cc *companyController) UploadFileTest(c *gin.Context) {
+func (cc *companyController) Create(c *gin.Context) {
 	var dto company.CompanyCreateDto
 
 	if err := c.ShouldBindJSON(&dto); err != nil {

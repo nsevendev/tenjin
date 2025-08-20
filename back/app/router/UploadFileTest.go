@@ -2,8 +2,8 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"tenjin/back/controller/uploadfiletestcontroller"
-	"tenjin/back/internal/filestores"
+	"tenjin/back/app/controller/uploadfiletestcontroller"
+	"tenjin/back/internal/utils/filestores"
 )
 
 func RegisterUploadFileTest(v1 *gin.RouterGroup, deps *Dependencies) {

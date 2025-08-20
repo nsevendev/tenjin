@@ -6,9 +6,9 @@ import (
 	"github.com/nsevenpack/logger/v2/logger"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"tenjin/back/internal/s3adapter"
 	"tenjin/back/internal/utils/database"
 	"tenjin/back/internal/utils/mongohelpers"
+	s3adapter2 "tenjin/back/internal/utils/s3adapter"
 )
 
 const pathApiV1 = "api/v1"
@@ -16,14 +16,14 @@ const pathApiV1 = "api/v1"
 // Dependencies contient toutes les dépendances partagées
 type Dependencies struct {
 	MongoHelper mongohelpers.Helper
-	R2Adapter   s3adapter.AdapterInterface
+	R2Adapter   s3adapter2.AdapterInterface
 	// Ajouter d'autres dépendances globales
 }
 
 func Routes(r *gin.Engine) {
 	deps := &Dependencies{
 		MongoHelper: mongohelpers.NewHelper(),
-		R2Adapter:   s3adapter.AdapterCloudflareR2(),
+		R2Adapter:   s3adapter2.AdapterCloudflareR2(),
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

@@ -1,7 +1,7 @@
 package uploadfiletestcontroller
 
 import (
-	"tenjin/back/internal/filestores"
+	"tenjin/back/internal/utils/filestores"
 )
 
 type FileTestController struct {
