@@ -101,6 +101,41 @@
                     }
                 }
             }
+        },
+        "/uploadfile/test": {
+            "post": {
+                "description": "Test enregistre un fichier dans le stockage R2",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UploadFileTest"
+                ],
+                "summary": "Enregistrement d'un fichier dans le stockage R2",
+                "responses": {
+                    "200": {
+                        "description": "Fichier enregistré avec succès",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur à la récupération du fichier",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur à l'enregistrement dans S3",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

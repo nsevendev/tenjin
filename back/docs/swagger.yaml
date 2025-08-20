@@ -293,6 +293,29 @@ paths:
       summary: Récupère les infos d'une entreprise via SIRET/SIREN
       tags:
       - company
+  /uploadfile/test:
+    post:
+      consumes:
+      - application/json
+      description: Test enregistre un fichier dans le stockage R2
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Fichier enregistré avec succès
+          schema:
+            $ref: '#/definitions/ginresponse.JsonFormatterSwag'
+        "400":
+          description: Erreur à la récupération du fichier
+          schema:
+            $ref: '#/definitions/ginresponse.JsonFormatterSwag'
+        "500":
+          description: Erreur à l'enregistrement dans S3
+          schema:
+            $ref: '#/definitions/ginresponse.JsonFormatterSwag'
+      summary: Enregistrement d'un fichier dans le stockage R2
+      tags:
+      - UploadFileTest
 schemes:
 - https
 securityDefinitions:
