@@ -14,6 +14,6 @@ func RegisterCompanyRoutes(v1 *gin.RouterGroup, db *mongo.Database, deps *Depend
 	companyGroup := v1.Group("/company")
 	{
 		companyGroup.POST("/retrieve-infos", companyController.RetrieveCompanyInfo)
-		companyGroup.POST("/register", companyController.Create)
+		companyGroup.POST("/register", companyController.UploadFileTest)
 	}
 }

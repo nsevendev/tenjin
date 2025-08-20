@@ -6,7 +6,7 @@ import (
 	"github.com/nsevenpack/logger/v2/logger"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"tenjin/back/internal/storage/r2"
+	"tenjin/back/internal/s3adapter"
 	"tenjin/back/internal/utils/database"
 	"tenjin/back/internal/utils/mongohelpers"
 )
@@ -16,23 +16,17 @@ const pathApiV1 = "api/v1"
 // Dependencies contient toutes les dépendances partagées
 type Dependencies struct {
 	MongoHelper mongohelpers.Helper
-	R2Adapter   *r2.Adapter
+	R2Adapter   s3adapter.AdapterInterface
 	// Ajouter d'autres dépendances globales
 }
 
 func Routes(r *gin.Engine) {
-	fromEnv, err := r2.NewFromEnv()
-	if err != nil {
-		logger.Ff("Erreur lors de la création de l'adapter R2 : %v", err)
-		return
+	deps := &Dependencies{
+		MongoHelper: mongohelpers.NewHelper(),
+		R2Adapter:   s3adapter.AdapterCloudflareR2(),
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-	deps := &Dependencies{
-		MongoHelper: mongohelpers.NewHelper(),
-		R2Adapter:   fromEnv,
-	}
 
 	v1 := r.Group(pathApiV1)
 

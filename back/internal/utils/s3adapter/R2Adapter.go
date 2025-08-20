@@ -1,4 +1,4 @@
-package r2
+package s3adapter
 
 import (
 	"bytes"
@@ -17,6 +17,8 @@ import (
 	"github.com/nsevenpack/logger/v2/logger"
 )
 
+var adapterCloudflareR2 *Adapter
+
 type Adapter struct {
 	accountID  string
 	accessKey  string
@@ -27,8 +29,8 @@ type Adapter struct {
 	baseURL    string
 }
 
-// Options permet de configurer l'adapter R2 sans dépendre d'ENV dans les tests.
-type Options struct {
+// Options permet de configurer l'Adapter R2 sans dépendre d'ENV dans les tests.
+type options struct {
 	AccountID string
 	AccessKey string
 	SecretKey string
@@ -36,24 +38,20 @@ type Options struct {
 	KeyPrefix string
 }
 
-// NewFromEnv pratique en prod
-func NewFromEnv() (*Adapter, error) {
-	return New(Options{
+// AdapterCloudflareR2 retourne l'adapteur Cloudflare R2
+// Il est initialisé par CreateAdapteur() qui charge les options depuis l'environnement.
+func AdapterCloudflareR2() *Adapter {
+	return adapterCloudflareR2
+}
+
+// CreateAdapteur crée un Adapter Cloudflare R2 avec HTTP direct
+func CreateAdapteur() {
+	opts := &options{
 		AccountID: env.Get("R2_ACCOUNT_ID"),
 		AccessKey: env.Get("R2_ACCESS_KEY_ID"),
 		SecretKey: env.Get("R2_SECRET_ACCESS_KEY"),
 		Bucket:    env.Get("R2_BUCKET_NAME"),
 		KeyPrefix: env.Get("R2_KEY_PREFIX"),
-	})
-}
-
-// New crée un adapter Cloudflare R2 avec HTTP direct
-func New(opts Options) (*Adapter, error) {
-	if opts.AccountID == "" ||
-		opts.AccessKey == "" ||
-		opts.SecretKey == "" ||
-		opts.Bucket == "" {
-		return nil, fmt.Errorf("r2: Les options sont obligatoire (AccountID/AccessKey/SecretKey/Bucket)")
 	}
 
 	baseURL := fmt.Sprintf("https://%s.r2.cloudflarestorage.com", opts.AccountID)
@@ -61,7 +59,7 @@ func New(opts Options) (*Adapter, error) {
 	logger.Sf("R2: Chargement config pour %s", opts.AccountID)
 	logger.Sf("R2: Chargement bucket %s", opts.Bucket)
 
-	return &Adapter{
+	adapterCloudflareR2 = &Adapter{
 		accountID:  opts.AccountID,
 		accessKey:  opts.AccessKey,
 		secretKey:  opts.SecretKey,
@@ -69,15 +67,7 @@ func New(opts Options) (*Adapter, error) {
 		keyPrefix:  opts.KeyPrefix,
 		httpClient: &http.Client{Timeout: 30 * time.Second},
 		baseURL:    baseURL,
-	}, nil
-}
-
-// prefixed ajoute le préfixe de clé si défini, sinon retourne la clé d'origine.
-func (a *Adapter) prefixed(key string) string {
-	if a.keyPrefix == "" {
-		return key
 	}
-	return a.keyPrefix + key
 }
 
 // Upload envoie des octets à la clé donnée via HTTP direct
@@ -185,6 +175,14 @@ func (a *Adapter) Delete(ctx context.Context, key string) error {
 	}
 
 	return nil
+}
+
+// prefixed ajoute le préfixe de clé si défini, sinon retourne la clé d'origine.
+func (a *Adapter) prefixed(key string) string {
+	if a.keyPrefix == "" {
+		return key
+	}
+	return a.keyPrefix + key
 }
 
 // signRequest signe la requête avec AWS Signature v4

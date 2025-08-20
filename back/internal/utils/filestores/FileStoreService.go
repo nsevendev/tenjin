@@ -1,4 +1,4 @@
-package storage
+package filestores
 
 import (
 	"context"
@@ -6,15 +6,17 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/nsevenpack/logger/v2/logger"
 	"mime"
 	"net/http"
 	"path"
 	"path/filepath"
 	"strings"
+	"tenjin/back/internal/s3adapter"
 	"time"
 )
 
-type Config struct {
+type FileStoreConfig struct {
 	// Préfixe commun dans le bucket (ex: "tenjin/uploads/").
 	KeyPrefix string
 	// Taille max autorisée (en octets). 0 = pas de limite.
@@ -25,26 +27,26 @@ type Config struct {
 	UseDateFolders bool
 }
 
-type UploadResult struct {
+type UploadStoreResult struct {
 	Key        string // clé stockée dans R2
-	Size       int64
-	MIME       string
+	Size       int64  // taille du fichier en octets
+	MIME       string // type MIME du fichier
 	Original   string // nom de fichier original
 	StoredPath string // = Key (alias, utile s’il y a un CDN plus tard)
 }
 
-type Service struct {
-	store  StorageInterface
-	config Config
+type FileStoreService struct {
+	s3Adapter s3adapter.AdapterInterface
+	config    FileStoreConfig
 }
 
-func NewService(store StorageInterface, cfg Config) *Service {
-	return &Service{store: store, config: cfg}
+func NewService(s3Adapter s3adapter.AdapterInterface, cfg FileStoreConfig) *FileStoreService {
+	return &FileStoreService{s3Adapter: s3Adapter, config: cfg}
 }
 
 // UploadBytes est la primitive d’upload.
 // scope devient un sous-dossier logique (ex: "avatars", "docs", ...).
-func (s *Service) UploadBytes(ctx context.Context, scope, filename string, data []byte) (*UploadResult, error) {
+func (s *FileStoreService) UploadBytes(ctx context.Context, scope, filename string, data []byte) (*UploadStoreResult, error) {
 	if len(data) == 0 {
 		return nil, errors.New("fichier vide")
 	}
@@ -61,7 +63,7 @@ func (s *Service) UploadBytes(ctx context.Context, scope, filename string, data 
 			}
 		}
 	}
-	
+
 	// Filtrage MIME si configuré
 	if len(s.config.AllowedMIMEs) > 0 && !contains(s.config.AllowedMIMEs, mimeType) {
 		return nil, fmt.Errorf("mime n'est pas attribué: %s", mimeType)
@@ -69,19 +71,18 @@ func (s *Service) UploadBytes(ctx context.Context, scope, filename string, data 
 
 	key := s.buildKey(scope, filename)
 
-	// DEBUG: Ajouter des logs pour voir ce qui se passe
-	fmt.Printf("DEBUG StorageInterface Service:\n")
-	fmt.Printf("  - scope: %q\n", scope)
-	fmt.Printf("  - filename: %q\n", filename)
-	fmt.Printf("  - config.KeyPrefix: %q\n", s.config.KeyPrefix)
-	fmt.Printf("  - config.UseDateFolders: %v\n", s.config.UseDateFolders)
-	fmt.Printf("  - key générée: %q\n", key)
+	logger.If("DEBUG AdapterInterface FileStoreService:")
+	logger.If("  - scope: %q", scope)
+	logger.If("  - filename: %q", filename)
+	logger.If("  - config.KeyPrefix: %q", s.config.KeyPrefix)
+	logger.If("  - config.UseDateFolders: %v", s.config.UseDateFolders)
+	logger.If("  - key générée: %q", key)
 
-	if err := s.store.Upload(ctx, key, data); err != nil {
-		return nil, err
+	if err := s.s3Adapter.Upload(ctx, key, data); err != nil {
+		return nil, fmt.Errorf("erreur lors de l'upload vers le s3: %w", err)
 	}
 
-	return &UploadResult{
+	return &UploadStoreResult{
 		Key:        key,
 		Size:       int64(len(data)),
 		MIME:       mimeType,
@@ -90,23 +91,23 @@ func (s *Service) UploadBytes(ctx context.Context, scope, filename string, data 
 	}, nil
 }
 
-func (s *Service) Download(ctx context.Context, key string) ([]byte, error) {
+func (s *FileStoreService) Download(ctx context.Context, key string) ([]byte, error) {
 	if strings.TrimSpace(key) == "" {
-		return nil, errors.New("missing key")
+		return nil, errors.New("key manquante")
 	}
-	return s.store.Download(ctx, key)
+	return s.s3Adapter.Download(ctx, key)
 }
 
-func (s *Service) Delete(ctx context.Context, key string) error {
+func (s *FileStoreService) Delete(ctx context.Context, key string) error {
 	if strings.TrimSpace(key) == "" {
-		return errors.New("missing key")
+		return errors.New("key manquante")
 	}
-	return s.store.Delete(ctx, key)
+	return s.s3Adapter.Delete(ctx, key)
 }
 
 // ---------- helpers ----------
 
-func (s *Service) buildKey(scope, filename string) string {
+func (s *FileStoreService) buildKey(scope, filename string) string {
 	scope = cleanPart(scope)
 	prefix := strings.Trim(s.config.KeyPrefix, "/")
 	now := time.Now()

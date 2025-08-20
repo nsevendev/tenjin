@@ -12,7 +12,7 @@ type companyController struct {
 
 type CompanyControllerInterface interface {
 	RetrieveCompanyInfo(c *gin.Context)
-	Create(c *gin.Context)
+	UploadFileTest(c *gin.Context)
 }
 
 func NewCompanyController(companyService company.CompanyServiceInterface) CompanyControllerInterface {
