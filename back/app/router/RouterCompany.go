@@ -3,7 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
-	"tenjin/back/controller/companycontroller"
+	"tenjin/back/app/controller/companycontroller"
 	"tenjin/back/internal/company"
 )
 
