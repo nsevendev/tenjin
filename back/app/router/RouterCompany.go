@@ -2,13 +2,12 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/mongo"
 	"tenjin/back/app/controller/companycontroller"
 	"tenjin/back/internal/company"
 )
 
-func RegisterCompanyRoutes(v1 *gin.RouterGroup, db *mongo.Database, deps *Dependencies) {
-	companyService := company.NewCompanyService(db, deps.MongoHelper)
+func RegisterCompanyRoutes(v1 *gin.RouterGroup, deps *dependencies) {
+	companyService := company.NewCompanyService(deps.db, deps.MongoHelper)
 	companyController := companycontroller.NewCompanyController(companyService)
 
 	companyGroup := v1.Group("/company")
