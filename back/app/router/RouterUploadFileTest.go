@@ -6,7 +6,7 @@ import (
 	"tenjin/back/internal/utils/filestores"
 )
 
-func RegisterUploadFileTest(v1 *gin.RouterGroup, deps *Dependencies) {
+func RegisterUploadFileTest(v1 *gin.RouterGroup, deps *dependencies) {
 	fileStoreService := filestores.NewService(deps.R2Adapter, filestores.FileStoreConfig{
 		KeyPrefix:      "tenjin/uploads/",
 		MaxSize:        10 * 1024 * 1024, // 10 Mo
