@@ -7,7 +7,7 @@ const LoginSchema = z.object({
 });
 
 // eslint-disable-next-line qwik/loader-location
-export const useLoginAction = routeAction$(async (data, { fail, cookie }) => {
+export const useLoginAction = routeAction$(async (data, { env, fail, cookie }) => {
     console.log('📥 Données reçues:', data); // Pour debug
     console.log('📥 Type:', typeof data);
     console.log('📥 Keys:', Object.keys(data));
@@ -16,7 +16,7 @@ export const useLoginAction = routeAction$(async (data, { fail, cookie }) => {
         // Validation côté serveur
         const validatedData = LoginSchema.parse(data);
         
-        const response = await fetch(`http://api:3000/api/v1/your/login`, {
+        const response = await fetch(`${env.get("HOST_API_TENJIN")}/api/v1/your/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
