@@ -69,6 +69,5 @@ app.use(notFound);
 
 // Start the express server
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
   console.log(`Server started: http://localhost:${PORT}/`);
 });

@@ -1,5 +1,4 @@
 import {routeAction$, z, zod$} from "@builder.io/qwik-city";
-import {createCipher, createDecipher} from "node:crypto";
 
 // Schéma de validation pour le serveur
 const LoginSchema = z.object({
@@ -8,7 +7,7 @@ const LoginSchema = z.object({
 });
 
 // eslint-disable-next-line qwik/loader-location
-export const useLoginAction = routeAction$(async (data, { env, fail, redirect, cookie }) => {
+export const useLoginAction = routeAction$(async (data, { fail, cookie }) => {
     console.log('📥 Données reçues:', data); // Pour debug
     console.log('📥 Type:', typeof data);
     console.log('📥 Keys:', Object.keys(data));
