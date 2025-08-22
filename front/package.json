@@ -51,6 +51,7 @@
     "dotenv": "^16.3.2",
     "express": "^4.21.2",
     "tailwindcss": "^4.1.11",
-    "undici": "*"
+    "undici": "*",
+    "zod": "^4.0.17"
   }
 }
