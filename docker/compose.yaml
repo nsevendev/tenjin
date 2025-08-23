@@ -1,25 +1,51 @@
 name: tenjin-${APP_ENV}
 services:
-  app:
+#  app:
+#    build:
+#      target: ${APP_ENV}
+#      context: ../front
+#      dockerfile: ../docker/front.dockerfile
+#    container_name: tenjin_${APP_ENV}_app
+#    image: tenjin-app:${APP_ENV}
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.docker.network=traefik-nseven"
+#      - "traefik.http.routers.tenjin-app.rule=${HOST_TRAEFIK}"
+#      - "traefik.http.routers.tenjin-app.entrypoints=websecure"
+#      - "traefik.http.routers.tenjin-app.tls=true"
+#      - "traefik.http.routers.tenjin-app.tls.certresolver=default"
+#      - "traefik.http.services.tenjin-app.loadbalancer.server.port=${PORT}"
+#      - "traefik.http.services.tenjin-app.loadbalancer.server.scheme=http"
+#    volumes:
+#      - ../front:/app
+#    env_file:
+#      - ../front/.env
+#    networks:
+#      - traefik-nseven
+#      - tenjin
+#    depends_on:
+#      - api
+
+  fa:
     build:
       target: ${APP_ENV}
-      context: ../front
-      dockerfile: ../docker/front.dockerfile
-    container_name: tenjin_${APP_ENV}_app
-    image: tenjin-app:${APP_ENV}
+      context: ../fa
+      dockerfile: ../docker/front.fa.dockerfile
+    container_name: tenjin_${APP_ENV}_fa
+    image: tenjin-fa:${APP_ENV}
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-nseven"
-      - "traefik.http.routers.tenjin-app.rule=${HOST_TRAEFIK}"
-      - "traefik.http.routers.tenjin-app.entrypoints=websecure"
-      - "traefik.http.routers.tenjin-app.tls=true"
-      - "traefik.http.routers.tenjin-app.tls.certresolver=default"
-      - "traefik.http.services.tenjin-app.loadbalancer.server.port=${PORT}"
-      - "traefik.http.services.tenjin-app.loadbalancer.server.scheme=http"
+      - "traefik.http.routers.tenjin-fa.rule=${HOST_TRAEFIK}"
+      - "traefik.http.routers.tenjin-fa.entrypoints=websecure"
+      - "traefik.http.routers.tenjin-fa.tls=true"
+      - "traefik.http.routers.tenjin-fa.tls.certresolver=default"
+      - "traefik.http.services.tenjin-fa.loadbalancer.server.port=${PORT}"
+      - "traefik.http.services.tenjin-fa.loadbalancer.server.scheme=http"
     volumes:
-      - ../front:/app
+      - ../fa:/app
     env_file:
-      - ../front/.env
+      - ../fa/.env
     networks:
       - traefik-nseven
       - tenjin
