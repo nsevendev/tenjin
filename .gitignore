@@ -7,3 +7,5 @@
 .env.preprod
 node_modules
 competences.log
+competence-complet.log
+metier-detail.log
