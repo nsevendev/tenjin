@@ -12,7 +12,7 @@ export default component$(() => {
     })
     
     return (
-        <div className="py-8 px-16">
+        <div class="py-8 px-16">
             {/* LINK TEXT */}
             <div class="mb-10">
                 <LinkText href="/" >Retour accueil</LinkText>
@@ -30,7 +30,7 @@ export default component$(() => {
                 <SmallTitle>Je suis un petit titre</SmallTitle>
             </SectionCard>
             
-            <div className="h-8"></div>
+            <div class="h-8"></div>
             
             {/* BADGE */}
             <ArticleCard class="gap-4">
@@ -46,7 +46,7 @@ export default component$(() => {
                 <Badge color="pink">Pink</Badge>
             </ArticleCard>
             
-            <div className="h-8"></div>
+            <div class="h-8"></div>
             
             {/* BUTTON */}
             <ArticleCard class="gap-4" containPosition="centerColumn">

@@ -1,7 +1,7 @@
 import {component$} from "@builder.io/qwik";
 import {DocumentHead, Form} from "@builder.io/qwik-city";
-import {Card, SectionCard} from "~/components/core/card/card";
-import {CardTitle, Title} from "~/components/core/title/title";
+import {SectionCard} from "~/components/core/card/card";
+import {Title} from "~/components/core/title/title";
 import {Button} from "~/components/core/button/button";
 import {useForm} from "~/hooks/form-hook/form-hook";
 import {useLoginAction} from "~/routes/your/login/_login-action";
