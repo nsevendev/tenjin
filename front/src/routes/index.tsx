@@ -1,15 +1,20 @@
 import {component$} from "@builder.io/qwik";
-import {DocumentHead, Link} from "@builder.io/qwik-city";
+import {DocumentHead} from "@builder.io/qwik-city";
+import {LinkText} from "~/components/core/link-text/link-text";
+import {PageTitle} from "~/components/core/title/title";
 
 export default component$(() => {
   return (
       <div>
-          <h1>Bienvenu</h1>
+          <PageTitle>Bienvenue</PageTitle>
           <div>
-              <Link href="/design-system" class={"text-blue-500 hover:text-blue-700 underline cursor-pointer"}>Voir les composants</Link>
+              <LinkText href="/design-system">Voir les composants</LinkText>
           </div>
           <div>
-              <Link href="/your/login" class={"text-blue-500 hover:text-blue-700 underline cursor-pointer"}>Connexion</Link>
+              <LinkText href="/your/login">Connexion</LinkText>
+          </div>
+          <div>
+              <LinkText href="/register">Créer son compte</LinkText>
           </div>
       </div>
   );

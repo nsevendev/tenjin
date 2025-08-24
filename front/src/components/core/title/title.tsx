@@ -1,72 +1,64 @@
 import {component$, Slot} from "@builder.io/qwik";
-import {TitleProps, TitleStyles, TitleTagType} from "~/components/core/title/title-variant";
+import {TitleProps, TitleTag, titleVariants} from "~/components/core/title/title-variant";
+import {cn} from "~/utils/classe-name/cn";
 
-export const Title = component$<TitleProps<TitleTagType>>(({
-    tag = 'h1',
-    variant = 'black',
-    size = 'base',
-    className = '',
+export const Title = component$<TitleProps<TitleTag>>(({
+    as = 'h1',
+    size,
+    weight,
+    class: className,
     ...props
 }) => {
-    const classes = [
-        TitleStyles.base,
-        TitleStyles.variants[variant],
-        TitleStyles.sizes[size],
-        className
-    ].filter(Boolean).join(' ');
-    
     // Création dynamique de l'élément selon le tag
-    const TagComponent = tag as any;
+    const TagComponent = as as any;
     
     return (
-        <TagComponent class={classes} {...props}>
+        <TagComponent class={cn(titleVariants({size, weight}), className)} {...props}>
             <Slot />
         </TagComponent>
     );
 });
 
-// Composants pré-configurés pour des cas d'usage spécifiques
-export const PageTitle = component$<Omit<TitleProps<'h1'>, 'tag' | 'size'>>(({
-    variant = 'black',
-    ...props
-}) => (
-    <Title tag="h1" size="3xl" variant={variant} {...props}>
+// ----------------------------- Composants pré-configurés pour des cas d'usage spécifiques ----------------------------- //
+
+export const PageTitle = component$<Omit<TitleProps<'h1'>, 'as' | 'color' | 'size' | 'weight'>>((props) => (
+    <Title as="h1" size="3xl" weight="semibold" {...props}>
         <Slot />
     </Title>
 ));
 
-export const SectionTitle = component$<Omit<TitleProps<'h2'>, 'tag' | 'size'>>(({
-    variant = 'black',
-    ...props
-}) => (
-    <Title tag="h2" size="2xl" variant={variant} {...props}>
+export const PageSubTitle = component$<Omit<TitleProps<'h1'>, 'as' | 'color' | 'size' | 'weight'>>((props) => (
+    <Title as="h2" size="2xl" weight="normal" {...props}>
         <Slot />
     </Title>
 ));
 
-export const SubsectionTitle = component$<Omit<TitleProps<'h3'>, 'tag' | 'size'>>(({
-    variant = 'black',
-    ...props
-}) => (
-    <Title tag="h3" size="xl" variant={variant} {...props}>
+export const SectionTitle = component$<Omit<TitleProps<'h2'>, 'as' | 'color' | 'size' | 'weight'>>((props) => (
+    <Title as="h2" size="2xl" weight="semibold" {...props}>
         <Slot />
     </Title>
 ));
 
-export const CardTitle = component$<Omit<TitleProps<'h4'>, 'tag' | 'size'>>(({
-    variant = 'black',
-    ...props
-}) => (
-    <Title tag="h4" size="lg" variant={variant} {...props}>
+export const SectionSubTitle = component$<Omit<TitleProps<'h3'>, 'as' | 'color' | 'size' | 'weight'>>((props) => (
+    <Title as="h3" size="xl" weight="normal" {...props}>
         <Slot />
     </Title>
 ));
 
-export const SmallTitle = component$<Omit<TitleProps<'h5'>, 'tag' | 'size'>>(({
-    variant = 'gray',
-    ...props
-}) => (
-    <Title tag="h5" size="base" variant={variant} {...props}>
+export const CardTitle = component$<Omit<TitleProps<'h4'>, 'as' | 'color' | 'size' | 'weight'>>((props) => (
+    <Title as="h4" size="lg" weight="semibold" {...props}>
+        <Slot />
+    </Title>
+));
+
+export const CardSubTitle = component$<Omit<TitleProps<'h4'>, 'as' | 'color' | 'size' | 'weight'>>((props) => (
+    <Title as="h5" size="base" weight="light" {...props}>
+        <Slot />
+    </Title>
+));
+
+export const SmallTitle = component$<Omit<TitleProps<'h6'>, 'as' | 'color' | 'size' | 'weight'>>((props) => (
+    <Title as="h6" size="sm" weight="light" {...props}>
         <Slot />
     </Title>
 ));

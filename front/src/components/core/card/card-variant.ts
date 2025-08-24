@@ -1,34 +1,41 @@
 import {QwikIntrinsicElements} from "@builder.io/qwik";
+import {cva, VariantProps} from "class-variance-authority";
 
-type CardVariantType = 'small' | 'medium' | 'large' | 'expanded' | 'extraLarge' | 'long' | 'tall'
-type CardContainPositionType = 'center' | 'default' | 'centerColumn';
-type CardTagType = 'div' | 'article' | 'section';
-type CardStyleType = {
-    base: string;
-    variants: Record<CardVariantType, string>;
-    containPosition: Record<CardContainPositionType, string>;
-}
-
-export const cardStyles: CardStyleType = {
-    base: 'rounded-lg bg-white shadow-sm w-fit',
-    containPosition: {
-        centerColumn: 'flex items-center justify-center flex-col',
-        default: '',
-        center: 'flex items-center justify-center',
-    },
-    variants: {
-        small: 'p-4',
-        medium: 'p-6',
-        large: 'p-8',
-        expanded: 'p-10',
-        extraLarge: 'p-12',
-        long: 'px-20 py-12',
-        tall: 'px-12 py-20',
+export const cardVariants = cva(
+    'rounded-lg bg-white shadow-sm w-fit', // base
+    {
+        variants: {
+            containPosition: {
+                default: '',
+                centerColumn: 'flex flex-col items-center justify-center',
+                center: 'flex items-center justify-center',
+                left: 'flex flex-col items-start justify-center',
+            },
+            size: {
+                small: 'p-4',
+                medium: 'p-6',
+                large: 'p-8',
+                expanded: 'p-10',
+                extraLarge: 'p-12',
+                long: 'px-20 py-12',
+                tall: 'px-12 py-20',
+            },
+        },
+        defaultVariants: {
+            containPosition: 'default',
+            size: 'medium',
+        },
+        // optionnel: variants composés
+        compoundVariants: [],
     }
-};
+);
 
-export type CardPropsType<T extends CardTagType = 'div'> = {
-    variant?: CardVariantType;
-    containPosition?: CardContainPositionType;
-    tag?: CardTagType;
-} & QwikIntrinsicElements[T]
+type CardVariantProps = VariantProps<typeof cardVariants>;
+export type CardTag = 'div' | 'article' | 'section';
+
+export type CardProps<TCard extends CardTag> =
+    {
+        as?: TCard;
+        class?: string;
+    } & CardVariantProps
+    & QwikIntrinsicElements[TCard];
