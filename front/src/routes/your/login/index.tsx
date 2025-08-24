@@ -38,8 +38,8 @@ export default component$(() => {
     const passwordProps = form.getFieldProps('password');
     
     // Gestion des erreurs serveur dans le hook
-    if (loginAction.value?.fieldErrors) {
-        Object.entries(loginAction.value.fieldErrors).forEach(([field, errors]) => {
+    if (loginAction.value?.failed) {
+        Object.entries(loginAction.value.message).forEach(([field, errors]) => {
             if (Array.isArray(errors) && errors.length > 0) {
                 form.setFieldError(field as keyof LoginForm, errors[0]);
             }
