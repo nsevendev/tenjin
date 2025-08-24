@@ -1,5 +1,5 @@
 import {$, component$} from "@builder.io/qwik";
-import {DocumentHead, Link} from "@builder.io/qwik-city";
+import {DocumentHead} from "@builder.io/qwik-city";
 import {LinkText} from "~/components/core/link-text/link-text";
 import {Badge} from "~/components/core/badge/badge";
 import {Card} from "~/components/core/card/card";
