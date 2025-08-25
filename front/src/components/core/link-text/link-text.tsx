@@ -1,25 +1,20 @@
 import {component$, Slot} from "@builder.io/qwik";
 import {Link as QwikLink} from "@builder.io/qwik-city";
-import {LinkTextPropsType, linkTextStyles} from "~/components/core/link-text/link-text-variant";
+import {LinkProps, linkVariants} from "~/components/core/link-text/link-text-variant";
 import {cn} from "~/utils/classe-name/cn";
 
-export const LinkText = component$<LinkTextPropsType>(({
-    variant = 'blue',
+export const LinkText = component$<LinkProps>(({
+    color = 'blue',
     size = 'base',
     href,
     external = false,
     class: className,
     ...props
 }) => {
-    const linkClasses = cn(
-        linkTextStyles.base,
-        linkTextStyles.variants[variant],
-        linkTextStyles.sizes[size],
-        className
-    );
+    const linkClasses = cn(linkVariants({color, size}),className);
 
-    // Si c'est un lien externe ou commence par http/https, utiliser un <a> normal
-    if (external || href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+    // lien externe ou commence par http/https, utiliser un <a> normal
+    if (external || href?.startsWith('http://') || href?.startsWith('https://') || href?.startsWith('mailto:') || href?.startsWith('tel:')) {
         return (
             <a 
                 {...props} 
@@ -33,7 +28,7 @@ export const LinkText = component$<LinkTextPropsType>(({
         );
     }
 
-    // Sinon, utiliser le Link de Qwik pour la navigation interne
+    // utilise le Link de Qwik pour la navigation interne
     return (
         <QwikLink 
             {...props} 

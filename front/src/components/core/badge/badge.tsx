@@ -1,21 +1,15 @@
 import {component$, Slot} from "@builder.io/qwik";
-import {BadgePropsType, badgeStyles} from "~/components/core/badge/badge-variant";
+import {BadgeProps, badgeVariants} from "~/components/core/badge/badge-variant";
 import {cn} from "~/utils/classe-name/cn";
 
-export const Badge = component$<BadgePropsType>(({
-    variant = 'blue',
+export const Badge = component$<BadgeProps>(({
+    color = 'gray',
     size = 'base',
     class: className,
     ...props
 }) => {
     return (
-        <div {...props} class={cn(
-                badgeStyles.base,
-                badgeStyles.variants[variant],
-                badgeStyles.sizes[size],
-                className
-            )}
-        >
+        <div class={cn(badgeVariants({color, size}), className)}{...props}>
             <Slot/>
         </div>
     )
