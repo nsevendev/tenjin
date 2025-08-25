@@ -25,6 +25,7 @@ services:
       - tenjin
     depends_on:
       - api
+      - redis
 
   api:
     build:
@@ -51,6 +52,7 @@ services:
       - tenjin
     depends_on:
       - db
+      - redis
 
   db:
     image: mongo:7
@@ -64,6 +66,16 @@ services:
     networks:
       - traefik-nseven
       - tenjin
+
+  redis:
+    image: redis:7
+    container_name: tenjin_${APP_ENV}_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - traefik-nseven
+      - tenjin
+    restart: unless-stopped
 
 networks:
   traefik-nseven:
