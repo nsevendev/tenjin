@@ -5,6 +5,7 @@ import (
 	"tenjin/back/app/router"
 	"tenjin/back/docs"
 	"tenjin/back/internal/jobs"
+	"tenjin/back/internal/mailer"
 	"tenjin/back/internal/utils/database"
 	"tenjin/back/internal/utils/s3adapter"
 	"tenjin/back/migration"
@@ -23,6 +24,7 @@ func init() {
 	ginresponse.SetFormatter(&ginresponse.JsonFormatter{})
 	s3adapter.CreateAdapteur()
 	jobs.InitJobs()
+	mailer.InitMailer()
 }
  
 // @title tenjin api
