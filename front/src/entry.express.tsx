@@ -49,6 +49,9 @@ const { router, notFound } = createQwikCity({
 // https://expressjs.com/
 const app = express();
 
+// pour traefik
+app.set('trust proxy', true)
+
 // Enable gzip compression
 // app.use(compression());
 
