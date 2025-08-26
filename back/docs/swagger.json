@@ -136,6 +136,52 @@
                     }
                 }
             }
+        },
+        "/user/register": {
+            "post": {
+                "description": "Crée un utilisateur dans la base de données MongoDB",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Crée un utilisateur",
+                "parameters": [
+                    {
+                        "description": "Informations de l'utilisateur à créer",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UserCreateDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Utilisateur créé",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    },
+                    "400": {
+                        "description": "Paramètres invalides",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne lors de la création",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -455,6 +501,56 @@
                         {
                             "$ref": "#/definitions/constantes.PhoneNumberType"
                         }
+                    ]
+                }
+            }
+        },
+        "user.UserCreateDto": {
+            "type": "object",
+            "required": [
+                "email",
+                "firstname",
+                "lastname",
+                "roles"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "firstname": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 2
+                },
+                "lastname": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 2
+                },
+                "organizations": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "sessions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "training",
+                        "employed",
+                        "jobseeker"
                     ]
                 }
             }
