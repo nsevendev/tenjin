@@ -84,6 +84,7 @@ func initDbAndMigNosql(appEnv string) {
 	// EXAMPLE => migrator.Add(migration.<namefile>)
 	// ajouter les migrations ici ...
 	migrator.Add(migration.CreateCompanyCollection)
+	migrator.Add(migration.CreateUserCollection)
 
 	if err := migrator.Apply(); err != nil {
 		logger.Ff("Erreur lors de l'application des migrations : %v", err)
