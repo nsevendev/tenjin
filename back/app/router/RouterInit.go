@@ -1,6 +1,11 @@
 package router
 
 import (
+	"tenjin/back/internal/auth"
+	"tenjin/back/internal/utils/database"
+	"tenjin/back/internal/utils/mongohelpers"
+	s3adapter2 "tenjin/back/internal/utils/s3adapter"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nsevenpack/env/env"
 	"github.com/nsevenpack/ginresponse"
@@ -8,10 +13,6 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.mongodb.org/mongo-driver/mongo"
-	"tenjin/back/internal/auth"
-	"tenjin/back/internal/utils/database"
-	"tenjin/back/internal/utils/mongohelpers"
-	s3adapter2 "tenjin/back/internal/utils/s3adapter"
 )
 
 const pathApiV1 = "api/v1"
@@ -39,6 +40,7 @@ func Routes(r *gin.Engine) {
 	RegisterCompanyRoutes(v1, deps)
 	RegisterUploadFileTest(v1, deps)
 	RegisterAuth(v1, deps)
+	RegisterUserRoutes(v1, deps)
 	RegisterCrm(v1, deps)
 
 	r.NoRoute(func(ctx *gin.Context) {
