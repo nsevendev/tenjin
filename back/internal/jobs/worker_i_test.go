@@ -13,7 +13,6 @@ import (
 )
 
 func TestWorkerIntegration(t *testing.T) {
-	logger.I("🔹 Démarrage du test d’intégration du worker...")
 
 	redisAddr := env.Get("REDIS_ADDR")
 	if redisAddr == "" {
@@ -31,7 +30,6 @@ func TestWorkerIntegration(t *testing.T) {
 		env.Get("MAIL_PASS"),
 		env.Get("MAIL_FROM"),
 	)
-	logger.Sf("'%s' iciiiiiiiiiiiiiiiiiiii", testMailer)
 	StartWorker(testMailer, jobsProcessed)
 
 	jobTest := Job{
@@ -39,7 +37,7 @@ func TestWorkerIntegration(t *testing.T) {
 		Payload: map[string]string{
 			"email":   "test@example.com",
 			"subject": "Test d'intégration",
-			"body":    "ouais la citééééééééééééééééééééé",
+			"body":    "ceci est un mail de test",
 		},
 		Retry:    0,
 		MaxRetry: 3,
