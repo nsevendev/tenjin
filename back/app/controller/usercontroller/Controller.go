@@ -2,6 +2,8 @@ package usercontroller
 
 import (
 	"tenjin/back/internal/user"
+
+	"github.com/gin-gonic/gin"
 )
 
 type userController struct {
@@ -9,6 +11,7 @@ type userController struct {
 }
 
 type UserControllerInterface interface {
+	Create(c *gin.Context)
 }
 
 func NewUserController(userService user.UserServiceInterface) UserControllerInterface {
