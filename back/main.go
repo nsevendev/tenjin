@@ -23,7 +23,16 @@ func init() {
 	initDbAndMigNosql(appEnv)
 	ginresponse.SetFormatter(&ginresponse.JsonFormatter{})
 	s3adapter.CreateAdapteur()
-	jobs.InitJobs()
+	jobsProcessed := make(chan jobs.Job, 100)
+	mailerInstance := mailer.NewMailer(
+	    env.Get("MAILTRAP_HOST"),
+	    env.Get("MAILTRAP_PORT"),
+	    env.Get("MAILTRAP_USER"),
+	    env.Get("MAILTRAP_PASS"),
+	    env.Get("MAIL_FROM"),
+	)
+
+	jobs.InitJobs(mailerInstance, jobsProcessed)
 	mailer.InitMailer()
 }
  
