@@ -1,17 +1,19 @@
 package main
 
 import (
+	"strings"
+	"tenjin/back/app/router"
+	"tenjin/back/docs"
+	"tenjin/back/internal/jobs"
+	"tenjin/back/internal/utils/database"
+	"tenjin/back/internal/utils/s3adapter"
+	"tenjin/back/migration"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nsevenpack/env/env"
 	"github.com/nsevenpack/ginresponse"
 	"github.com/nsevenpack/logger/v2/logger"
 	"github.com/nsevenpack/mignosql"
-	"strings"
-	"tenjin/back/app/router"
-	"tenjin/back/docs"
-	"tenjin/back/internal/utils/database"
-	"tenjin/back/internal/utils/s3adapter"
-	"tenjin/back/migration"
 )
 
 func init() {
@@ -20,6 +22,7 @@ func init() {
 	initDbAndMigNosql(appEnv)
 	ginresponse.SetFormatter(&ginresponse.JsonFormatter{})
 	s3adapter.CreateAdapteur()
+	jobs.InitJobs()
 }
  
 // @title tenjin api
