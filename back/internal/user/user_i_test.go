@@ -19,11 +19,9 @@ import (
 var userServiceTest UserServiceInterface
 
 func TestMain(m *testing.M) {
-	logger.I("Connexion à la base de données de dev...")
 	database.ConnexionDatabase("dev")
 	db := database.Client
 
-	logger.I("Vider initialement la collection 'user'...")
 	_, err := db.Collection("user").DeleteMany(context.Background(), bson.M{})
 	if err != nil {
 		logger.Ef("Erreur lors du vidage initial de la collection 'user' : %v", err)
@@ -34,12 +32,11 @@ func TestMain(m *testing.M) {
 
 	code := m.Run()
 
-	logger.I("Vider la collection 'user' après les tests...")
-	_, err = db.Collection("user").DeleteMany(context.Background(), bson.M{})
-	if err != nil {
-		logger.Ef("Erreur lors du vidage final de la collection 'user' : %v", err)
-		os.Exit(1)
-	}
+    _, err = db.Collection("user").DeleteMany(context.Background(), bson.M{})
+    if err != nil {
+        logger.Ef("Erreur lors du vidage final de la collection 'user' : %v", err)
+        os.Exit(1)
+    }
 
 	os.Exit(code)
 }
@@ -56,12 +53,6 @@ func TestCreateUser_Success(t *testing.T) {
 	}
 
 	user, err := userServiceTest.Create(context.Background(), dto)
-
-	if err != nil {
-		logger.Ef("[TestCreateUser_Success] Échec lors de la création de l'utilisateur: %v", err)
-	} else {
-		logger.Sf("[TestCreateUser_Success] Utilisateur créé avec succès: %+v", user)
-	}
 
 	assert.NoError(t, err)
 	assert.NotNil(t, user)
@@ -85,20 +76,11 @@ func TestCreateUser_DuplicateEmail(t *testing.T) {
 	}
 
 	user, err := userServiceTest.Create(context.Background(), dto)
-	if err != nil {
-		logger.Ef("[TestCreateUser_DuplicateEmail] Erreur à la première création: %v", err)
-	} else {
-		logger.Sf("[TestCreateUser_DuplicateEmail] Premier utilisateur créé: %+v", user)
-	}
+
 	assert.NoError(t, err)
 	assert.NotNil(t, user)
 
 	user2, err := userServiceTest.Create(context.Background(), dto)
-	if err != nil {
-		logger.Ef("[TestCreateUser_DuplicateEmail] Erreur sur doublon: %v", err)
-	} else {
-		logger.Sf("[TestCreateUser_DuplicateEmail] Second utilisateur créé malgré doublon: %+v", user2)
-	}
 
 	if err == nil {
 		assert.NotNil(t, user2)

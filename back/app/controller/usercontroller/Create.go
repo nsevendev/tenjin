@@ -5,9 +5,12 @@ import (
 	"tenjin/back/internal/user"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/nsevenpack/ginresponse"
 	"github.com/nsevenpack/logger/v2/logger"
 )
+
+var validate = validator.New()
 
 // Create godoc
 // @Summary Crée un utilisateur
@@ -24,7 +27,17 @@ func (uc *userController) Create(c *gin.Context) {
 	var dto user.UserCreateDto
 
 	if err := c.ShouldBindJSON(&dto); err != nil {
-		logger.Ef("Erreur de validation: %v", err)
+		logger.Ef("Erreur de binding JSON: %v", err)
+		ginresponse.BadRequest(c, "Erreur de validation", ginresponse.ErrorModel{
+			Message: err.Error(),
+			Type:    "Validation",
+			Detail:  fmt.Sprintf("%v", err),
+		})
+		return
+	}
+
+	if err := validate.Struct(dto); err != nil {
+		logger.Ef("Erreur de validation du DTO: %v", err)
 		ginresponse.BadRequest(c, "Erreur de validation", ginresponse.ErrorModel{
 			Message: err.Error(),
 			Type:    "Validation",
