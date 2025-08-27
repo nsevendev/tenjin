@@ -14,11 +14,18 @@ type Formation struct {
 	Duration            int                  `bson:"duration" json:"duration" validate:"required,min=1"` // en secondes
 	MaxParticipant      *int                 `bson:"max_participant" json:"maxParticipant"`
 	DocumentUrls        []string             `bson:"document_urls" json:"documentUrls" validate:"omitempty,dive,url"`
-	InstituteID         primitive.ObjectID   `bson:"institute_id" json:"instituteId" validate:"required"`
+	CompanyID           primitive.ObjectID   `bson:"company_id" json:"companyID" validate:"required"`
 	FormationSessionIDs []primitive.ObjectID `bson:"formation_session_ids" json:"formationSessionIds"`
 	JobID               primitive.ObjectID   `bson:"job_id" json:"jobId" validate:"required"`
-	CreatedAt           time.Time            `bson:"created_at" json:"createdAt"`
-	UpdatedAt           time.Time            `bson:"updated_at" json:"updatedAt"`
+	
+	// Soft delete avec traçabilité
+	IsDeleted       bool                 `bson:"is_deleted" json:"isDeleted"`
+	DeletedAt       *time.Time           `bson:"deleted_at,omitempty" json:"deletedAt"`
+	DeletedBy       *primitive.ObjectID  `bson:"deleted_by,omitempty" json:"deletedBy"`
+	HasParticipants bool                 `bson:"has_participants" json:"hasParticipants"`
+	
+	CreatedAt       time.Time            `bson:"created_at" json:"createdAt"`
+	UpdatedAt       time.Time            `bson:"updated_at" json:"updatedAt"`
 }
 
 // FormationSession creer des session sur une base de formation deja defini, session 2023, 2024, etc ...
@@ -40,4 +47,18 @@ type FormationSession struct {
 	StageEndDate      *time.Time           `bson:"stage_end_date" json:"stageEndDate"`
 	CreatedAt         time.Time            `bson:"created_at" json:"createdAt"`
 	UpdatedAt         time.Time            `bson:"updated_at" json:"updatedAt"`
+}
+
+// SoftDelete marque la formation comme supprimée
+func (f *Formation) SoftDelete(deletedBy primitive.ObjectID) {
+	now := time.Now()
+	f.IsDeleted = true
+	f.DeletedAt = &now
+	f.DeletedBy = &deletedBy
+	f.IsActive = false
+}
+
+// IsAccessible vérifie si la formation est accessible (non supprimée et active)
+func (f *Formation) IsAccessible() bool {
+	return !f.IsDeleted && f.IsActive
 }
