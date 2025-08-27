@@ -36,6 +36,14 @@ func (s *userService) Create(ctx context.Context, dto UserCreateDto) (*User, err
 		Organizations: dto.Organizations,
 		Sessions:      dto.Sessions,
 		Status:        dto.Status,
+
+		CompetenceRecords:    []CompetenceRecord{},
+		ExternalExperiences:  []ExternalExperience{},
+		Availability:         []AvailabilityPeriod{},
+		ReceivedOffers:       []primitive.ObjectID{},
+		PendingShareRequests: []ShareRequest{},
+		QuizResults:          []QuizResult{},
+		Chats:                []primitive.ObjectID{},
 	}
 
 	s.mongoHelper.SetTimestamps(user)
