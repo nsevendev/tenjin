@@ -66,6 +66,16 @@ services:
     environment:
       - MONGO_INITDB_DATABASE=${DB_NAME}
 
+  redis:
+    image: redis:7
+    container_name: tenjin_${APP_ENV}_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - traefik-nseven
+      - tenjin
+    restart: unless-stopped
+
 networks:
   traefik-nseven:
     external: true
