@@ -93,7 +93,7 @@ const (
 type TypeMail string
 
 const (
-	MailWelcome TypeMail = "welcome" 				// mail de bienvenue
-	MailRegister   TypeMail = "register"			// mail de validation du compte
-	MailResetPassword TypeMail = "reset_password" 	// mail de reset du password
+	MailWelcome 		TypeMail = "welcome" 			// mail de bienvenue
+	MailRegister   		TypeMail = "register"			// mail de validation du compte
+	MailResetPassword 	TypeMail = "reset_password" 	// mail de reset du password
 )
