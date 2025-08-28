@@ -5,8 +5,10 @@ import (
 	"tenjin/back/app/router"
 	"tenjin/back/docs"
 	"tenjin/back/internal/jobs"
+	"tenjin/back/internal/mail"
 	"tenjin/back/internal/mailer"
 	"tenjin/back/internal/utils/database"
+	"tenjin/back/internal/utils/filestores"
 	"tenjin/back/internal/utils/s3adapter"
 	"tenjin/back/migration"
 
@@ -21,18 +23,36 @@ func init() {
 	appEnv := env.Get("APP_ENV")
 	logger.Init(appEnv)
 	initDbAndMigNosql(appEnv)
+
 	ginresponse.SetFormatter(&ginresponse.JsonFormatter{})
 	s3adapter.CreateAdapteur()
+
 	jobsProcessed := make(chan jobs.Job, 100)
+
 	mailerInstance := mailer.NewMailer(
-	    env.Get("MAILTRAP_HOST"),
-	    env.Get("MAILTRAP_PORT"),
-	    env.Get("MAILTRAP_USER"),
-	    env.Get("MAILTRAP_PASS"),
-	    env.Get("MAIL_FROM"),
+		env.Get("MAILTRAP_HOST"),
+		env.Get("MAILTRAP_PORT"),
+		env.Get("MAILTRAP_USER"),
+		env.Get("MAILTRAP_PASS"),
+		env.Get("MAIL_FROM"),
 	)
 
-	jobs.InitJobs(mailerInstance, jobsProcessed)
+	mailService := mail.NewMailService(nil, database.Client)
+	fileStoreService := filestores.NewService(
+		s3adapter.AdapterCloudflareR2(),
+		filestores.FileStoreConfig{
+			KeyPrefix:      "mails/",
+			MaxSize:        0,
+			AllowedMIMEs:   []string{},
+			UseDateFolders: true,
+		},
+	)
+	mu := &mailer.MailUploader{
+		FileStore: fileStoreService,
+		MailSvc:   mailService,
+	}
+
+	jobs.InitJobs(mailerInstance, mu, jobsProcessed)
 	mailer.InitMailer()
 }
  
