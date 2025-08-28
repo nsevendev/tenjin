@@ -10,7 +10,7 @@ import (
 	"github.com/nsevenpack/logger/v2/logger"
 )
 
-func StartWorker(mailerInstance *mailer.Mailer, jobsProcessed chan Job) {
+func StartWorker(mailerInstance *mailer.Mailer, mu *mailer.MailUploader, jobsProcessed chan Job) {
 	go func() {
 		for {
 			data, err := ClientRedis.RPop(context.Background(), "job:queue").Result()
@@ -25,7 +25,7 @@ func StartWorker(mailerInstance *mailer.Mailer, jobsProcessed chan Job) {
 				continue
 			}
 
-			if err := routeJob(job, mailerInstance, jobsProcessed); err != nil {
+			if err := routeJob(job, mailerInstance, mu, jobsProcessed); err != nil {
 				job.Retry++
 				if job.Retry >= job.MaxRetry {
 					saveFailedJob(job)
@@ -37,10 +37,10 @@ func StartWorker(mailerInstance *mailer.Mailer, jobsProcessed chan Job) {
 	}()
 }
 
-func routeJob(job Job, mailerInstance *mailer.Mailer, jobsProcessed chan Job) error {
+func routeJob(job Job, mailerInstance *mailer.Mailer, mu *mailer.MailUploader, jobsProcessed chan Job) error {
 	switch job.Name {
 	case "mail:send":
-		return HandleSendMail(job, mailerInstance, jobsProcessed)
+		return HandleSendMail(job, mailerInstance, mu, jobsProcessed)
 	default:
 		logger.Wf("Job inconnu : %s", job.Name)
 		return nil

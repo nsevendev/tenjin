@@ -11,14 +11,14 @@ import (
 )
 
 type MailUploader struct {
-	fileStore *filestores.FileStoreService
-	mailSvc   *mail.MailService
+	FileStore *filestores.FileStoreService
+	MailSvc   *mail.MailService
 }
 
 func (mu *MailUploader) StoreAndCreate(ctx context.Context, userID primitive.ObjectID, to, subject, body string, mailType constantes.TypeMail) (*mail.Mail, error) {
 	filename := fmt.Sprintf("%s.html", filestores.RandHex(16))
 
-	uploadRes, err := mu.fileStore.UploadBytes(ctx, "mails", filename, []byte(body))
+	uploadRes, err := mu.FileStore.UploadBytes(ctx, "mails", filename, []byte(body))
 	if err != nil {
 		return nil, fmt.Errorf("erreur upload sur R2 : %w", err)
 	}
@@ -33,5 +33,5 @@ func (mu *MailUploader) StoreAndCreate(ctx context.Context, userID primitive.Obj
 		MetaName: &filename,
 	}
 
-	return mu.mailSvc.Create(ctx, dto)
+	return mu.MailSvc.Create(ctx, dto)
 }

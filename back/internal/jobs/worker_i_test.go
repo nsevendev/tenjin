@@ -11,11 +11,13 @@ import (
 	"github.com/nsevenpack/logger/v2/logger"
 	"github.com/stretchr/testify/assert"
 
+	"tenjin/back/internal/mail"
 	"tenjin/back/internal/mailer"
+	"tenjin/back/internal/utils/filestores"
+	"tenjin/back/internal/utils/s3adapter"
 )
 
 func TestWorkerIntegration(t *testing.T) {
-
 	redisAddr := env.Get("REDIS_ADDR")
 	if redisAddr == "" {
 		t.Fatal("REDIS_ADDR non défini, impossible de tester le worker")
@@ -32,7 +34,20 @@ func TestWorkerIntegration(t *testing.T) {
 		env.Get("MAIL_PASS"),
 		env.Get("MAIL_FROM"),
 	)
-	StartWorker(testMailer, jobsProcessed)
+
+	mailService := mail.NewMailService(mongoHelper, mongoDB)
+	fileStoreService := filestores.NewService(s3adapter.AdapterCloudflareR2(), filestores.FileStoreConfig{
+		KeyPrefix:      "tests/",
+		MaxSize:        0,
+		AllowedMIMEs:   []string{},
+		UseDateFolders: false,
+	})
+	mu := &mailer.MailUploader{
+		FileStore: fileStoreService,
+		MailSvc:   mailService,
+	}
+
+	StartWorker(testMailer, mu, jobsProcessed)
 
 	jobTest := Job{
 		Name: "mail:send",
