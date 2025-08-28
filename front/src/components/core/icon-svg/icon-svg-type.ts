@@ -1,8 +1,12 @@
+import type { QRL } from "@builder.io/qwik";
+
 export type IconProps = {
     size?: IconSize | number | string;
     class?: string;
-    color?: string;
+    color?: ColorSvg | string;
     strokeWidth?: StrokeWidths | number | string;
+    fill?: ColorSvg | string;
+    onClick$?: QRL<() => void>;
 }
 
 export const iconSizes = {
@@ -15,14 +19,14 @@ export const iconSizes = {
 
 export type IconSize = keyof typeof iconSizes | number | string;
 
-export const strokeWith = {
+export const strokeWidths = {
     thin: 1,
     normal: 1.5,
     thick: 2,
     extraThick: 3
 }
 
-export type StrokeWidths = keyof typeof strokeWith | number | string;
+export type StrokeWidths = keyof typeof strokeWidths | number | string;
 
 export const colorSvg = {
     currentColor: 'currentColor',
