@@ -1,12 +1,12 @@
 package mail
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
 	"tenjin/back/internal/utils/mongohelpers"
 
-	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -23,7 +23,7 @@ func NewMailService(mongoHelper mongohelpers.Helper, db *mongo.Database) *MailSe
 	}
 }
 
-func (s *MailService) Create(ctx *gin.Context, dto MailCreateDto) (*Mail, error) {
+func (s *MailService) Create(ctx context.Context, dto MailCreateDto) (*Mail, error) {
 	if dto.UserID.IsZero() {
 		return nil, errors.New("UserID est obligatoire")
 	}
