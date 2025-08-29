@@ -40,7 +40,14 @@ export const colorSvg = {
     blue: '#3B82F6',
     yellow: '#F59E0B',
     purple: '#8B5CF6',
-    pink: '#EC4899'
+    pink: '#EC4899',
+    // Ajout des couleurs du système
+    primary: '#0089ff',
+    secondary: '#6B7280',
+    success: '#22c55e',
+    error: '#ef4444',
+    warning: '#eab308',
+    info: '#3B82F6'
 }
 
 export type ColorSvg = keyof typeof colorSvg | string;
