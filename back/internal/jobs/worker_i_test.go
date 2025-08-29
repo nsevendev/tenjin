@@ -12,6 +12,7 @@ import (
 	"github.com/nsevenpack/logger/v2/logger"
 	"github.com/nsevenpack/testup"
 	"github.com/stretchr/testify/assert"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"tenjin/back/internal/mail"
 	"tenjin/back/internal/mailer"
@@ -36,6 +37,8 @@ func TestMain(m *testing.M) {
 	}
 
 	mailService = mail.NewMailService(mongohelpers.NewHelper(), db)
+
+	s3adapter.CreateAdapteur()
 
 	fileStoreService := filestores.NewService(s3adapter.AdapterCloudflareR2(), filestores.FileStoreConfig{
 		KeyPrefix:      "tests/",
@@ -78,13 +81,15 @@ func TestWorkerIntegration(t *testing.T) {
 	)
 
 	StartWorker(testMailer, mu, jobsProcessed)
+	logger.If("🔄 Worker démarré")
 
 	jobTest := Job{
 		Name: "mail:send",
 		Payload: map[string]string{
 			"email":   "test@example.com",
 			"subject": "Test d'intégration",
-			"body":    "ceci est un mail de test",
+			"body":    "ouaissss johnnnnnn",
+			"user_id": primitive.NewObjectID().Hex(),
 		},
 		Retry:    0,
 		MaxRetry: 3,
@@ -92,6 +97,7 @@ func TestWorkerIntegration(t *testing.T) {
 	}
 
 	ProcessJob(context.Background(), jobTest)
+	time.Sleep(100 * time.Millisecond)
 
 	select {
 	case processedJob := <-jobsProcessed:
