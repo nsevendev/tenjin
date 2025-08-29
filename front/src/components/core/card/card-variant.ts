@@ -2,7 +2,7 @@ import {QwikIntrinsicElements} from "@builder.io/qwik";
 import {cva, VariantProps} from "class-variance-authority";
 
 export const cardVariants = cva(
-    'rounded-lg bg-white shadow-sm w-fit', // base
+    'rounded-lg bg-white dark:bg-gray-800 shadow-sm w-fit', // base
     {
         variants: {
             containPosition: {

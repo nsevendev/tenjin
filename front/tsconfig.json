@@ -20,5 +20,10 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["src", "./*.d.ts", "./*.config.ts"]
+  "include": [
+    "src",
+    "./*.d.ts",
+    "./*.config.ts",
+    "node_modules/vitest/globals.d.ts"
+  ]
 }

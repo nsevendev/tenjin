@@ -2,6 +2,11 @@
 
 > projet de suivi de formation
 
+## Les projets
+- back : api principal en go
+- front : application front en qwik partie commerciale
+- app : application front en angular partie interne
+
 ## Avant installation en mode dev
 - Treafik nseven doit etre installé, configuré et lancé
 - Creer des copies `.env` depuis `.env.dist` à l'endroit où sont les `.env.dist`
