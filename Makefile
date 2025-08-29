@@ -102,10 +102,10 @@ taivp: ## Lance les tests api en verbose + integration pour un path (usage: make
 	docker exec -i -e APP_ENV=test tenjin_dev_api go test -v -tags=integration ./$(path)
 
 tf: ## Lance tous les tests front
-	docker exec -i tenjin_dev_app npm run test.unit -- --run
+	docker exec -i tenjin_dev_front npm run test.unit -- --run
 
 tfv: ## Lance tous les tests front en mode verbose
-	docker exec -i tenjin_dev_app npm run test.unit -- --run --reporter=verbose
+	docker exec -i tenjin_dev_front npm run test.unit -- --run --reporter=verbose
 
 cli: ## execute commande package api rome (usage: make apir cmd=help)
 	$(DOCKER_COMPOSE) exec api bash -c "go run ./cli/main.go $(cmd)"
