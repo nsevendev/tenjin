@@ -2,7 +2,7 @@ import { QwikIntrinsicElements } from "@builder.io/qwik";
 import {cva, VariantProps} from "class-variance-authority";
 
 export const titleVariants = cva(
-    '', // base
+    'text-black dark:text-white', // base
     {
         variants: {
             weight: {
