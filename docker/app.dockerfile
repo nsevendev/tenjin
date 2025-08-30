@@ -1,5 +1,6 @@
 # ---------- Base ----------
 FROM node:22.17.0-slim AS base
+RUN apt-get update && apt-get install -y bash
 WORKDIR /app
 RUN apt-get update && apt-get install -y \
     wget ca-certificates fonts-liberation libasound2 libatk1.0-0 libatk-bridge2.0-0 \
