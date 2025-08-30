@@ -84,7 +84,11 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
+            "karmaConfig": "karma.conf.js",
             "tsConfig": "tsconfig.spec.json",
+            "progress": false,
+            "watch": false,
+            "codeCoverage": true,
             "assets": [
               {
                 "glob": "**/*",
