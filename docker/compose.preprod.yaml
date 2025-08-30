@@ -37,7 +37,7 @@ services:
       - "traefik.http.routers.tenjin-app.rule=${HOST_TRAEFIK_APP}"
       - "traefik.http.routers.tenjin-app.entrypoints=websecure"
       - "traefik.http.routers.tenjin-app.tls=true"
-      - "traefik.http.routers.tenjin-app.tls.certresolver=default"
+      - "traefik.http.routers.tenjin-app.tls.certresolver=le"
       - "traefik.http.services.tenjin-app.loadbalancer.server.port=${PORT}"
     env_file:
       - ../app/.env
