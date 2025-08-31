@@ -1,0 +1,152 @@
+<section class="p-10">
+  <!-- link -->
+  <c-container [direction]="'col'" [gap]="2" class="mb-10">
+    <c-link-text url="/">Accueil</c-link-text>
+    <c-link-text url="/dashboard">Dashboard</c-link-text>
+  </c-container>
+
+  <c-card class="mb-10">
+    <c-title [size]="'3xl'" [as]="'h1'" [weight]="'bold'" class="mb-4">Card link avec title h1 3xl bold</c-title>
+    <c-link-text url="https://google.fr">
+      je suis un lien
+    </c-link-text>
+    <p>je suis du texte pour tester la police les tailles etc .... et voir les changements</p>
+  </c-card>
+
+  <!-- text simple -->
+  <c-card class="mb-10">
+    <c-title [size]="'2xl'" [as]="'h1'" [weight]="'bold'" class="mb-4">Card normal avec title h1 2xl bold</c-title>
+    <p>je suis du texte pour tester la police les tailles etc .... et voir les changements</p>
+    <p>je suis du texte pour tester la police les tailles etc .... et voir les changements</p>
+    <p>je suis du texte pour tester la police les tailles etc .... et voir les changements</p>
+  </c-card>
+
+  <c-card class="mb-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Card avec container col + gap avec title h1 lg bold</c-title>
+    <c-container [direction]="'col'" [gap]="6">
+      <p>je suis du texte pour tester la police les tailles etc .... et voir les changements</p>
+      <p>je suis du texte pour tester la police les tailles etc .... et voir les changements</p>
+      <p>je suis du texte pour tester la police les tailles etc .... et voir les changements</p>
+    </c-container>
+  </c-card>
+
+  <c-card class="mb-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Card avec differents textes + gap avec title h1 lg bold</c-title>
+    <c-container [direction]="'col'" [gap]="4" class="mb-4">
+      <c-text>Texte par défaut</c-text>
+      <c-text variant="small" size="sm" color="muted">Texte petit & atténué</c-text>
+      <c-text variant="code">const x = 42;</c-text>
+
+      <c-text-paragraph class="mb-2">Paragraphe preset</c-text-paragraph>
+      <c-text-caption>Légende</c-text-caption>
+      <c-text-lead>Lead text</c-text-lead>
+      <c-text-muted>Muted</c-text-muted>
+      <c-code-text>npm run dev</c-code-text>
+
+      <c-text-message>Info par défaut</c-text-message>
+      <c-text-message-success>Succès</c-text-message-success>
+      <c-text-message-error>Erreur</c-text-message-error>
+      <c-text-message-warning>Attention</c-text-message-warning>
+
+      <c-text-blockquote>« Une citation simple »</c-text-blockquote>
+      <c-text-blockquote variant="primary">« Citation accent »</c-text-blockquote>
+    </c-container>
+  </c-card>
+
+  <c-card class="mb-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Card avec differents bouton + gap avec title h1 lg bold</c-title>
+    <c-container [direction]="'col'" [gap]="4" class="mb-4">
+      <c-button>Par défaut</c-button>
+      <c-button [variant]="'success'">OK</c-button>
+      <c-button [variant]="'error'" size="sm">Supprimer</c-button>
+      <c-button [variant]="'primaryOpacity'" class="gap-2">
+        <span>Opacity</span>
+      </c-button>
+      <c-button [variant]="'secondaryOpacity'" class="gap-2">
+        <span>Opacity</span>
+      </c-button>
+
+      <c-button-primary (pressed)="handlerButton()" class="w-full">Full</c-button-primary>
+      <c-button-primary-small (pressed)="handlerButton()">Petit</c-button-primary-small>
+      <c-button-secondary (pressed)="handlerButton()">Secondaire</c-button-secondary>
+      <c-button-secondary-small (pressed)="handlerButton()" [disabled]="true">Disabled</c-button-secondary-small>
+
+    </c-container>
+  </c-card>
+
+  <c-card class="mb-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Card avec differents badge + gap avec title h1 lg bold</c-title>
+    <c-container [gap]="4" [wrap]="'wrap'" class="mb-4">
+      <c-badge>Par défaut</c-badge>
+      <c-badge (pressed)="handlerBadge()" [hasHandler]="true">Par défaut avec click</c-badge>
+      <c-badge [color]="'blue'" (pressed)="handlerBadge()" [hasHandler]="true">Blue click</c-badge>
+      <c-badge [color]="'red'" (pressed)="handlerBadge()" [hasHandler]="true">Erreur click</c-badge>
+      <c-badge [color]="'green'" (pressed)="handlerBadge()" [hasHandler]="true">Validé click</c-badge>
+      <c-badge [color]="'orange'" (pressed)="handlerBadge()" [hasHandler]="true">Orange click</c-badge>
+      <c-badge [color]="'yellow'" (pressed)="handlerBadge()" [hasHandler]="true">En attente click</c-badge>
+      <c-badge [color]="'purple'" (pressed)="handlerBadge()" [hasHandler]="true">En attente click</c-badge>
+      <c-badge [color]="'pink'" (pressed)="handlerBadge()" [hasHandler]="true">En attente click</c-badge>
+      <c-badge [color]="'indigo'" (pressed)="handlerBadge()" [hasHandler]="true">En attente click</c-badge>
+    </c-container>
+  </c-card>
+
+  <c-card class="mb-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Card avec differents badge + gap + largeur fix avec title h1 lg bold</c-title>
+    <c-container [gap]="4" [wrap]="'wrap'" class="mb-4 w-3xs">
+      <c-badge>Par défaut</c-badge>
+      <c-badge (pressed)="handlerBadge()" [hasHandler]="true">Par défaut avec click</c-badge>
+      <c-badge [color]="'blue'" (pressed)="handlerBadge()" [hasHandler]="true">Blue click</c-badge>
+      <c-badge [color]="'red'" (pressed)="handlerBadge()" [hasHandler]="true">Erreur click</c-badge>
+      <c-badge [color]="'green'" (pressed)="handlerBadge()" [hasHandler]="true">Validé click</c-badge>
+      <c-badge [color]="'orange'" (pressed)="handlerBadge()" [hasHandler]="true">Orange click</c-badge>
+      <c-badge [color]="'yellow'" (pressed)="handlerBadge()" [hasHandler]="true">En attente click</c-badge>
+      <c-badge [color]="'purple'" (pressed)="handlerBadge()" [hasHandler]="true">En attente click</c-badge>
+      <c-badge [color]="'pink'" (pressed)="handlerBadge()" [hasHandler]="true">En attente click</c-badge>
+      <c-badge [color]="'indigo'" (pressed)="handlerBadge()" [hasHandler]="true">En attente click</c-badge>
+    </c-container>
+  </c-card>
+
+  <c-card>
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Card avec differents input avec title h1 lg bold</c-title>
+    <div class="mb-4">
+      <c-input [(value)]="valueInput" [placeholder]="'Votre email'"/>
+    </div>
+    <div class="mb-4">
+      <c-input [(value)]="valueInput" [placeholder]="'Votre email'" [disabled]="true"/>
+    </div>
+    <div class="mb-4">
+      <c-input [(value)]="valueInput" [placeholder]="'Votre email'" [variant]="'error'"/>
+    </div>
+    <div class="mb-4">
+      <c-input [(value)]="valueInput" [placeholder]="'Votre email'" [variant]="'success'"/>
+    </div>
+    <div class="mb-4">
+      <c-input [(value)]="valueInputWithValue"/>
+    </div>
+    <div class="mb-4">
+      <c-input [(value)]="username" placeholder="Votre nom">
+        <svg cInputPrefix xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+        </svg>
+      </c-input>
+    </div>
+    <div>
+      <c-input [(value)]="filter" placeholder="Filtre">
+        <button
+          cInputSuffix
+          type="button"
+          class="pointer-events-auto cursor-pointer opacity-60 hover:opacity-100"
+          (click)="filter.set('')"
+        >
+          ✕
+        </button>
+      </c-input>
+      @if (filter()){
+        <div>
+          <span>Mon filtre est : </span><c-text-message-info>{{filter()}}</c-text-message-info>
+        </div>
+      }
+    </div>
+  </c-card>
+</section>
+

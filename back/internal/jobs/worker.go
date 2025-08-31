@@ -4,14 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"tenjin/back/internal/mailer"
 	"time"
 
 	"github.com/nsevenpack/logger/v2/logger"
 )
 
-var JobsProcessed chan Job
-
-func StartWorker() {
+func StartWorker(mailerInstance *mailer.Mailer, jobsProcessed chan Job) {
 	go func() {
 		for {
 			data, err := ClientRedis.RPop(context.Background(), "job:queue").Result()
@@ -26,7 +25,7 @@ func StartWorker() {
 				continue
 			}
 
-			if err := routeJob(job); err != nil {
+			if err := routeJob(job, mailerInstance, jobsProcessed); err != nil {
 				job.Retry++
 				if job.Retry >= job.MaxRetry {
 					saveFailedJob(job)
@@ -38,18 +37,14 @@ func StartWorker() {
 	}()
 }
 
-func routeJob(job Job) error {
-	logger.Sf("📌 Job reçu : %s avec payload : %v", job.Name, job.Payload)
-
-	if JobsProcessed != nil {
-		select {
-		case JobsProcessed <- job:
-		default:
-			logger.Wf("JobsProcessed channel plein, job %s ignoré dans le test", job.Name)
-		}
+func routeJob(job Job, mailerInstance *mailer.Mailer, jobsProcessed chan Job) error {
+	switch job.Name {
+	case "mail:send":
+		return HandleSendMail(job, mailerInstance, jobsProcessed)
+	default:
+		logger.Wf("Job inconnu : %s", job.Name)
+		return nil
 	}
-
-	return nil
 }
 
 func retryJob(job Job) {

@@ -12,7 +12,10 @@ export const Card = component$<CardProps<CardTag>>(({
     const TagCard = as as any;
     
     return (
-        <TagCard {...props} class={cn(cardVariants({containPosition, size}), className)} {...props}>
+        <TagCard 
+            {...props} 
+            class={cn(cardVariants({containPosition, size}), className)}
+        >
             <Slot/>
         </TagCard>
     )

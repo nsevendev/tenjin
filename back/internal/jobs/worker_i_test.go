@@ -10,10 +10,11 @@ import (
 	"github.com/nsevenpack/env/env"
 	"github.com/nsevenpack/logger/v2/logger"
 	"github.com/stretchr/testify/assert"
+
+	"tenjin/back/internal/mailer"
 )
 
 func TestWorkerIntegration(t *testing.T) {
-	logger.I("🔹 Démarrage du test d’intégration du worker...")
 
 	redisAddr := env.Get("REDIS_ADDR")
 	if redisAddr == "" {
@@ -22,14 +23,23 @@ func TestWorkerIntegration(t *testing.T) {
 
 	Redis(redisAddr)
 
-	JobsProcessed = make(chan Job, 10)
+	jobsProcessed := make(chan Job, 10)
 
-	StartWorker()
+	testMailer := mailer.NewMailer(
+		env.Get("MAIL_HOST"),
+		env.Get("MAIL_PORT"),
+		env.Get("MAIL_USER"),
+		env.Get("MAIL_PASS"),
+		env.Get("MAIL_FROM"),
+	)
+	StartWorker(testMailer, jobsProcessed)
 
 	jobTest := Job{
-		Name: "test:integration",
+		Name: "mail:send",
 		Payload: map[string]string{
-			"message": "Hello Redis Worker!",
+			"email":   "test@example.com",
+			"subject": "Test d'intégration",
+			"body":    "ceci est un mail de test",
 		},
 		Retry:    0,
 		MaxRetry: 3,
@@ -39,12 +49,12 @@ func TestWorkerIntegration(t *testing.T) {
 	ProcessJob(context.Background(), jobTest)
 
 	select {
-	case processedJob := <-JobsProcessed:
+	case processedJob := <-jobsProcessed:
 		assert.Equal(t, jobTest.Name, processedJob.Name)
-		assert.Equal(t, jobTest.Payload["message"], processedJob.Payload["message"])
+		assert.Equal(t, jobTest.Payload["email"], processedJob.Payload["email"])
 		logger.Sf("✅ Job '%s' traité correctement", processedJob.Name)
-	case <-time.After(5 * time.Second):
-		t.Fatal("❌ Timeout : le worker n'a pas traité le job dans les 5s")
+	case <-time.After(10 * time.Second):
+		t.Fatal("❌ Timeout : le worker n'a pas traité le job dans les 10s")
 	}
 
 	logger.I("🔹 Test d’intégration du worker terminé avec succès")
