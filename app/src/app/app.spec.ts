@@ -10,13 +10,13 @@ describe('App', () => {
     }).compileComponents();
   });
 
-  it('test la creation de APP', () => {
+  it('test create component APP', () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it('test des tests avec un calcul', () => {
+  it('test for tests with calculate', () => {
     const sum = 2 + 3;
     expect(sum).toBe(5);
   });
