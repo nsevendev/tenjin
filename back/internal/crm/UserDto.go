@@ -1,15 +1,21 @@
 package crm
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type UserCreateDto struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required,min=6"`
-	Username string `json:"username" binding:"required"`
-	Role     string `json:"role" binding:"omitempty"`
+	Firstname     string               `json:"firstname" validate:"required,min=2,max=100"`
+	Lastname      string               `json:"lastname" validate:"required,min=2,max=100"`
+	Email         string               `json:"email" validate:"required,email"`
+	Password      string               `json:"password" validate:"required,min=6"`
+	Username      string               `json:"username" validate:"required"`
+	Roles         []string             `json:"roles" validate:"required,dive,oneof=student trainer manager admin recruiter"`
+	Status        string               `json:"status" validate:"omitempty,oneof=training employed jobseeker"`
+	Organizations []primitive.ObjectID `json:"organizations"`
+	Sessions      []primitive.ObjectID `json:"sessions"`
 }
 
 type UserDeleteDto struct {
