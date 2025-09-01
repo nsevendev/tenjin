@@ -2,13 +2,16 @@ package auth
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
-	"github.com/nsevenpack/env/env"
 	"net/http/httptest"
 	"os"
 	"tenjin/back/internal/utils/database"
 	"testing"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/nsevenpack/env/env"
+
+	"tenjin/back/internal/crm"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/nsevenpack/logger/v2/logger"
@@ -17,7 +20,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"tenjin/back/internal/crm"
 )
 
 var (
@@ -68,11 +70,11 @@ func TestAuthService_generateToken_Success(t *testing.T) {
 	testup.LogNameTestInfo(t, "Test generate token success")
 
 	user := &crm.User{
-		ID:       primitive.NewObjectID(),
-		Email:    "test@example.com",
-		Password: "$2a$10$hashedPassword",
-		Role:     "user",
-		Username: "testuser",
+		ID:        primitive.NewObjectID(),
+		Email:     "test@example.com",
+		Password:  "$2a$10$hashedPassword",
+		Roles:     []string{"user"},
+		Username:  "testuser",
 	}
 
 	token, err := testAuthService.generateToken(user)
@@ -92,7 +94,7 @@ func TestAuthService_generateToken_Success(t *testing.T) {
 	require.True(t, ok)
 	assert.Equal(t, user.ID.Hex(), claims.IdUser)
 	assert.Equal(t, user.Email, claims.Email)
-	assert.Equal(t, user.Role, claims.Role)
+	assert.Equal(t, user.Roles, claims.Roles)
 }
 
 func TestAuthService_generateToken_EmptyJWTKey(t *testing.T) {
@@ -103,7 +105,7 @@ func TestAuthService_generateToken_EmptyJWTKey(t *testing.T) {
 		ID:       primitive.NewObjectID(),
 		Email:    "test@example.com",
 		Password: "$2a$10$hashedPassword",
-		Role:     "user",
+		Roles:    []string{"user"},
 		Username: "testuser",
 	}
 
@@ -121,7 +123,7 @@ func TestAuthService_generateToken_TokenExpiration(t *testing.T) {
 		ID:       primitive.NewObjectID(),
 		Email:    "test@example.com",
 		Password: "$2a$10$hashedPassword",
-		Role:     "user",
+		Roles:    []string{"user"},
 		Username: "testuser",
 	}
 
@@ -153,7 +155,7 @@ func TestAuthService_CreateToken_Success(t *testing.T) {
 		ID:       primitive.NewObjectID(),
 		Email:    "test@example.com",
 		Password: "plainPassword",
-		Role:     "user",
+		Roles:    []string{"user"},
 		Username: "testuser",
 	}
 
@@ -202,7 +204,7 @@ func TestAuthService_CreateToken_WrongPassword(t *testing.T) {
 		ID:       primitive.NewObjectID(),
 		Email:    "test@example.com",
 		Password: "correctPassword",
-		Role:     "user",
+		Roles:    []string{"user"},
 		Username: "testuser",
 	}
 
@@ -235,7 +237,7 @@ func TestAuthService_CreateToken_Integration(t *testing.T) {
 		Email:    "integration@example.com",
 		Password: "testpassword123",
 		Username: "integrationuser",
-		Role:     "user",
+		Roles:    []string{"user"},
 	}
 
 	createdUser, err := userService.CreateUser(ctx, userCreateDto)
@@ -269,7 +271,7 @@ func TestAuthService_CreateToken_Integration(t *testing.T) {
 
 	assert.Equal(t, foundUser.ID.Hex(), claims.IdUser)
 	assert.Equal(t, foundUser.Email, claims.Email)
-	assert.Equal(t, foundUser.Role, claims.Role)
+	assert.Equal(t, foundUser.Roles, claims.Roles)
 }
 
 func TestTokenClaims_Structure(t *testing.T) {
@@ -278,7 +280,7 @@ func TestTokenClaims_Structure(t *testing.T) {
 	claims := &tokenClaims{
 		IdUser: "507f1f77bcf86cd799439011",
 		Email:  "test@example.com",
-		Role:   "admin",
+		Roles:  []string{"admin"},
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -287,7 +289,7 @@ func TestTokenClaims_Structure(t *testing.T) {
 
 	assert.Equal(t, "507f1f77bcf86cd799439011", claims.IdUser)
 	assert.Equal(t, "test@example.com", claims.Email)
-	assert.Equal(t, "admin", claims.Role)
+	assert.Equal(t, []string{"admin"}, claims.Roles)
 	assert.NotNil(t, claims.ExpiresAt)
 	assert.NotNil(t, claims.IssuedAt)
 }
@@ -311,7 +313,7 @@ func TestAuthService_TokenValidation_Algorithm(t *testing.T) {
 		ID:       primitive.NewObjectID(),
 		Email:    "test@example.com",
 		Password: "password",
-		Role:     "user",
+		Roles:  []string{"user"},
 		Username: "testuser",
 	}
 
@@ -337,7 +339,7 @@ func TestAuthService_MultipleTokensGeneration(t *testing.T) {
 		ID:       primitive.NewObjectID(),
 		Email:    "test@example.com",
 		Password: "password",
-		Role:     "user",
+		Roles:  []string{"user"},
 		Username: "testuser",
 	}
 
