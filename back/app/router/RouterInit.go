@@ -40,7 +40,6 @@ func Routes(r *gin.Engine) {
 	RegisterCompanyRoutes(v1, deps)
 	RegisterUploadFileTest(v1, deps)
 	RegisterAuth(v1, deps)
-	RegisterUserRoutes(v1, deps)
 	RegisterCrm(v1, deps)
 
 	r.NoRoute(func(ctx *gin.Context) {

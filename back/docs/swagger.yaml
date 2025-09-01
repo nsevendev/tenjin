@@ -227,42 +227,6 @@ definitions:
     - number
     - type
     type: object
-  user.UserCreateDto:
-    properties:
-      email:
-        type: string
-      firstname:
-        maxLength: 100
-        minLength: 2
-        type: string
-      lastname:
-        maxLength: 100
-        minLength: 2
-        type: string
-      organizations:
-        items:
-          type: string
-        type: array
-      roles:
-        items:
-          type: string
-        type: array
-      sessions:
-        items:
-          type: string
-        type: array
-      status:
-        enum:
-        - training
-        - employed
-        - jobseeker
-        type: string
-    required:
-    - email
-    - firstname
-    - lastname
-    - roles
-    type: object
 info:
   contact: {}
   description: API service tenjin api
@@ -352,36 +316,6 @@ paths:
       summary: Enregistrement d'un fichier dans le stockage R2
       tags:
       - UploadFileTest
-  /user/register:
-    post:
-      consumes:
-      - application/json
-      description: Crée un utilisateur dans la base de données MongoDB
-      parameters:
-      - description: Informations de l'utilisateur à créer
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/user.UserCreateDto'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Utilisateur créé
-          schema:
-            $ref: '#/definitions/ginresponse.JsonFormatterSwag'
-        "400":
-          description: Paramètres invalides
-          schema:
-            $ref: '#/definitions/ginresponse.JsonFormatterSwag'
-        "500":
-          description: Erreur interne lors de la création
-          schema:
-            $ref: '#/definitions/ginresponse.JsonFormatterSwag'
-      summary: Crée un utilisateur
-      tags:
-      - user
 schemes:
 - https
 securityDefinitions:

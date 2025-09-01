@@ -426,7 +426,7 @@ func TestUserCreateDto_Faker(t *testing.T) {
 	assert.NotEmpty(t, fakeDto.Firstname)
 	assert.NotEmpty(t, fakeDto.Lastname)
 	assert.Equal(t, []string{"user"}, fakeDto.Roles)
-	assert.Equal(t, "training", fakeDto.Status)
+	assert.Equal(t, "employed", fakeDto.Status)
 	assert.NotNil(t, fakeDto.Organizations)
 	assert.NotNil(t, fakeDto.Sessions)
 
@@ -441,7 +441,7 @@ func TestUserCreateDto_Faker(t *testing.T) {
 		assert.NotEmpty(t, dto.Lastname, "DTO %d should have lastname", i)
 		assert.Equal(t, "password123", dto.Password, "DTO %d should have password", i)
 		assert.Equal(t, []string{"user"}, dto.Roles, "DTO %d should have role", i)
-		assert.Equal(t, "training", dto.Status, "DTO %d should have status", i)
+		assert.Equal(t, "employed", dto.Status, "DTO %d should have status", i)
 		assert.NotNil(t, dto.Organizations, "DTO %d should have organizations slice", i)
 		assert.NotNil(t, dto.Sessions, "DTO %d should have sessions slice", i)
 	}
