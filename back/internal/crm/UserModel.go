@@ -99,6 +99,12 @@ type FormationParticipation struct {
 	CreatedAt         time.Time           `bson:"created_at" json:"createdAt"`
 }
 
+type EmailVerificationTokenPayload struct {
+	UserID primitive.ObjectID `json:"userId"`
+	Token  string             `json:"token"`
+	Expiry time.Time          `json:"expiry"`
+}
+
 func (u *User) HashPassword() error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
