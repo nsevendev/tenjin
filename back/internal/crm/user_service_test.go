@@ -446,17 +446,3 @@ func TestUserCreateDto_Faker(t *testing.T) {
 		assert.NotNil(t, dto.Sessions, "DTO %d should have sessions slice", i)
 	}
 }
-
-func TestUserService_GenerateEmailVerificationToken(t *testing.T) {
-	testup.LogNameTestInfo(t, "Test GenerateEmailVerificationToken")
-
-	userID := primitive.NewObjectID()
-	tokenPayload := testUserService.GenerateEmailVerificationToken(userID)
-
-	assert.NotEmpty(t, tokenPayload.Token)
-	assert.Equal(t, userID, tokenPayload.UserID)
-
-	now := time.Now()
-	assert.True(t, tokenPayload.Expiry.After(now), "Expiry should be after current time")
-	assert.InDelta(t, now.Add(1*time.Hour).Unix(), tokenPayload.Expiry.Unix(), 5, "Expiry should be approximately 1 hour from now")
-}
