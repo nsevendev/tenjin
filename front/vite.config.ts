@@ -73,6 +73,10 @@ export default defineConfig(({ command, mode }): UserConfig => {
         "Cache-Control": "public, max-age=600",
       },
     },
+    test: {
+      environment: 'jsdom',
+      globals: true,
+    },
   };
 });
 

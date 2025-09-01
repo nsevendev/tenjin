@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Poppins", sans-serif;
+
+  /* === Core brand === */
+  --color-primary: #2563eb;
+  --color-primary-light: #60a5fa;
+  --color-primary-dark: #1e40af;
+
+  --color-secondary: #64748b;
+  --color-accent: #9333ea;
+
+  /* === Neutral grays (background / text) === */
+  --color-bg: #f9fafb;
+  --color-bg-muted: #f3f4f6;
+  --color-surface: #ffffff;
+  --color-border: #e5e7eb;
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  /* Dark mode */
+  --color-bg-dark: #111827;
+  --color-bg-muted-dark: #1f2937;
+  --color-surface-dark: #1c1c1e;
+  --color-border-dark: #2d3748;
+  --color-text-dark: #f9fafb;
+  --color-text-muted-dark: #9ca3af;
+
+  /* === Feedback === */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error:   #ef4444;
+  --color-info:    #0ea5e9;
+
+  /* === Gradients === */
+  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #9333ea 100%);
+  --gradient-accent:  linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  line-height: 1.6;
+  height: 100%;
+}
+
+body {
+  font-size: 1rem;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

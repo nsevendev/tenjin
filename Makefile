@@ -38,7 +38,7 @@ up: ## Lance tous les services
 upb: ## rebuild l'image et lance tous les services
 	$(DOCKER_COMPOSE) up -d --build
 
-up-logs: ## Lance tous les services avec les logs
+upl: ## Lance tous les services avec les logs
 	$(DOCKER_COMPOSE) up
 
 down: ## Arrête tous les services et supprime les containers
@@ -50,25 +50,25 @@ stop: ## Arrête tous les services
 cm: ## créé un fichier de migration - usage: make cm file=nom_du_fichier
 	docker exec -it tenjin_$(APP_ENV)_api migrationcreate $(file)
 
-logs: ## Affiche les logs de tous les services
+l: ## Affiche les logs de tous les services
 	$(DOCKER_COMPOSE) logs -f
 
-logs-app: ## Affiche les logs de l'application frontend
+lapp: ## Affiche les logs de l'application frontend
 	$(DOCKER_COMPOSE) logs -f app
 
-logs-api: ## Affiche les logs de l'API backend
+lapi: ## Affiche les logs de l'API backend
 	$(DOCKER_COMPOSE) logs -f api
 
-logs-db: ## Affiche les logs de la base de données
+ldb: ## Affiche les logs de la base de données
 	$(DOCKER_COMPOSE) logs -f db
 
-shell-app: ## Ouvre un shell dans le conteneur de l'application frontend
-	$(DOCKER_COMPOSE) exec app sh
+shapp: ## Ouvre un shell dans le conteneur de l'application frontend
+	$(DOCKER_COMPOSE) exec app bash
 
-shell-api: ## Ouvre un shell dans le conteneur de l'API backend
+shapi: ## Ouvre un shell dans le conteneur de l'API backend
 	$(DOCKER_COMPOSE) exec api bash
 
-shell-db: ## Ouvre un shell dans le conteneur de la base de données
+shdb: ## Ouvre un shell dans le conteneur de la base de données
 	$(DOCKER_COMPOSE) exec db mongosh
 
 clean: ## Supprime les conteneurs, réseaux et volumes
@@ -101,11 +101,14 @@ tavp: ## Lance les tests api en verbose pour un path (usage: make tavp path=monp
 taivp: ## Lance les tests api en verbose + integration pour un path (usage: make tavp path=monpath)
 	docker exec -i -e APP_ENV=test tenjin_dev_api go test -v -tags=integration ./$(path)
 
-tf: ## Lance tous les tests front
-	docker exec -i tenjin_dev_app npm run test.unit -- --run
+taf: ## Lance tous les tests de l'app
+	docker exec -it tenjin_dev_app npm run test
 
-tfv: ## Lance tous les tests front en mode verbose
-	docker exec -i tenjin_dev_app npm run test.unit -- --run --reporter=verbose
+taff: ## Lance le test du fichier donné de l'app (usage: make taff file=pathdufichier)
+	docker exec -it tenjin_dev_app npm run test -- --include $(file)
+
+tafc: ## Lance tous les tests de l'app en mode CI (headless)
+	docker exec tenjin_dev_app npm run test:ci
 
 cli: ## execute commande package api rome (usage: make apir cmd=help)
 	$(DOCKER_COMPOSE) exec api bash -c "go run ./cli/main.go $(cmd)"

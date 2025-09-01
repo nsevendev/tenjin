@@ -46,11 +46,13 @@ jobs:
       - name: Run frontend tests
         run: |
           # Lancer tous les tests frontend
-          make tfv
+          make tafc
           
       - name: Check logs on failure
         if: failure()
         run: |
+          echo "=== APP Logs ==="
+          make logs-app
           echo "=== API Logs ==="
           make logs-api
           echo "=== DB Logs ==="
