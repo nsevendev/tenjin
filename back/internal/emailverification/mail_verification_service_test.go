@@ -122,3 +122,27 @@ func TestEmailVerificationService_VerifyToken_Expired(t *testing.T) {
 	}).Decode(&ev)
 	assert.Error(t, err, "Le token expiré devrait être supprimé après vérification")
 }
+
+func TestEmailVerificationService_DeleteTokensByUserID(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test DeleteTokensByUserID")
+
+	userID := primitive.NewObjectID()
+
+	_, err := testEmailVerificationService.GenerateToken(userID)
+	require.NoError(t, err)
+	_, err = testEmailVerificationService.GenerateToken(userID)
+	require.NoError(t, err)
+
+	countBefore, err := testDB.Collection("email_verifications").
+		CountDocuments(context.Background(), map[string]interface{}{"user_id": userID})
+	require.NoError(t, err)
+	assert.True(t, countBefore >= 2, "Il devrait y avoir au moins 2 tokens")
+
+	err = testEmailVerificationService.DeleteTokensByUserID(userID)
+	require.NoError(t, err)
+
+	countAfter, err := testDB.Collection("email_verifications").
+		CountDocuments(context.Background(), map[string]interface{}{"user_id": userID})
+	require.NoError(t, err)
+	assert.Equal(t, int64(0), countAfter, "Tous les tokens devraient être supprimés")
+}
