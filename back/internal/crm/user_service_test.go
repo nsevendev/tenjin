@@ -8,14 +8,16 @@ import (
 	"testing"
 	"time"
 
+	"tenjin/back/internal/utils/database"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nsevenpack/env/env"
 	"github.com/nsevenpack/logger/v2/logger"
 	"github.com/nsevenpack/testup"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"tenjin/back/internal/utils/database"
 )
 
 var (
@@ -59,10 +61,15 @@ func TestUserService_CreateUser_Success(t *testing.T) {
 
 	uniqueEmail := fmt.Sprintf("testuser_%d@example.com", time.Now().UnixNano())
 	userCreateDto := UserCreateDto{
-		Email:    uniqueEmail,
-		Password: "password123",
-		Username: "testuser",
-		Role:     "user",
+		Firstname:     "Test",
+		Lastname:      "User",
+		Email:         uniqueEmail,
+		Password:      "password123",
+		Username:      "testuser",
+		Roles:         []string{"user"},
+		Status:        "training",
+		Organizations: []primitive.ObjectID{},
+		Sessions:      []primitive.ObjectID{},
 	}
 
 	createdUser, err := testUserService.CreateUser(ctx, userCreateDto)
@@ -73,7 +80,10 @@ func TestUserService_CreateUser_Success(t *testing.T) {
 	// Vérifier les champs de l'utilisateur créé
 	assert.Equal(t, userCreateDto.Email, createdUser.Email)
 	assert.Equal(t, userCreateDto.Username, createdUser.Username)
-	assert.Equal(t, userCreateDto.Role, createdUser.Role)
+	assert.Equal(t, userCreateDto.Firstname, createdUser.Firstname)
+	assert.Equal(t, userCreateDto.Lastname, createdUser.Lastname)
+	assert.Equal(t, userCreateDto.Roles, createdUser.Roles)
+	assert.Equal(t, userCreateDto.Status, createdUser.Status)
 	assert.NotEmpty(t, createdUser.ID)
 	assert.NotEqual(t, userCreateDto.Password, createdUser.Password) // Le mot de passe doit être hashé
 
@@ -88,10 +98,15 @@ func TestUserService_CreateUser_DuplicateEmail(t *testing.T) {
 
 	uniqueEmail := fmt.Sprintf("duplicate_%d@example.com", time.Now().UnixNano())
 	userCreateDto := UserCreateDto{
-		Email:    uniqueEmail,
-		Password: "password123",
-		Username: "testuser1",
-		Role:     "user",
+		Firstname:     "Test",
+		Lastname:      "User1",
+		Email:         uniqueEmail,
+		Password:      "password123",
+		Username:      "testuser1",
+		Roles:         []string{"user"},
+		Status:        "training",
+		Organizations: []primitive.ObjectID{},
+		Sessions:      []primitive.ObjectID{},
 	}
 
 	// Créer le premier utilisateur
@@ -116,10 +131,15 @@ func TestUserService_CreateUser_PasswordHashing(t *testing.T) {
 	uniqueEmail := fmt.Sprintf("hash_test_%d@example.com", time.Now().UnixNano())
 	plainPassword := "mySecretPassword123"
 	userCreateDto := UserCreateDto{
-		Email:    uniqueEmail,
-		Password: plainPassword,
-		Username: "hashtest",
-		Role:     "user",
+		Firstname:     "Hash",
+		Lastname:      "Test",
+		Email:         uniqueEmail,
+		Password:      plainPassword,
+		Username:      "hashtest",
+		Roles:         []string{"user"},
+		Status:        "training",
+		Organizations: []primitive.ObjectID{},
+		Sessions:      []primitive.ObjectID{},
 	}
 
 	createdUser, err := testUserService.CreateUser(ctx, userCreateDto)
@@ -148,28 +168,43 @@ func TestUserService_CreateUser_EmptyFields(t *testing.T) {
 		{
 			name: "Empty email",
 			dto: UserCreateDto{
-				Email:    "",
-				Password: "password123",
-				Username: "testuser",
-				Role:     "user",
+				Firstname:     "Test",
+				Lastname:      "User",
+				Email:         "",
+				Password:      "password123",
+				Username:      "testuser",
+				Roles:         []string{"user"},
+				Status:        "training",
+				Organizations: []primitive.ObjectID{},
+				Sessions:      []primitive.ObjectID{},
 			},
 		},
 		{
 			name: "Empty password",
 			dto: UserCreateDto{
-				Email:    "test@example.com",
-				Password: "",
-				Username: "testuser",
-				Role:     "user",
+				Firstname:     "Test",
+				Lastname:      "User",
+				Email:         "test@example.com",
+				Password:      "",
+				Username:      "testuser",
+				Roles:         []string{"user"},
+				Status:        "training",
+				Organizations: []primitive.ObjectID{},
+				Sessions:      []primitive.ObjectID{},
 			},
 		},
 		{
 			name: "Empty username",
 			dto: UserCreateDto{
-				Email:    "test@example.com",
-				Password: "password123",
-				Username: "",
-				Role:     "user",
+				Firstname:     "Test",
+				Lastname:      "User",
+				Email:         "test@example.com",
+				Password:      "password123",
+				Username:      "",
+				Roles:         []string{"user"},
+				Status:        "training",
+				Organizations: []primitive.ObjectID{},
+				Sessions:      []primitive.ObjectID{},
 			},
 		},
 	}
@@ -195,10 +230,15 @@ func TestUserService_FindByEmail_Success(t *testing.T) {
 	// Créer d'abord un utilisateur
 	uniqueEmail := fmt.Sprintf("findtest_%d@example.com", time.Now().UnixNano())
 	userCreateDto := UserCreateDto{
-		Email:    uniqueEmail,
-		Password: "password123",
-		Username: "findtestuser",
-		Role:     "admin",
+		Firstname:     "Find",
+		Lastname:      "Test",
+		Email:         uniqueEmail,
+		Password:      "password123",
+		Username:      "findtestuser",
+		Roles:         []string{"admin"},
+		Status:        "training",
+		Organizations: []primitive.ObjectID{},
+		Sessions:      []primitive.ObjectID{},
 	}
 
 	createdUser, err := testUserService.CreateUser(ctx, userCreateDto)
@@ -215,7 +255,10 @@ func TestUserService_FindByEmail_Success(t *testing.T) {
 	assert.Equal(t, createdUser.ID, foundUser.ID)
 	assert.Equal(t, createdUser.Email, foundUser.Email)
 	assert.Equal(t, createdUser.Username, foundUser.Username)
-	assert.Equal(t, createdUser.Role, foundUser.Role)
+	assert.Equal(t, createdUser.Firstname, foundUser.Firstname)
+	assert.Equal(t, createdUser.Lastname, foundUser.Lastname)
+	assert.Equal(t, createdUser.Roles, foundUser.Roles)
+	assert.Equal(t, createdUser.Status, foundUser.Status)
 	assert.Equal(t, createdUser.Password, foundUser.Password)
 }
 
@@ -251,10 +294,15 @@ func TestUserService_CreateUser_Integration(t *testing.T) {
 	// Données de test
 	uniqueEmail := fmt.Sprintf("integration_%d@example.com", time.Now().UnixNano())
 	userCreateDto := UserCreateDto{
-		Email:    uniqueEmail,
-		Password: "integrationPassword123",
-		Username: "integrationUser",
-		Role:     "moderator",
+		Firstname:     "Integration",
+		Lastname:      "User",
+		Email:         uniqueEmail,
+		Password:      "integrationPassword123",
+		Username:      "integrationUser",
+		Roles:         []string{"user"},
+		Status:        "training",
+		Organizations: []primitive.ObjectID{},
+		Sessions:      []primitive.ObjectID{},
 	}
 
 	// Créer l'utilisateur
@@ -271,17 +319,25 @@ func TestUserService_CreateUser_Integration(t *testing.T) {
 	assert.Equal(t, createdUser.ID, foundUser.ID)
 	assert.Equal(t, createdUser.Email, foundUser.Email)
 	assert.Equal(t, createdUser.Username, foundUser.Username)
-	assert.Equal(t, createdUser.Role, foundUser.Role)
+	assert.Equal(t, createdUser.Firstname, foundUser.Firstname)
+	assert.Equal(t, createdUser.Lastname, foundUser.Lastname)
+	assert.Equal(t, createdUser.Roles, foundUser.Roles)
+	assert.Equal(t, createdUser.Status, foundUser.Status)
 
 	// Vérifier que le mot de passe fonctionne
 	assert.True(t, foundUser.CheckPassword(userCreateDto.Password))
 
 	// Vérifier qu'on ne peut pas créer un autre utilisateur avec le même email
 	duplicateDto := UserCreateDto{
-		Email:    uniqueEmail,
-		Password: "differentPassword",
-		Username: "differentUser",
-		Role:     "user",
+		Firstname:     "Duplicate",
+		Lastname:      "User",
+		Email:         uniqueEmail,
+		Password:      "differentPassword",
+		Username:      "differentUser",
+		Roles:         []string{"user"},
+		Status:        "training",
+		Organizations: []primitive.ObjectID{},
+		Sessions:      []primitive.ObjectID{},
 	}
 
 	duplicateUser, err := testUserService.CreateUser(ctx, duplicateDto)
@@ -294,24 +350,40 @@ func TestUserService_CreateUser_MultipleUsers(t *testing.T) {
 
 	ctx, _ := gin.CreateTestContext(httptest.NewRecorder())
 
+	timestamp := time.Now().UnixNano()
 	users := []UserCreateDto{
 		{
-			Email:    fmt.Sprintf("user1_%d@example.com", time.Now().UnixNano()),
-			Password: "password1",
-			Username: "user1",
-			Role:     "user",
+			Firstname:     "User1",
+			Lastname:      "Test1",
+			Email:         fmt.Sprintf("user1_%d@example.com", timestamp),
+			Password:      "password1",
+			Username:      "user1",
+			Roles:         []string{"user"},
+			Status:        "training",
+			Organizations: []primitive.ObjectID{},
+			Sessions:      []primitive.ObjectID{},
 		},
 		{
-			Email:    fmt.Sprintf("user2_%d@example.com", time.Now().UnixNano()),
-			Password: "password2",
-			Username: "user2",
-			Role:     "admin",
+			Firstname:     "User2",
+			Lastname:      "Test2",
+			Email:         fmt.Sprintf("user2_%d@example.com", timestamp),
+			Password:      "password2",
+			Username:      "user2",
+			Roles:         []string{"admin"},
+			Status:        "training",
+			Organizations: []primitive.ObjectID{},
+			Sessions:      []primitive.ObjectID{},
 		},
 		{
-			Email:    fmt.Sprintf("user3_%d@example.com", time.Now().UnixNano()),
-			Password: "password3",
-			Username: "user3",
-			Role:     "moderator",
+			Firstname:     "User3",
+			Lastname:      "Test3",
+			Email:         fmt.Sprintf("user3_%d@example.com", timestamp),
+			Password:      "password3",
+			Username:      "user3",
+			Roles:         []string{"moderator"},
+			Status:        "training",
+			Organizations: []primitive.ObjectID{},
+			Sessions:      []primitive.ObjectID{},
 		},
 	}
 
@@ -334,7 +406,10 @@ func TestUserService_CreateUser_MultipleUsers(t *testing.T) {
 		assert.Equal(t, createdUsers[i].ID, foundUser.ID)
 		assert.Equal(t, userDto.Email, foundUser.Email)
 		assert.Equal(t, userDto.Username, foundUser.Username)
-		assert.Equal(t, userDto.Role, foundUser.Role)
+		assert.Equal(t, userDto.Firstname, foundUser.Firstname)
+		assert.Equal(t, userDto.Lastname, foundUser.Lastname)
+		assert.Equal(t, userDto.Roles, foundUser.Roles)
+		assert.Equal(t, userDto.Status, foundUser.Status)
 	}
 }
 
@@ -346,9 +421,14 @@ func TestUserCreateDto_Faker(t *testing.T) {
 
 	assert.NotEmpty(t, fakeDto.Email)
 	assert.Contains(t, fakeDto.Email, "@example.com")
-	assert.Equal(t, "password", fakeDto.Password)
+	assert.Equal(t, "password123", fakeDto.Password)
 	assert.NotEmpty(t, fakeDto.Username)
-	assert.Equal(t, "user", fakeDto.Role)
+	assert.NotEmpty(t, fakeDto.Firstname)
+	assert.NotEmpty(t, fakeDto.Lastname)
+	assert.Equal(t, []string{"user"}, fakeDto.Roles)
+	assert.Equal(t, "training", fakeDto.Status)
+	assert.NotNil(t, fakeDto.Organizations)
+	assert.NotNil(t, fakeDto.Sessions)
 
 	// Test de CreateDtosFaker
 	fakeDtos := testUserService.CreateDtosFaker(3)
@@ -357,7 +437,12 @@ func TestUserCreateDto_Faker(t *testing.T) {
 	for i, dto := range fakeDtos {
 		assert.NotEmpty(t, dto.Email, "DTO %d should have email", i)
 		assert.NotEmpty(t, dto.Username, "DTO %d should have username", i)
-		assert.Equal(t, "password", dto.Password, "DTO %d should have password", i)
-		assert.Equal(t, "user", dto.Role, "DTO %d should have role", i)
+		assert.NotEmpty(t, dto.Firstname, "DTO %d should have firstname", i)
+		assert.NotEmpty(t, dto.Lastname, "DTO %d should have lastname", i)
+		assert.Equal(t, "password123", dto.Password, "DTO %d should have password", i)
+		assert.Equal(t, []string{"user"}, dto.Roles, "DTO %d should have role", i)
+		assert.Equal(t, "training", dto.Status, "DTO %d should have status", i)
+		assert.NotNil(t, dto.Organizations, "DTO %d should have organizations slice", i)
+		assert.NotNil(t, dto.Sessions, "DTO %d should have sessions slice", i)
 	}
 }
