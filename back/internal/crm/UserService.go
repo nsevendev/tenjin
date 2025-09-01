@@ -5,8 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"tenjin/back/internal/utils/mongohelpers"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/nsevenpack/logger/v2/logger"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -78,4 +80,15 @@ func (u *UserService) FindByEmail(ctx context.Context, email string) (*User, err
 		return nil, fmt.Errorf("erreur à la recuperation du user : %v", err)
 	}
 	return &user, nil
+}
+
+func (u *UserService) GenerateEmailVerificationToken(userID primitive.ObjectID) EmailVerificationTokenPayload {
+	token := uuid.New().String()
+	expiry := time.Now().Add(1 * time.Hour)
+
+	return EmailVerificationTokenPayload{
+		UserID: userID,
+		Token:  token,
+		Expiry: expiry,
+	}
 }
