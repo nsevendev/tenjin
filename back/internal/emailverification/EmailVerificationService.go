@@ -2,10 +2,13 @@ package emailverification
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"tenjin/back/internal/utils/mongohelpers"
 	"time"
 
 	"github.com/google/uuid"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -39,4 +42,30 @@ func (s *EmailVerificationService) GenerateToken(userID primitive.ObjectID) (str
 	}
 
 	return token, nil
+}
+
+func (s *EmailVerificationService) VerifyToken(token string) (*primitive.ObjectID, error) {
+	var ev EmailVerification
+
+	err := s.db.Collection("email_verifications").
+		FindOne(context.Background(), bson.M{"token": token}).
+		Decode(&ev)
+
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, errors.New("token invalide")
+		}
+		return nil, fmt.Errorf("erreur lors de la recherche du token : %v", err)
+	}
+
+	if time.Now().After(ev.Expiry) {
+		_, _ = s.db.Collection("email_verifications").
+			DeleteOne(context.Background(), bson.M{"_id": ev.ID})
+		return nil, errors.New("token expiré")
+	}
+
+	_, _ = s.db.Collection("email_verifications").
+		DeleteOne(context.Background(), bson.M{"_id": ev.ID})
+
+	return &ev.UserID, nil
 }
