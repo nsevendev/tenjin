@@ -31,6 +31,9 @@ type User struct {
 	CompanyHistory       []CompanyAssignment      `bson:"company_history" json:"companyHistory"`
 	ParticipationHistory []FormationParticipation `bson:"participation_history" json:"participationHistory"`
 
+	// pour la vérif de l'email
+	EmailVerified        bool                     `bson:"email_verified" json:"emailVerified"`
+
 	CreatedAt            primitive.DateTime       `bson:"created_at" json:"createdAt"`
 	UpdatedAt            primitive.DateTime       `bson:"updated_at" json:"updatedAt"`
 }

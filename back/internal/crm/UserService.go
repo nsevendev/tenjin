@@ -54,6 +54,7 @@ func (u *UserService) CreateUser(ctx *gin.Context, userCreateDto UserCreateDto) 
 		Chats:                []primitive.ObjectID{},
 		CompanyHistory:       []CompanyAssignment{},
 		ParticipationHistory: []FormationParticipation{},
+		EmailVerified:        false,
 	}
 
 	if err := user.HashPassword(); err != nil {
