@@ -408,8 +408,8 @@ func Test_cleanPart(t *testing.T) {
 func Test_randHex(t *testing.T) {
 	testup.LogNameTestInfo(t, "Test random hex generation")
 
-	hex1 := randHex(16)
-	hex2 := randHex(16)
+	hex1 := RandHex(16)
+	hex2 := RandHex(16)
 
 	assert.Len(t, hex1, 32) // 16 bytes = 32 hex chars
 	assert.Len(t, hex2, 32)

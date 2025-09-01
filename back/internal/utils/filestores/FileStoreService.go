@@ -6,7 +6,6 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/nsevenpack/logger/v2/logger"
 	"mime"
 	"net/http"
 	"path"
@@ -14,6 +13,8 @@ import (
 	"strings"
 	"tenjin/back/internal/utils/s3adapter"
 	"time"
+
+	"github.com/nsevenpack/logger/v2/logger"
 )
 
 type FileStoreConfig struct {
@@ -116,7 +117,7 @@ func (s *FileStoreService) buildKey(scope, filename string) string {
 	if ext == "" {
 		ext = guessExtByName(filename)
 	}
-	name := randHex(16) + ext
+	name := RandHex(16) + ext
 
 	var parts []string
 	if prefix != "" {
@@ -143,7 +144,7 @@ func cleanPart(s string) string {
 	return s
 }
 
-func randHex(n int) string {
+func RandHex(n int) string {
 	b := make([]byte, n)
 	_, _ = rand.Read(b)
 	return hex.EncodeToString(b)
