@@ -69,3 +69,16 @@ func (s *EmailVerificationService) VerifyToken(token string) (*primitive.ObjectI
 
 	return &ev.UserID, nil
 }
+
+func (s *EmailVerificationService) DeleteTokensByUserID(userID primitive.ObjectID) error {
+	_, err := s.db.Collection("email_verifications").DeleteMany(
+		context.Background(),
+		map[string]interface{}{
+			"user_id": userID,
+		},
+	)
+	if err != nil {
+		return fmt.Errorf("erreur lors de la suppression des tokens de l'utilisateur %v : %w", userID.Hex(), err)
+	}
+	return nil
+}
