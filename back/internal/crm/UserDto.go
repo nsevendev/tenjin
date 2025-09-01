@@ -23,13 +23,20 @@ type UserDeleteDto struct {
 }
 
 func (u *UserService) CreateDtoFaker() UserCreateDto {
+	timestamp := time.Now().Format("2006-01-02_15-04-05.000")
 	return UserCreateDto{
-		Email:    "user" + time.Now().Format("2006-01-02_15-04-05.000") + "@example.com",
-		Password: "password",
-		Username: "user" + time.Now().Format("2006-01-02_15-04-05.000"),
-		Role:     "user",
+		Firstname:     "Firstname" + timestamp,
+		Lastname:      "Lastname" + timestamp,
+		Email:         "user" + timestamp + "@example.com",
+		Password:      "password123",
+		Username:      "user" + timestamp,
+		Roles:         []string{"user"},
+		Status:        "employee",
+		Organizations: []primitive.ObjectID{},
+		Sessions:      []primitive.ObjectID{},
 	}
 }
+
 
 func (u *UserService) CreateDtosFaker(n int) []UserCreateDto {
 	users := make([]UserCreateDto, n)
