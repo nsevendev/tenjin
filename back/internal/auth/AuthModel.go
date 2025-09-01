@@ -3,8 +3,8 @@ package auth
 import "github.com/golang-jwt/jwt/v5"
 
 type tokenClaims struct {
-	IdUser string `json:"id_user"`
-	Email  string `json:"email"`
-	Roles   string `json:"roles"`
+	IdUser string 	`json:"id_user"`
+	Email  string 	`json:"email"`
+	Roles  []string `json:"roles"`
 	jwt.RegisteredClaims
 }

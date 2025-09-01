@@ -3,7 +3,6 @@ package auth
 import (
 	"errors"
 	"fmt"
-	"strings"
 	"tenjin/back/internal/crm"
 	"time"
 
@@ -51,16 +50,10 @@ func (s *AuthService) generateToken(user *crm.User) (string, error) {
 
 	expirationTime := time.Now().Add(24 * time.Hour) // changer ici pour la durée d'expiration
 
-	roles := ""
-	if len(user.Roles) > 0 {
-		roles = strings.Join(user.Roles, ",")
-	}
-
-
 	claims := &tokenClaims{
 		IdUser: user.ID.Hex(),
 		Email:  user.Email,
-		Roles:   roles,
+		Roles:  user.Roles,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
