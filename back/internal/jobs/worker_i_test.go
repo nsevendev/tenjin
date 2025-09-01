@@ -12,6 +12,7 @@ import (
 	"github.com/nsevenpack/logger/v2/logger"
 	"github.com/nsevenpack/testup"
 	"github.com/stretchr/testify/assert"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"tenjin/back/internal/mail"
@@ -31,10 +32,10 @@ func TestMain(m *testing.M) {
 	database.ConnexionDatabase("dev")
 	db := database.Client
 
-	if err := db.Collection("mails").Drop(context.Background()); err != nil {
-		logger.Ef("Erreur suppression collection 'mails' : %v", err)
-		os.Exit(1)
-	}
+    if _, err := db.Collection("mails").DeleteMany(context.Background(), bson.M{}); err != nil {
+        logger.Ef("Erreur nettoyage collection 'mails' : %v", err)
+        os.Exit(1)
+    }
 
 	mailService = mail.NewMailService(mongohelpers.NewHelper(), db)
 
@@ -52,11 +53,23 @@ func TestMain(m *testing.M) {
 		MailSvc:   mailService,
 	}
 
+	redisAddr := env.Get("REDIS_ADDR")
+	if redisAddr != "" {
+		Redis(redisAddr)
+		if err := ClientRedis.Del(context.Background(), "job:queue").Err(); err != nil {
+			logger.Ef("Erreur vidage queue Redis: %v", err)
+			os.Exit(1)
+		} else {
+			logger.Sf("Queue Redis 'job:queue' videe")
+		}
+	}
+
 	code := m.Run()
 
-	if err := db.Collection("mails").Drop(context.Background()); err != nil {
-		logger.Ef("Erreur suppression finale collection 'mails' : %v", err)
-	}
+    if _, err := db.Collection("mails").DeleteMany(context.Background(), bson.M{}); err != nil {
+        logger.Ef("Erreur nettoyage collection 'mails' : %v", err)
+        os.Exit(1)
+    }
 
 	os.Exit(code)
 }

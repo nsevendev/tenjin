@@ -26,11 +26,13 @@ func HandleSendMail(job Job, mailerInstance *mailer.Mailer, mu *mailer.MailUploa
 		userID, _ = primitive.ObjectIDFromHex(userIDHex)
 	}
 
+	logger.Sf("debut du stockage du mail ...")
 	_, err := mu.StoreAndCreate(context.Background(), userID, to, subject, body, mailType)
 	if err != nil {
 		logger.Ef("Erreur stockage mail pour job %s: %v", job.Name, err)
 		return err
 	}
+	logger.Sf("Stockage du mail reussi")
 
 	m := mailer.Mail{
 		To:      to,
