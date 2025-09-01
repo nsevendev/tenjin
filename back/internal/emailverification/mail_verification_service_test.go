@@ -67,3 +67,58 @@ func TestEmailVerificationService_GenerateToken(t *testing.T) {
 
 	assert.WithinDuration(t, time.Now(), ev.CreatedAt, 5*time.Second, "CreatedAt should be close to now")
 }
+
+func TestEmailVerificationService_VerifyToken_Valid(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test VerifyToken avec un token valide")
+
+	userID := primitive.NewObjectID()
+	token, err := testEmailVerificationService.GenerateToken(userID)
+	require.NoError(t, err)
+
+	returnedUserID, err := testEmailVerificationService.VerifyToken(token)
+	require.NoError(t, err)
+	assert.Equal(t, userID, *returnedUserID)
+
+	var ev EmailVerification
+	err = testDB.Collection("email_verifications").FindOne(context.Background(), map[string]interface{}{
+		"token": token,
+	}).Decode(&ev)
+	assert.Error(t, err, "Le token devrait être supprimé après vérification")
+}
+
+func TestEmailVerificationService_VerifyToken_Invalid(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test VerifyToken avec un token invalide")
+
+	invalidToken := "invalid-token-123"
+	returnedUserID, err := testEmailVerificationService.VerifyToken(invalidToken)
+
+	assert.Nil(t, returnedUserID)
+	assert.EqualError(t, err, "token invalide")
+}
+
+func TestEmailVerificationService_VerifyToken_Expired(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test VerifyToken avec un token expiré")
+
+	userID := primitive.NewObjectID()
+	token := "expired-token-123"
+	expired := EmailVerification{
+		UserID:    userID,
+		Token:     token,
+		Expiry:    time.Now().Add(-1 * time.Hour),
+		CreatedAt: time.Now().Add(-2 * time.Hour),
+	}
+
+	_, err := testDB.Collection("email_verifications").InsertOne(context.Background(), expired)
+	require.NoError(t, err)
+
+	returnedUserID, err := testEmailVerificationService.VerifyToken(token)
+
+	assert.Nil(t, returnedUserID)
+	assert.EqualError(t, err, "token expiré")
+
+	var ev EmailVerification
+	err = testDB.Collection("email_verifications").FindOne(context.Background(), map[string]interface{}{
+		"token": token,
+	}).Decode(&ev)
+	assert.Error(t, err, "Le token expiré devrait être supprimé après vérification")
+}
