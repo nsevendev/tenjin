@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"tenjin/back/internal/utils/mongohelpers"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nsevenpack/logger/v2/logger"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"tenjin/back/internal/utils/mongohelpers"
 )
 
 type UserService struct {
@@ -34,10 +35,23 @@ func (u *UserService) CreateUser(ctx *gin.Context, userCreateDto UserCreateDto) 
 	}
 
 	user := &User{
-		Email:    userCreateDto.Email,
-		Password: userCreateDto.Password,
-		Username: userCreateDto.Username,
-		Role:     userCreateDto.Role,
+		Firstname:            userCreateDto.Firstname,
+		Lastname:             userCreateDto.Lastname,
+		Email:                userCreateDto.Email,
+		Username:             userCreateDto.Username,
+		Roles:                userCreateDto.Roles,
+		Status:               userCreateDto.Status,
+		Password:             userCreateDto.Password,
+		Organizations:        userCreateDto.Organizations,
+		Sessions:             userCreateDto.Sessions,
+		CompetenceRecords:    []CompetenceRecord{},
+		ExternalExperiences:  []ExternalExperience{},
+		ReceivedOffers:       []primitive.ObjectID{},
+		PendingShareRequests: []ShareRequest{},
+		QuizResults:          []QuizResult{},
+		Chats:                []primitive.ObjectID{},
+		CompanyHistory:       []CompanyAssignment{},
+		ParticipationHistory: []FormationParticipation{},
 	}
 
 	if err := user.HashPassword(); err != nil {

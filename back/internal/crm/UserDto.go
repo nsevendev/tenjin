@@ -31,7 +31,7 @@ func (u *UserService) CreateDtoFaker() UserCreateDto {
 		Password:      "password123",
 		Username:      "user" + timestamp,
 		Roles:         []string{"user"},
-		Status:        "employee",
+		Status:        "employed",
 		Organizations: []primitive.ObjectID{},
 		Sessions:      []primitive.ObjectID{},
 	}
