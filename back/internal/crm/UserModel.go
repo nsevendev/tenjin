@@ -25,27 +25,52 @@ type User struct {
 	PendingShareRequests []ShareRequest           `bson:"pending_share_requests" json:"pendingShareRequests"`
 	QuizResults          []QuizResult             `bson:"quiz_results" json:"quizResults"`
 	Chats                []primitive.ObjectID     `bson:"chats" json:"chats"`
+
 	//gestion multi-filiales
 	CurrentCompanyID     primitive.ObjectID       `bson:"current_company_id" json:"currentCompanyId"`
 	CompanyHistory       []CompanyAssignment      `bson:"company_history" json:"companyHistory"`
 	ParticipationHistory []FormationParticipation `bson:"participation_history" json:"participationHistory"`
+
 	CreatedAt            primitive.DateTime       `bson:"created_at" json:"createdAt"`
 	UpdatedAt            primitive.DateTime       `bson:"updated_at" json:"updatedAt"`
 }
 
-func (u *User) HashPassword() error {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
-	if err != nil {
-		logger.Ef("Erreur de hashage du mot de passe: %v", err)
-		return err
-	}
-	u.Password = string(hashedPassword)
-	return nil
+type CompetenceRecord struct {
+	CompetenceID primitive.ObjectID `bson:"competence_id" json:"competenceId"`
+	History      []CompetenceEvent  `bson:"history" json:"history"`
 }
 
-func (u *User) CheckPassword(password string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
-	return err == nil
+type CompetenceEvent struct {
+	Date        primitive.DateTime `bson:"date" json:"date"`
+	Level       string             `bson:"level" json:"level"`
+	ValidatedBy primitive.ObjectID `bson:"validated_by" json:"validatedBy"`
+	SessionID   primitive.ObjectID `bson:"session_id" json:"sessionId"`
+	Notes       string             `bson:"notes,omitempty" json:"notes,omitempty"`
+}
+
+type ExternalExperience struct {
+	Title       string               `bson:"title" json:"title"`
+	Description string               `bson:"description" json:"description"`
+	Date        primitive.DateTime   `bson:"date" json:"date"`
+	Proofs      []primitive.ObjectID `bson:"proofs" json:"proofs"`
+}
+
+type AvailabilityPeriod struct {
+	StartDate primitive.DateTime `bson:"start_date" json:"startDate"`
+	EndDate   primitive.DateTime `bson:"end_date" json:"endDate"`
+	Type      string             `bson:"type" json:"type"`
+}
+
+type ShareRequest struct {
+	OfferID         primitive.ObjectID `bson:"offer_id" json:"offerId"`
+	FieldsRequested []string           `bson:"fields_requested" json:"fieldsRequested"`
+	Status          string             `bson:"status" json:"status"`
+}
+
+type QuizResult struct {
+	QuizID  primitive.ObjectID `bson:"quiz_id" json:"quizId"`
+	Result  string             `bson:"result" json:"result"`
+	Details map[string]any     `bson:"details" json:"details"`
 }
 
 // CompanyAssignment représente l'affectation d'un user à une company (historique des transferts)
@@ -72,6 +97,21 @@ type FormationParticipation struct {
 	CompletionRate    *float64            `bson:"completion_rate,omitempty" json:"completionRate"` // % de completion
 	Notes             string              `bson:"notes,omitempty" json:"notes"`
 	CreatedAt         time.Time           `bson:"created_at" json:"createdAt"`
+}
+
+func (u *User) HashPassword() error {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	if err != nil {
+		logger.Ef("Erreur de hashage du mot de passe: %v", err)
+		return err
+	}
+	u.Password = string(hashedPassword)
+	return nil
+}
+
+func (u *User) CheckPassword(password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+	return err == nil
 }
 
 // TransferToCompany effectue le transfert d'un user vers une nouvelle company
