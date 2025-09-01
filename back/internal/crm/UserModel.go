@@ -1,26 +1,36 @@
 package crm
 
 import (
+	"time"
+
 	"github.com/nsevenpack/logger/v2/logger"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
-	"time"
 )
 
 type User struct {
-	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	Email     string             `bson:"email" json:"email"`
-	Password  string             `bson:"password" json:"-"`
-	Role      string             `bson:"role" json:"role"`
-	Username  string             `bson:"username" json:"username"`
-	
-	// Gestion multi-filiales
-	CurrentCompanyID     primitive.ObjectID        `bson:"current_company_id" json:"currentCompanyId"`
-	CompanyHistory       []CompanyAssignment       `bson:"company_history" json:"companyHistory"`
-	ParticipationHistory []FormationParticipation  `bson:"participation_history" json:"participationHistory"`
-	
-	CreatedAt primitive.DateTime `bson:"created_at" json:"created_at"`
-	UpdatedAt primitive.DateTime `bson:"updated_at" json:"updated_at"`
+	ID                   primitive.ObjectID       `bson:"_id,omitempty" json:"id"`
+	Firstname            string                   `bson:"firstname" json:"firstname"`
+	Lastname             string                   `bson:"lastname" json:"lastname"`
+	Email                string                   `bson:"email" json:"email"`
+	Username             string                   `bson:"username" json:"username"`
+	Password             string                   `bson:"password" json:"-"`
+	Roles                []string                 `bson:"roles" json:"roles"`
+	Status               string                   `bson:"status" json:"status"`
+	Organizations        []primitive.ObjectID     `bson:"organizations" json:"organizations"`
+	Sessions             []primitive.ObjectID     `bson:"sessions" json:"sessions"`
+	CompetenceRecords    []CompetenceRecord       `bson:"competence_records" json:"competenceRecords"`
+	ExternalExperiences  []ExternalExperience     `bson:"external_experiences" json:"externalExperiences"`
+	ReceivedOffers       []primitive.ObjectID     `bson:"received_offers" json:"receivedOffers"`
+	PendingShareRequests []ShareRequest           `bson:"pending_share_requests" json:"pendingShareRequests"`
+	QuizResults          []QuizResult             `bson:"quiz_results" json:"quizResults"`
+	Chats                []primitive.ObjectID     `bson:"chats" json:"chats"`
+	//gestion multi-filiales
+	CurrentCompanyID     primitive.ObjectID       `bson:"current_company_id" json:"currentCompanyId"`
+	CompanyHistory       []CompanyAssignment      `bson:"company_history" json:"companyHistory"`
+	ParticipationHistory []FormationParticipation `bson:"participation_history" json:"participationHistory"`
+	CreatedAt            primitive.DateTime       `bson:"created_at" json:"createdAt"`
+	UpdatedAt            primitive.DateTime       `bson:"updated_at" json:"updatedAt"`
 }
 
 func (u *User) HashPassword() error {
