@@ -8,9 +8,11 @@ import (
 	"testing"
 	"time"
 
+	"tenjin/back/internal/emailverification"
 	"tenjin/back/internal/utils/database"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/nsevenpack/env/env"
 	"github.com/nsevenpack/logger/v2/logger"
 	"github.com/nsevenpack/testup"
@@ -21,8 +23,9 @@ import (
 )
 
 var (
-	testUserService *UserService
-	testDB          *mongo.Database
+	testUserService 		*UserService
+	testEmailVerification 	*emailverification.EmailVerificationService
+	testDB          		*mongo.Database
 )
 
 func TestMain(m *testing.M) {
@@ -37,6 +40,7 @@ func TestMain(m *testing.M) {
 		return
 	}
 	testUserService = NewUserService(nil, testDB)
+	testEmailVerification = emailverification.NewEmailVerificationService(nil, testDB)
 
 	code := m.Run()
 
@@ -445,4 +449,72 @@ func TestUserCreateDto_Faker(t *testing.T) {
 		assert.NotNil(t, dto.Organizations, "DTO %d should have organizations slice", i)
 		assert.NotNil(t, dto.Sessions, "DTO %d should have sessions slice", i)
 	}
+}
+
+func TestUserService_VerifyEmail_Success(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test verify email success")
+
+	ctx, _ := gin.CreateTestContext(httptest.NewRecorder())
+
+	dto := testUserService.CreateDtoFaker()
+	createdUser, err := testUserService.CreateUser(ctx, dto)
+	require.NoError(t, err)
+	require.NotNil(t, createdUser)
+
+	token, err := testEmailVerification.GenerateToken(createdUser.ID)
+	require.NoError(t, err)
+	require.NotEmpty(t, token)
+
+	err = testUserService.VerifyEmail(ctx, token, testEmailVerification)
+	require.NoError(t, err)
+
+	updatedUser, err := testUserService.FindByEmail(ctx, createdUser.Email)
+	require.NoError(t, err)
+	require.True(t, updatedUser.EmailVerified)
+}
+
+func TestUserService_VerifyEmail_UserNotFound(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test verify email when user does not exist anymore")
+
+	ctx, _ := gin.CreateTestContext(httptest.NewRecorder())
+
+	dto := testUserService.CreateDtoFaker()
+	createdUser, err := testUserService.CreateUser(ctx, dto)
+	require.NoError(t, err)
+
+	token, err := testEmailVerification.GenerateToken(createdUser.ID)
+	require.NoError(t, err)
+
+	_, err = testDB.Collection("users").DeleteOne(ctx, primitive.M{"_id": createdUser.ID})
+	require.NoError(t, err)
+
+	err = testUserService.VerifyEmail(ctx, token, testEmailVerification)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "utilisateur introuvable")
+}
+
+func TestUserService_VerifyEmail_ExpiredToken(t *testing.T) {
+	testup.LogNameTestInfo(t, "Test verify email with expired token")
+
+	ctx, _ := gin.CreateTestContext(httptest.NewRecorder())
+
+	dto := testUserService.CreateDtoFaker()
+	createdUser, err := testUserService.CreateUser(ctx, dto)
+	require.NoError(t, err)
+	require.NotNil(t, createdUser)
+
+	expiredToken := uuid.New().String()
+	expiredVerification := emailverification.EmailVerification{
+		UserID:    createdUser.ID,
+		Token:     expiredToken,
+		Expiry:    time.Now().Add(-1 * time.Hour),
+		CreatedAt: time.Now().Add(-2 * time.Hour),
+	}
+
+	_, err = testDB.Collection("email_verifications").InsertOne(ctx, expiredVerification)
+	require.NoError(t, err)
+
+	err = testUserService.VerifyEmail(ctx, expiredToken, testEmailVerification)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "token expiré")
 }
