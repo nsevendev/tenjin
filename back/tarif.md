@@ -1,8 +1,8 @@
-# 📘 Business Model Tenjin
+# Business Model Tenjin
 
 ---
 
-## 🟦 Axe Formation
+## Axe Formation
 
 ### **Starter — 4,99 €/mois** (49 €/an, -17%)
 
