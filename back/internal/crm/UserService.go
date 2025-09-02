@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"tenjin/back/internal/emailverification"
 	"tenjin/back/internal/utils/mongohelpers"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nsevenpack/logger/v2/logger"
@@ -79,4 +81,33 @@ func (u *UserService) FindByEmail(ctx context.Context, email string) (*User, err
 		return nil, fmt.Errorf("erreur à la recuperation du user : %v", err)
 	}
 	return &user, nil
+}
+
+func (u *UserService) VerifyEmail(ctx context.Context, token string, evService *emailverification.EmailVerificationService) error {
+	userID, err := evService.VerifyToken(token)
+	if err != nil {
+		return err
+	}
+
+	filter := bson.M{"_id": *userID}
+	update := bson.M{
+		"$set": bson.M{
+			"email_verified": true,
+			"updated_at":     primitive.NewDateTimeFromTime(time.Now()),
+		},
+	}
+
+	res, err := u.db.Collection("users").UpdateOne(ctx, filter, update)
+	if err != nil {
+		return fmt.Errorf("erreur lors de la mise à jour de l'utilisateur : %v", err)
+	}
+	if res.MatchedCount == 0 {
+		return errors.New("utilisateur introuvable")
+	}
+
+	if err := evService.DeleteTokensByUserID(*userID); err != nil {
+		logger.Wf("échec suppression des tokens après vérif email pour user %v : %v", userID.Hex(), err)
+	}
+
+	return nil
 }
