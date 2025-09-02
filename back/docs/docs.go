@@ -141,6 +141,50 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/verify-email": {
+            "get": {
+                "description": "Valide le token de vérification envoyé par email et met à jour la propriété EmailVerified de l'utilisateur",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Vérifie l'email d'un utilisateur",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token de vérification envoyé par email",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Email vérifié avec succès",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    },
+                    "400": {
+                        "description": "Paramètres invalides ou token invalide/expiré",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne lors de la vérification",
+                        "schema": {
+                            "$ref": "#/definitions/ginresponse.JsonFormatterSwag"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
