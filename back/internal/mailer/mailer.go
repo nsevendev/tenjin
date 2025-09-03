@@ -32,3 +32,15 @@ func (m *Mailer) Send(mail Mail) error {
 	addr := fmt.Sprintf("%s:%s", m.Host, m.Port)
 	return smtp.SendMail(addr, auth, m.From, to, msg)
 }
+
+/*func (m *Mailer) Send(mail Mail) error {
+	auth := smtp.PlainAuth("", m.User, m.Password, m.Host)
+
+	to := []string{mail.To}
+	msg := []byte(fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s",
+		m.From, mail.To, mail.Subject, mail.Body,
+	))
+
+	addr := fmt.Sprintf("%s:%s", m.Host, m.Port)
+	return smtp.SendMail(addr, auth, m.From, to, msg)
+}*/
