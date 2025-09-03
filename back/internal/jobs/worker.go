@@ -15,7 +15,7 @@ func StartWorker(mailerInstance *mailer.Mailer, mu *mailer.MailUploader, jobsPro
 	go func() {
 		for {
 			data, err := ClientRedis.RPop(context.Background(), "job:queue").Result()
-			logger.Sf("🔹 Lecture job Redis: data=%v, err=%v", data, err)
+			logger.Sf("🔹 Lecture job Redis: data=%v, err-%v", data, err.Error())
 			if err != nil {
 				time.Sleep(2 * time.Second)
 				continue

@@ -15,7 +15,7 @@
 
 ---
 
-### **Pro — 19,99 €/mois** (199 €/an, -17%)
+### **Pro — 24,99 €/mois** (199 €/an, -17%)
 
 * **Formations** : illimitées
 * **Sessions** : illimitées
@@ -32,7 +32,7 @@
 
 ---
 
-### **Business — 49,99 €/mois** (499 €/an, -17%)
+### **Business — 59,99 €/mois** (499 €/an, -17%)
 
 * **Formations** : tout illimité
 * **Sessions** : tout illimité
@@ -72,7 +72,7 @@
 
 ---
 
-### **Recruit Pro — 29,99 €/mois** (299 €/an, -17%)
+### **Recruit Pro — 24,99 €/mois** (299 €/an, -17%)
 
 * Offres illimitées
 * Quiz illimités
