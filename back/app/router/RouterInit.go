@@ -32,6 +32,11 @@ func Routes(r *gin.Engine) {
 		authService: auth.NewAuthService(database.Client, env.Get("JWT_SECRET_KEY")),
 	}
 
+	r.GET("/api/v1/testconnexionapp", func(c *gin.Context) {
+		ginresponse.Success(c, "OK", map[string]interface{}{
+			"status": "OK",
+		})
+	})
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	v1 := r.Group(pathApiV1)
