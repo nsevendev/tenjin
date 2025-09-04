@@ -4,7 +4,7 @@
 
 ## Axe Formation
 
-### **Starter — 4,99 €/mois** (49 €/an, -17%)
+### **Starter — 4,99 €/mois** (51 €/an, -15%)
 
 * **Formations** : 3 max
 * **Sessions** : 5/an par formation
@@ -15,7 +15,7 @@
 
 ---
 
-### **Pro — 24,99 €/mois** (199 €/an, -17%)
+### **Pro — 24,99 €/mois** (255 €/an, -15%)
 
 * **Formations** : illimitées
 * **Sessions** : illimitées
@@ -32,7 +32,7 @@
 
 ---
 
-### **Business — 59,99 €/mois** (499 €/an, -17%)
+### **Business — 59,99 €/mois** (612 €/an, -15%)
 
 * **Formations** : tout illimité
 * **Sessions** : tout illimité
@@ -63,7 +63,7 @@
 
 ## Axe Recrutement seul
 
-### **Recruit Lite — 9,99 €/mois** (99 €/an, -17%)
+### **Recruit Lite — 9,99 €/mois** (102 €/an, -15%)
 
 * 5 offres actives/mois
 * Quiz candidats
@@ -72,7 +72,7 @@
 
 ---
 
-### **Recruit Pro — 24,99 €/mois** (299 €/an, -17%)
+### **Recruit Pro — 24,99 €/mois** (255 €/an, -15%)
 
 * Offres illimitées
 * Quiz illimités
@@ -82,7 +82,7 @@
 
 ---
 
-### **Recruit Business — 49,99 €/mois** (499 €/an, -17%)
+### **Recruit Business — 49,99 €/mois** (510 €/an, -15%)
 
 * Offres illimitées
 * Quiz illimités
@@ -99,10 +99,10 @@
 | Plan             | Prix/mois | Formations | Sessions | Quiz/Compétences | Messagerie  | Stream | Calendrier | Recrutement inclus                                                        | Add-on Recruit Business                     |
 | ---------------- | --------- | ---------- | -------- | ---------------- | ----------- | ------ | ---------- | ------------------------------------------------------------------------- | ------------------------------------------- |
 | **Starter (F)**  | 4,99 €    | 3 max      | 5/an     | Tests illimités  | ❌           | ❌      | ❌          | ❌                                                                         | Non dispo                                   |
-| **Pro (F)**      | 19,99 €   | Illimitées | Illimité | Illimités        | ✅ interne   | ❌      | 1/session  | **Lite** (5 offres/mois + quiz + jobdating basique)                       | **+9,99 €/mois** → tout illimité + branding |
-| **Business (F)** | 49,99 €   | Illimitées | Illimité | Illimités        | ✅ interne   | ✅      | 2/session  | **Pro** (offres illimitées, messagerie, 5h vidéo, jobdating vidéo limité) | **+5,99 €/mois** → tout illimité + branding |
+| **Pro (F)**      | 24,99 €   | Illimitées | Illimité | Illimités        | ✅ interne   | ❌      | 1/session  | **Lite** (5 offres/mois + quiz + jobdating basique)                       | **+9,99 €/mois** → tout illimité + branding |
+| **Business (F)** | 59,99 €   | Illimitées | Illimité | Illimités        | ✅ interne   | ✅      | 2/session  | **Pro** (offres illimitées, messagerie, 5h vidéo, jobdating vidéo limité) | **+5,99 €/mois** → tout illimité + branding |
 | **Recruit Lite** | 9,99 €    | ❌          | ❌        | ❌                | ❌           | ❌      | ❌          | 5 offres/mois + quiz + jobdating basique                                  | —                                           |
-| **Recruit Pro**  | 29,99 €   | ❌          | ❌        | ❌                | ✅ candidats | ❌      | ❌          | Offres illimitées + messagerie + 5h vidéo                                 | —                                           |
+| **Recruit Pro**  | 24,99 €   | ❌          | ❌        | ❌                | ✅ candidats | ❌      | ❌          | Offres illimitées + messagerie + 5h vidéo                                 | —                                           |
 | **Recruit Bus.** | 49,99 €   | ❌          | ❌        | ❌                | ✅ illimité  | ❌      | ❌          | Tout illimité + branding employeur + support premium                      | —                                           |
 
 ---
@@ -110,7 +110,7 @@
 
 # Formation — Plans
 
-|                        | **Starter** <br> 4,99 €/mois | **Pro** <br> 19,99 €/mois                     | **Business** <br> 49,99 €/mois |
+|                        | **Starter** <br> 4,99 €/mois | **Pro** <br> 24,99 €/mois                     | **Business** <br> 59,99 €/mois |
 |------------------------|------------------------|-----------------------------------------------|----------------------|
 | **Formations**         | 3 max                 | Illimitées                                    | Illimitées           |
 | **Sessions**           | 5 / an                | Illimitées                                    | Illimitées           |
@@ -129,7 +129,7 @@
 
 # Recrutement — Plans
 
-|                        | **Lite** <br> 9,99 €/mois | **Pro** <br> 29,99 €/mois | **Business** <br> 49,99 €/mois |
+|                        | **Lite** <br> 9,99 €/mois | **Pro** <br> 24,99 €/mois | **Business** <br> 49,99 €/mois |
 |------------------------|---------------------------|----------------------------|--------------------------------|
 | **Offres d’emploi**    | 5 / mois                 | Illimitées                 | Illimitées                     |
 | **Quiz candidats**     | ✅                        | Illimités                  | Illimités                      |
