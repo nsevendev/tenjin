@@ -43,4 +43,4 @@ Thumbs.db
 
 # environement app
 src/environment/*
-!src/environment/environment.dist
+!src/environment/environment.ts
