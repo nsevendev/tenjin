@@ -13,8 +13,6 @@
 - renseigner les valeurs `1270.0.0.1  tenjin-app.local`, `1270.0.0.1  tenjin-api.local`  
   `127.0.0.1  tenjin.local` dans le fichier `/etc/hosts`  
   (attention utiliser `sudo` pour modifier ce fichier)
-- copier/coller `app/src/environment/environment.dist` en `app/src/environment/environment.ts`  
-  renseigné laisser les variables existante, celle sans valeur demandé au lead les valeurs manquantes
 
 ## Avant d'installer en mode prod ou preprod
 - pareil que le mode dev, sauf que les variables dans les `.env` doivent etre renseigner pour la production
