@@ -4,7 +4,7 @@ export const linkTextVariants = cva(
   [
     'inline cursor-pointer',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-    'hover:underline underline-offset-2'
+    'hover:underline underline-offset-2 md:underline-offset-4'
   ],
   {
     variants: {
@@ -25,8 +25,8 @@ export const linkTextVariants = cva(
       },
       size: {
         sm: 'text-sm',
-        base: 'text-base',
-        lg: 'text-lg',
+        base: 'text-sm md:text-base',
+        lg: 'text-base md:text-lg',
       },
       underline: {
         always: 'underline',
