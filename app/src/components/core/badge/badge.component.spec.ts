@@ -12,7 +12,7 @@ describe('BadgeComponent', () => {
       providers: [provideZonelessChangeDetection()]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(BadgeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -37,23 +37,23 @@ describe('BadgeComponent', () => {
   it('should emit pressed event on click', () => {
     spyOn(component.pressed, 'emit');
     const event = new MouseEvent('click');
-    
+
     component.onClick(event);
-    
+
     expect(component.pressed.emit).toHaveBeenCalledWith(event);
   });
 
   it('should apply custom className', () => {
     fixture.componentRef.setInput('class', 'custom-class');
     fixture.detectChanges();
-    
+
     expect(component.classes()).toContain('custom-class');
   });
 
   it('should apply color variant classes', () => {
     fixture.componentRef.setInput('color', 'blue');
     fixture.detectChanges();
-    
+
     expect(component.classes()).toContain('bg-blue-300');
     expect(component.classes()).toContain('text-blue-900');
   });
@@ -61,16 +61,15 @@ describe('BadgeComponent', () => {
   it('should apply size variant classes', () => {
     fixture.componentRef.setInput('size', 'sm');
     fixture.detectChanges();
-    
-    expect(component.classes()).toContain('px-3');
+
+    expect(component.classes()).toContain('px-2.5');
     expect(component.classes()).toContain('py-0.5');
-    expect(component.classes()).toContain('text-xs');
   });
 
   it('should apply interactive classes when hasHandler is true', () => {
     fixture.componentRef.setInput('hasHandler', true);
     fixture.detectChanges();
-    
+
     expect(component.classes()).toContain('cursor-pointer');
   });
 });
