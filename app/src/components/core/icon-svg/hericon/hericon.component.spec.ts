@@ -1,16 +1,25 @@
-import {TestBed} from '@angular/core/testing';
-import {ContainerComponent} from '../../container/container.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {HericonComponent} from './hericon.component';
 import {provideZonelessChangeDetection} from '@angular/core';
 
-describe('ContainerComponent', () => {
-  let iconComponent: Icon
+describe('HericonComponent', () => {
+  let component: HericonComponent
+  let fixture: ComponentFixture<HericonComponent>
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [],
-      providers: []
+      imports: [HericonComponent],
+      providers: [provideZonelessChangeDetection()]
     })
       .compileComponents()
 
+    fixture = TestBed.createComponent(HericonComponent);
+    component = fixture.componentInstance
+    fixture.componentRef.setInput('name', 'calendar');
+    fixture.detectChanges()
+  })
 
+  it('should create', () => {
+    expect(component).toBeTruthy()
   })
 })
