@@ -42,5 +42,5 @@ testem.log
 Thumbs.db
 
 # environement app
-src/environment/*
-!src/environment/environment.dist
+src/environments/*
+!src/environments/environment.dist

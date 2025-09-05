@@ -1,5 +1,5 @@
 import {HttpContextToken, HttpInterceptorFn} from '@angular/common/http';
-import {environment} from '../environment/environment';
+import {environment} from '../environments/environment';
 
 /** Contexte pour ignorer l'intercepteur, false par defaut pour executer l'intercepteur */
 export const SKIP_API_HOST = new HttpContextToken<boolean>(() => false);
