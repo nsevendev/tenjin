@@ -1,0 +1,11 @@
+<label class="inline-flex items-center gap-3 p-2 -m-2">
+  <input
+    type="checkbox"
+    [class]="classes()"
+    [disabled]="disabled()"
+    [ngModel]="checked()"
+    (ngModelChange)="checked.set($event)"
+    [attr.aria-invalid]="invalid() || null"
+  />
+  <ng-content></ng-content>
+</label>
