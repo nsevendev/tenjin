@@ -26,8 +26,8 @@ export const buttonVariants = cva(
         warningOpacity:   'bg-warning/15   text-warning   hover:bg-warning/25   focus-visible:ring-warning',
       },
       size: {
-        sm:   'px-2 py-1 text-sm',
-        base: 'px-6 py-3 text-base',
+        sm:   'px-3 py-2 text-xs md:px-4 md:text-sm',
+        base: 'px-4 py-3 text-sm md:px-6 md:text-base',
       },
       transform: {
         default: '',
