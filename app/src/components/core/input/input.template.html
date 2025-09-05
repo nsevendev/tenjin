@@ -1,7 +1,7 @@
 <div class="relative w-full">
   <!-- Prefix -->
   @if (hasPrefix()) {
-    <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center"
+    <span class="absolute inset-y-0 left-0 flex items-center"
           [class]="prefixWrapperPad()">
           <ng-content select="[cInputPrefix]"></ng-content>
         </span>
@@ -19,7 +19,7 @@
 
   <!-- Suffix -->
   @if (hasSuffix()) {
-    <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center"
+    <span class="absolute inset-y-0 right-0 flex items-center"
           [class]="suffixWrapperPad()">
           <ng-content select="[cInputSuffix]"></ng-content>
         </span>
