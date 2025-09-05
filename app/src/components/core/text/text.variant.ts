@@ -5,19 +5,19 @@ export const textVariants = cva(
   {
     variants: {
       variant: {
-        paragraph: 'text-text dark:text-text',
+        paragraph: 'text-text dark:text-text leading-6 md:leading-7',
         small: 'text-sm text-text-muted',
-        caption: 'text-xs text-text-muted',
-        lead: 'text-lg text-text-muted',
+        caption: 'text-[11px] md:text-xs text-text-muted',
+        lead: 'text-base md:text-lg text-text-muted leading-7 md:leading-8',
         muted: 'text-text-muted',
-        code: 'font-mono text-sm bg-bg-muted dark:bg-bg px-1 py-0.5 rounded text-text dark:text-text',
+        code: 'font-mono text-xs md:text-sm bg-bg-muted dark:bg-bg px-1 py-0.5 rounded text-text dark:text-text',
       },
       size: {
         xs: 'text-xs',
         sm: 'text-sm',
-        base: 'text-base',
-        lg: 'text-lg',
-        xl: 'text-xl',
+        base: 'text-sm md:text-base',
+        lg: 'text-base md:text-lg',
+        xl: 'text-lg md:text-xl',
       },
       weight: {
         light: 'font-light',
@@ -76,7 +76,7 @@ export const messageVariants = cva(
 );
 
 export const blockquoteVariants = cva(
-  'border-l-4 pl-4 italic',
+  'border-l-2 pl-3 md:border-l-4 md:pl-4 italic',
   {
     variants: {
       variant: {

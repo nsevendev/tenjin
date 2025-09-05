@@ -124,29 +124,255 @@
       <c-input [(value)]="valueInputWithValue"/>
     </div>
     <div class="mb-4">
-      <c-input [(value)]="username" placeholder="Votre nom">
-        <svg cInputPrefix xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-        </svg>
+      <c-input [(value)]="username" placeholder="Votre Email">
+        <c-h-icon cInputPrefix [name]="'user'"></c-h-icon>
       </c-input>
     </div>
     <div>
       <c-input [(value)]="filter" placeholder="Filtre">
-        <button
+        <c-button
           cInputSuffix
           type="button"
-          class="pointer-events-auto cursor-pointer opacity-60 hover:opacity-100"
+          [variant]="'transparentDefaultPrimary'"
           (click)="filter.set('')"
         >
-          ✕
-        </button>
+          <c-h-icon [name]="'x'" cInputSuffix></c-h-icon>
+        </c-button>
       </c-input>
+
       @if (filter()){
         <div>
           <span>Mon filtre est : </span><c-text-message-info>{{filter()}}</c-text-message-info>
         </div>
       }
+
     </div>
   </c-card>
-</section>
 
+  <c-card [size]="'extraLarge'" class="mt-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Card avec différents checkbox</c-title>
+    <c-container [direction]="'col'" [gap]="4">
+      <c-input-checkbox [(checked)]="acceptTerms">J’accepte les conditions</c-input-checkbox>
+      <c-input-checkbox variant="error" [(checked)]="errorChoice">Erreur</c-input-checkbox>
+      <c-input-checkbox variant="success">Succès (défaut décoché)</c-input-checkbox>
+      <c-input-checkbox [disabled]="true">Désactivé</c-input-checkbox>
+
+      <div class="pt-2">
+        <c-title [size]="'sm'" [as]="'h3'" [weight]="'semibold'" class="mb-2">Tailles & radius</c-title>
+        <c-container [direction]="'col'" [gap]="3">
+          <c-input-checkbox size="sm">Petit</c-input-checkbox>
+          <c-input-checkbox size="base">Moyen</c-input-checkbox>
+          <c-input-checkbox size="lg" radius="full" [(checked)]="bigRound">Large & rond</c-input-checkbox>
+        </c-container>
+      </div>
+    </c-container>
+  </c-card>
+
+  <c-card class="mt-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Checkbox group inline</c-title>
+    <c-input-checkbox-group
+      [options]="fruits"
+      [(checkedValues)]="selectedFruits"
+      size="base"
+      radius="md"
+      display="inline-flex"
+      direction="row"
+      wrap="wrap"
+      [gap]="3"
+    />
+    <div class="mt-3">
+      <span>Sélection: </span>
+      <c-text-message-info>{{ selectedFruits().length ? selectedFruits().join(', ') : 'Aucune' }}</c-text-message-info>
+    </div>
+  </c-card>
+
+  <c-card class="mt-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Scroll into view (clavier)</c-title>
+    <c-text size="sm" color="muted" class="mb-2">Ouvrez le menu puis utilisez ↑/↓ : l’élément actif est automatiquement scrollé en vue.</c-text>
+
+    <div class="mb-4">
+      <c-text size="sm" class="mb-1">Select avec recherche</c-text>
+      <c-input-select-search
+        [options]="manyOptions"
+        placeholder="Rechercher... (50 options)"
+        [(value)]="selectedOneMany"
+      />
+    </div>
+
+    <c-input-select-search
+      [options]="manyOptions"
+      placeholder="Rechercher... (50 options)"
+      [(value)]="selectedOneMany"
+    />
+
+    <div>
+      <c-text size="sm" class="mb-1">Select multi (tags)</c-text>
+      <c-input-select-multi
+        [options]="manyOptions"
+        placeholder="Sélectionner... (50 options)"
+        [(values)]="selectedMany"
+      />
+    </div>
+  </c-card>
+
+  <c-card class="mt-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Select avec recherche</c-title>
+    <c-input-select-search
+      [options]="fruitOptions"
+      placeholder="Rechercher un fruit"
+      [(value)]="selectedFruit"
+    />
+  </c-card>
+
+  <c-card class="mt-6">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Checkbox group colonne (empilé)</c-title>
+    <c-input-checkbox-group
+      [options]="fruits"
+      [(checkedValues)]="selectedFruits"
+      size="sm"
+      radius="sm"
+      display="flex"
+      direction="col"
+      wrap="nowrap"
+      [gap]="2"
+    />
+    <div class="mt-3">
+      <span>Sélection: </span>
+      <c-text-message-info>{{ selectedFruits().length ? selectedFruits().join(', ') : 'Aucune' }}</c-text-message-info>
+    </div>
+  </c-card>
+
+  <c-card class="mt-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Mode Sheet (mobile)</c-title>
+    <c-text size="sm" color="muted" class="mb-2">Démos forcées en sheet: pratique sur petit écran.</c-text>
+    <div class="mb-4">
+      <c-text size="sm" class="mb-1">Select avec recherche (sheet)</c-text>
+      <c-input-select-search
+        [options]="manyOptions"
+        panelMode="sheet"
+        placeholder="Rechercher (sheet)"
+        [(value)]="selectedOneMany"
+      />
+    </div>
+    <div>
+      <c-text size="sm" class="mb-1">Select multi (sheet)</c-text>
+      <c-input-select-multi
+        [options]="manyOptions"
+        panelMode="sheet"
+        placeholder="Sélectionner (sheet)"
+        [(values)]="selectedMany"
+      />
+    </div>
+  </c-card>
+
+  <c-card class="mt-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Selects</c-title>
+    <c-container [direction]="'col'" [gap]="4">
+      <!-- Basique avec placeholder -->
+      <c-input-select
+        [options]="fruitOptions"
+        placeholder="Choisir un fruit"
+        [(value)]="selectedFruit"
+      />
+      <div class="text-sm">Sélection: {{ selectedFruit() ?? 'Aucune' }}</div>
+
+      <!-- Erreur -->
+      <c-input-select
+        [options]="fruitOptions"
+        placeholder="Sélection invalide"
+        variant="error"
+        [(value)]="selectedFruitError"
+      />
+
+      <!-- Désactivé -->
+      <c-input-select
+        [options]="fruitOptions"
+        placeholder="Désactivé"
+        [disabled]="true"
+      />
+
+      <!-- Tailles & radius -->
+      <c-input-select [options]="fruitOptions" size="sm" placeholder="Small" />
+      <c-input-select [options]="fruitOptions" size="lg" radius="full" placeholder="Large & rond" />
+    </c-container>
+  </c-card>
+
+  <c-card class="mt-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Select multi avec tags</c-title>
+    <c-input-select-multi
+      [options]="fruitOptions"
+      placeholder="Choisir des fruits"
+      [(values)]="selectedFruitsForMulti"
+    />
+    <div class="text-sm mt-2">Sélection: {{ selectedFruitsForMulti().join(', ') || 'Aucune' }}</div>
+  </c-card>
+
+  <c-card class="mt-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Sheet générique</c-title>
+    <c-text size="sm" color="muted" class="mb-2">Exemple d’utilisation du composant réutilisable.</c-text>
+    <c-button (pressed)="openGenericSheet.set(true)">Ouvrir le sheet</c-button>
+
+    <c-bottom-sheet [(open)]="openGenericSheet" [height]="'70vh'">
+      <div cSheetContent>
+        <c-title [size]="'sm'" [as]="'h3'" [weight]="'semibold'" class="mb-2">Contenu libre</c-title>
+        <c-text>Vous pouvez placer n’importe quel composant ici.</c-text>
+        <div class="mt-4">
+          <c-input-select [options]="fruitOptions" placeholder="Select dans sheet" />
+        </div>
+        <div class="mt-4">
+          <c-input-select-multi [options]="fruits" placeholder="Multi dans sheet" />
+        </div>
+      </div>
+    </c-bottom-sheet>
+  </c-card>
+
+  <c-card class="mt-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Sheet avec footer (valider/annuler)</c-title>
+    <c-button (pressed)="openFooterSheet.set(true)">Ouvrir</c-button>
+    <c-text class="mt-2" size="sm">Dernière action: {{ lastAction() || '—' }}</c-text>
+
+    <c-bottom-sheet [(open)]="openFooterSheet" [height]="'60vh'" [showFooter]="true"
+                     (confirmed)="lastAction.set('confirm')" (cancelled)="lastAction.set('cancel')"
+                     [title]="'Actions'">
+      <div cSheetContent>
+        <c-text size="sm">Contenu nécessitant une confirmation explicite.</c-text>
+        <c-title [size]="'sm'" [as]="'h3'" [weight]="'semibold'" class="mb-2">Contenu libre</c-title>
+        <c-text>Vous pouvez placer n’importe quel composant ici.</c-text>
+        <div class="mt-4">
+          <c-input-select [options]="fruitOptions" placeholder="Select dans sheet" />
+        </div>
+        <div class="mt-4">
+          <c-input-select-multi [options]="fruits" placeholder="Multi dans sheet" />
+        </div>
+      </div>
+    </c-bottom-sheet>
+  </c-card>
+
+  <c-card class="mt-10">
+    <c-title [size]="'lg'" [as]="'h2'" [weight]="'bold'" class="mb-4">Affichage adaptatif (Desktop vs Mobile)</c-title>
+    @if (!isMobile()) {
+      <div class="p-4 border rounded-md">
+        <c-text size="sm" class="mb-2">Inline (desktop)</c-text>
+        <c-container [direction]="'row'" [gap]="3" [wrap]="'wrap'">
+          <c-input-select [options]="fruitOptions" placeholder="Inline select" />
+          <c-input-select-search [options]="fruitOptions" placeholder="Inline search" />
+        </c-container>
+      </div>
+    } @else {
+      <div class="p-4 border rounded-md">
+        <c-text size="sm" class="mb-2">Mobile: ouvrir en sheet</c-text>
+        <c-button (pressed)="openFiltersFromService()">Ouvrir les filtres</c-button>
+      </div>
+
+      <c-bottom-sheet id="filters-sheet">
+        <div cSheetContent>
+          <c-title [size]="'sm'" [as]="'h3'" [weight]="'semibold'" class="mb-2">Filtres</c-title>
+          <c-input-select [options]="fruitOptions" placeholder="Select" />
+          <div class="mt-3">
+            <c-input-select-search [options]="fruitOptions" placeholder="Recherche" />
+          </div>
+        </div>
+      </c-bottom-sheet>
+    }
+  </c-card>
+</section>

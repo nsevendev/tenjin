@@ -1,0 +1,15 @@
+<div [class]="wrapperClasses()">
+  @for (opt of options(); track opt.value) {
+    <c-input-checkbox
+      [size]="size()"
+      [variant]="variant()"
+      [radius]="radius()"
+      [disabled]="disabled() || !!opt.disabled"
+      [checked]="isSelected(opt.value)"
+      (checkedChange)="onToggle(opt.value, $event)"
+    >
+      {{ opt.label }}
+    </c-input-checkbox>
+  }
+</div>
+

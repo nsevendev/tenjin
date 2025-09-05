@@ -1,0 +1,75 @@
+<div class="relative w-full">
+  <!-- Trigger -->
+  <div
+    [class]="triggerClasses()"
+    [attr.aria-invalid]="variant() === 'error' || null"
+    [class.opacity-50]="disabled()"
+    [class.cursor-not-allowed]="disabled()"
+    role="combobox"
+    aria-haspopup="listbox"
+    [attr.aria-expanded]="open()"
+    tabindex="0"
+    #triggerEl
+    (click)="toggleOpen()"
+    (keydown)="onKeydown($event)"
+  >
+    <div class="flex flex-wrap gap-1 items-center w-full">
+      @if (selectedOptions().length === 0) {
+        <span class="text-gray-400">{{ placeholder() }}</span>
+      } @else {
+        @for (opt of selectedOptions(); track opt.value) {
+          <span class="inline-flex items-center gap-1 rounded-md bg-gray-200 px-2 py-1 text-sm">
+            {{ opt.label }}
+            <button type="button" class="text-gray-600 hover:text-gray-800 p-1 -m-1" (click)="$event.stopPropagation(); removeValue(opt.value)">
+              <c-h-icon [name]="'x'" class="h-3 w-3"></c-h-icon>
+            </button>
+          </span>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Chevron -->
+  <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
+    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+    </svg>
+  </span>
+
+  <!-- Panel -->
+  @if (open() && !useSheet()) {
+    <div class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-[60vh] md:max-h-60 overflow-auto p-1" role="listbox" [attr.aria-multiselectable]="true">
+      @for (opt of options(); track opt.value; let i = $index) {
+        <div class="px-1 py-2 md:py-1" [class.bg-gray-100]="activeIndex() === i" role="option" [attr.aria-selected]="isSelected(opt.value)" #optEl>
+          <c-input-checkbox
+            [checked]="isSelected(opt.value)"
+            (checkedChange)="onToggle(opt.value, $event)"
+            [disabled]="disabled() || !!opt.disabled"
+            size="base"
+          >
+            {{ opt.label }}
+          </c-input-checkbox>
+        </div>
+      }
+    </div>
+  }
+
+  @if (open() && useSheet()) {
+    <c-bottom-sheet [(open)]="open">
+      <div cSheetContent>
+        @for (opt of options(); track opt.value; let i = $index) {
+          <div class="px-2 py-3" [class.bg-gray-100]="activeIndex() === i" role="option" [attr.aria-selected]="isSelected(opt.value)" #optEl>
+            <c-input-checkbox
+              [checked]="isSelected(opt.value)"
+              (checkedChange)="onToggle(opt.value, $event)"
+              [disabled]="disabled() || !!opt.disabled"
+              size="base"
+            >
+              {{ opt.label }}
+            </c-input-checkbox>
+          </div>
+        }
+      </div>
+    </c-bottom-sheet>
+  }
+</div>

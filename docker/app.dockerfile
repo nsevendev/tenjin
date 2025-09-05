@@ -28,6 +28,7 @@ CMD ["npm", "start"]
 FROM base AS build
 COPY . .
 RUN npm ci
+RUN test -f src/environments/environment.ts || cp src/environments/environment.dist src/environments/environment.ts
 RUN npm run build
 
 # ---------- Runtime SPA avec Nginx ----------

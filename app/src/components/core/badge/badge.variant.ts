@@ -16,8 +16,8 @@ export const badgeVariants = cva(
         pink:   'bg-pink-300 text-pink-900',
       },
       size: {
-        sm:   'px-3 py-0.5 text-xs',
-        base: 'px-4 py-1 text-sm',
+        sm:   'px-2.5 py-0.5 text-[11px] md:text-xs',
+        base: 'px-3 py-1 text-xs md:px-4 md:py-1 md:text-sm',
       },
       interactive: {
         true:  'cursor-pointer',

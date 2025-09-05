@@ -10,11 +10,16 @@
 ## Avant installation en mode dev
 - Treafik nseven doit etre installé, configuré et lancé
 - Creer des copies `.env` depuis `.env.dist` à l'endroit où sont les `.env.dist`
-- renseigner les valeurs `1270.0.0.1  tenjin.local`, `1270.0.0.1  tenjin-api.local`  
-  dans le fichier `/etc/hosts` (attention utiliser `sudo` pour modifier ce fichier)
+- renseigner les valeurs `1270.0.0.1  tenjin-app.local`, `1270.0.0.1  tenjin-api.local`  
+  `127.0.0.1  tenjin.local` dans le fichier `/etc/hosts`  
+  (attention utiliser `sudo` pour modifier ce fichier)
+- si le fichier `app/src/environments/environment.ts` n'existe pas,  
+  le créer en copiant/collant le fichier `app/src/environments/environment.dist`  
+  et renommer le en `environment.ts` il fonctionne pour le dev, il faudra le modifier pour la prod ou preprod
 
 ## Avant d'installer en mode prod ou preprod
 - pareil que le mode dev, sauf que les variables dans les `.env` doivent etre renseigner pour la production
+  utiliser la preprod comme réference
 
 ## Mode dev
 - lancer la commande `make up`
