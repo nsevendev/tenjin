@@ -30,15 +30,13 @@ jobs:
           # Créer le réseau traefik-nseven requis par docker-compose
           docker network create traefik-nseven || true
 
-      - name: CP file environments
-        run: |
-          # Copie le fichier environment.dist et creer le fichier environment.ts
-          cp app/src/environments/environment.dist app/src/environments/environment.ts
-
       - name: Start services in dev mode
         run: |
           # Lancer le projet en mode dev
           make up
+          
+          # Copie le fichier environment.dist et creer le fichier environment.ts
+          cp app/src/environments/environment.dist app/src/environments/environment.ts
           
           # Attendre que les services soient prêts
           sleep 30
