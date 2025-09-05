@@ -29,7 +29,12 @@ jobs:
         run: |
           # Créer le réseau traefik-nseven requis par docker-compose
           docker network create traefik-nseven || true
-          
+
+      - name: CP file environments
+        run: |
+          # Copie le fichier environment.dist et creer le fichier environment.ts
+          cp app/src/environments/environment.dist app/src/environments/environment.ts
+
       - name: Start services in dev mode
         run: |
           # Lancer le projet en mode dev
@@ -109,6 +114,8 @@ jobs:
             git fetch origin
             git checkout preprod || git checkout -b preprod origin/preprod
             git pull origin preprod
+          
+          [ -f app/src/environments/environment.ts ] || cp app/src/environments/environment.dist app/src/environments/environment.ts
             
             # Deploy with Docker
             make down || true
