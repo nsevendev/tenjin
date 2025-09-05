@@ -89,3 +89,11 @@ const (
 	TypeChannelModerated TypeChannel = "moderated" // Salon modéré, messages contrôlés par des modérateurs
 	TypeChannelRecruiter TypeChannel = "recruiter" // Salon spécial recruteur, avec auto-suppression après 1 mois
 )
+
+type TypeMail string
+
+const (
+	MailWelcome 		TypeMail = "welcome" 			// mail de bienvenue
+	MailRegister   		TypeMail = "register"			// mail de validation du compte
+	MailResetPassword 	TypeMail = "reset_password" 	// mail de reset du password
+)

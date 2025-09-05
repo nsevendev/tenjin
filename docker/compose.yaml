@@ -1,32 +1,5 @@
 name: tenjin-${APP_ENV}
 services:
-#  front:
-#    build:
-#      target: ${APP_ENV}
-#      context: ../front
-#      dockerfile: ../docker/front.dockerfile
-#    container_name: tenjin_${APP_ENV}_front
-#    image: tenjin-front:${APP_ENV}
-#    labels:
-#      - "traefik.enable=true"
-#      - "traefik.docker.network=traefik-nseven"
-#      - "traefik.http.routers.tenjin-front.rule=${HOST_TRAEFIK}"
-#      - "traefik.http.routers.tenjin-front.entrypoints=websecure"
-#      - "traefik.http.routers.tenjin-front.tls=true"
-#      - "traefik.http.routers.tenjin-front.tls.certresolver=default"
-#      - "traefik.http.services.tenjin-front.loadbalancer.server.port=${PORT}"
-#      - "traefik.http.services.tenjin-front.loadbalancer.server.scheme=http"
-#    volumes:
-#      - ../front:/app
-#    env_file:
-#      - ../front/.env
-#    networks:
-#      - traefik-nseven
-#      - tenjin
-#    depends_on:
-#      - api
-#      - redis
-
   app:
     build:
       target: ${APP_ENV}

@@ -1,41 +1,62 @@
 package main
 
 import (
-	"strings"
-	"tenjin/back/app/router"
-	"tenjin/back/docs"
-	"tenjin/back/internal/jobs"
-	"tenjin/back/internal/mailer"
-	"tenjin/back/internal/utils/database"
-	"tenjin/back/internal/utils/s3adapter"
-	"tenjin/back/migration"
-
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/nsevenpack/env/env"
 	"github.com/nsevenpack/ginresponse"
 	"github.com/nsevenpack/logger/v2/logger"
 	"github.com/nsevenpack/mignosql"
+	"strings"
+	"tenjin/back/app/router"
+	"tenjin/back/docs"
+	"tenjin/back/internal/jobs"
+	"tenjin/back/internal/mail"
+	"tenjin/back/internal/mailer"
+	"tenjin/back/internal/utils/database"
+	"tenjin/back/internal/utils/filestores"
+	"tenjin/back/internal/utils/s3adapter"
+	"tenjin/back/migration"
+	"time"
 )
 
 func init() {
 	appEnv := env.Get("APP_ENV")
 	logger.Init(appEnv)
 	initDbAndMigNosql(appEnv)
+
 	ginresponse.SetFormatter(&ginresponse.JsonFormatter{})
 	s3adapter.CreateAdapteur()
+
 	jobsProcessed := make(chan jobs.Job, 100)
+
 	mailerInstance := mailer.NewMailer(
-	    env.Get("MAILTRAP_HOST"),
-	    env.Get("MAILTRAP_PORT"),
-	    env.Get("MAILTRAP_USER"),
-	    env.Get("MAILTRAP_PASS"),
-	    env.Get("MAIL_FROM"),
+		env.Get("MAILTRAP_HOST"),
+		env.Get("MAILTRAP_PORT"),
+		env.Get("MAILTRAP_USER"),
+		env.Get("MAILTRAP_PASS"),
+		env.Get("MAIL_FROM"),
 	)
 
-	jobs.InitJobs(mailerInstance, jobsProcessed)
+	mailService := mail.NewMailService(nil, database.Client)
+	fileStoreService := filestores.NewService(
+		s3adapter.AdapterCloudflareR2(),
+		filestores.FileStoreConfig{
+			KeyPrefix:      "mails/",
+			MaxSize:        0,
+			AllowedMIMEs:   []string{},
+			UseDateFolders: true,
+		},
+	)
+	mu := &mailer.MailUploader{
+		FileStore: fileStoreService,
+		MailSvc:   mailService,
+	}
+
+	jobs.InitJobs(mailerInstance, mu, jobsProcessed)
 	mailer.InitMailer()
 }
- 
+
 // @title tenjin api
 // @version 1.0
 // @description API service tenjin api
@@ -51,11 +72,39 @@ func main() {
 	port := env.Get("PORT")
 	setSwaggerOpt(hostTraefikApi)             // config option swagger
 	infoServer(hostTraefikApi, hostTraefikDb) // log info server
+	setCors(s)
+
 	router.Routes(s)
 
 	if err := s.Run(host + ":" + port); err != nil {
 		logger.Ef("Une erreur est survenue au lancement du serveur : %v", err)
 	}
+}
+
+func setCors(s *gin.Engine) {
+	s.Use(cors.New(cors.Config{
+		AllowOrigins: []string{
+			env.Get("CORS_DEV_APP"),
+			env.Get("CORS_PREPROD_APP"),
+			env.Get("CORS_PROD_APP"),
+		}, // front autorisés
+		AllowMethods: []string{
+			"GET",
+			"POST",
+			"PUT",
+			"PATCH",
+			"DELETE",
+			"OPTIONS",
+		}, // méthodes autorisées
+		AllowHeaders: []string{
+			"Authorization",
+			"Content-Type",
+			"X-Requested-With",
+		},                                           // headers autorisés
+		ExposeHeaders:    []string{"X-Total-Count"}, // headers exposés au client
+		AllowCredentials: true,                      // true si utilise cookies ou fetch withCredentials
+		MaxAge:           12 * time.Hour,            // cache du preflight
+	}))
 }
 
 func infoServer(hostTraefikApi string, hostTraefikDb string) {

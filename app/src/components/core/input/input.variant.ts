@@ -9,9 +9,9 @@ export const inputVariants = cva(
   {
     variants: {
       size: {
-        sm:   'px-2 py-1 text-sm',     // ~32px haut
-        base: 'px-3 py-2 text-base',   // ~40px haut
-        lg:   'px-4 py-3 text-lg',   // ~48px haut
+        sm:   'px-2.5 py-2 text-sm',     // ~40px haut
+        base: 'px-3 py-3 text-base',     // ~48px haut
+        lg:   'px-4 py-3 text-lg',       // ~48-52px haut
       },
       variant: {
         default: 'border border-1 border-gray-400 hover:border-gray-500 focus:border-primary dark:focus:border-primary-light',

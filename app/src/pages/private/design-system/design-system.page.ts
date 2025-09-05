@@ -12,6 +12,7 @@ import {BadgeComponent} from '../../../components/core/badge/badge.component';
 import {InputComponent} from '../../../components/core/input/input.component';
 import {CInputPrefixDirective} from '../../../components/core/input/input-prefix.directive';
 import {CInputSuffixDirective} from '../../../components/core/input/input-suffix.directive';
+import {HericonComponent} from '../../../components/core/icon-svg/hericon/hericon.component';
 
 @Component({
   selector: 'page-design-system',
@@ -41,7 +42,8 @@ import {CInputSuffixDirective} from '../../../components/core/input/input-suffix
     InputComponent,
     CInputPrefixDirective,
     CInputSuffixDirective,
-    InfoTextMessageComponent
+    InfoTextMessageComponent,
+    HericonComponent
   ]
 })
 export class DesignSystemPage {

@@ -7,7 +7,7 @@ import (
 	"github.com/nsevenpack/logger/v2/logger"
 )
 
-func InitJobs(mailerInstance *mailer.Mailer, jobsProcessed chan Job) {
+func InitJobs(mailerInstance *mailer.Mailer, mu *mailer.MailUploader, jobsProcessed chan Job) {
     redisAddr := env.Get("REDIS_ADDR")
     if redisAddr == "" {
         logger.Ef("❌ REDIS_ADDR non défini, impossible de démarrer le worker")
@@ -17,6 +17,6 @@ func InitJobs(mailerInstance *mailer.Mailer, jobsProcessed chan Job) {
     Redis(redisAddr)
     logger.Sf("✅ Redis initialisé sur %s", redisAddr)
 
-    StartWorker(mailerInstance, jobsProcessed)
+    StartWorker(mailerInstance, mu, jobsProcessed)
     logger.Sf("✅ Worker jobs démarré")
 }
