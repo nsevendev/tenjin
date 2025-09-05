@@ -84,8 +84,9 @@ func main() {
 func setCors(s *gin.Engine) {
 	s.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
-			"https://tenjin-app.local",
-			"https://tenjin-app.woopear.fr",
+			env.Get("CORS_DEV_APP"),
+			env.Get("CORS_PREPROD_APP"),
+			env.Get("CORS_PROD_APP"),
 		}, // front autorisés
 		AllowMethods: []string{
 			"GET",
