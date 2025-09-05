@@ -21,6 +21,7 @@ export class ButtonComponent {
   // variant
   readonly variant   = input<VV<'variant'>>('primary');
   readonly size      = input<VV<'size'>>('base');
+  readonly textSize      = input<VV<'size'>>('base');
   readonly transform = input<VV<'transform'>>('default');
 
   // props
@@ -34,6 +35,7 @@ export class ButtonComponent {
       buttonVariants({
         variant: this.variant(),
         size: this.size(),
+        textSize: this.textSize(),
         transform: this.transform(),
       }),
       this.className(),
