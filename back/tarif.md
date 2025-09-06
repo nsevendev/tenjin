@@ -7,57 +7,57 @@
 ### **Starter — 4,99 €/mois** (51 €/an, -15%)
 
 * **Formations** : 3 max
-* **Sessions** : 5/an par formation
-* **Cours** : illimités
-* **Quiz de test** : illimités
-* **Feuilles de présence** : simples
-* **Recrutement** : aucun
+  * **Sessions** : 5/an par formation
+  * **Cours** : illimités
+  * **Quiz de test** : illimités
+  * **Feuilles de présence** : simples
+  * **Recrutement** : aucun
 
 ---
 
 ### **Pro — 24,99 €/mois** (255 €/an, -15%)
 
 * **Formations** : illimitées
-* **Sessions** : illimitées
-* **Quiz & compétences** : illimités
-* **Suivi stagiaires** : PDF + tableau compétences
-* **Feuilles de présence** : illimitées
-* **Calendrier** : 1 par session
-* **Messagerie interne** : ✅
-* **Recrutement inclus (Lite)** :
+  * **Sessions** : illimitées
+  * **Quiz & compétences** : illimités
+  * **Suivi stagiaires** : PDF + tableau compétences
+  * **Feuilles de présence** : illimitées
+  * **Calendrier** : 1 par session
+  * **Messagerie interne** : ✅
+  * **Recrutement inclus (Lite)** :
 
-    * 5 offres actives/mois
-    * Quiz candidats
-    * Jobdating basique
+      * 5 offres actives/mois
+      * Quiz candidats
+      * Jobdating basique
 
 ---
 
 ### **Business — 59,99 €/mois** (612 €/an, -15%)
 
 * **Formations** : tout illimité
-* **Sessions** : tout illimité
-* **Quiz & compétences** : illimités
-* **Suivi stagiaires** : avancé
-* **Calendrier** : 2 par session (stagiaire + formateur)
-* **Messagerie interne** : ✅
-* **Stream** : ✅
-* **Marque blanche basique** : logo, couleurs
-* **Support** : prioritaire
-* **Recrutement inclus (Pro)** :
+  * **Sessions** : tout illimité
+  * **Quiz & compétences** : illimités
+  * **Suivi stagiaires** : avancé
+  * **Calendrier** : 2 par session (stagiaire + formateur)
+  * **Messagerie interne** : ✅
+  * **Stream** : ✅
+  * **Marque blanche basique** : logo, couleurs
+  * **Support** : prioritaire
+  * **Recrutement inclus (Pro)** :
 
-    * Offres illimitées
-    * Quiz illimités
-    * Messagerie candidats
-    * 5h d’entretien vidéo/mois
-    * Jobdating vidéo limité
+      * Offres illimitées
+      * Quiz illimités
+      * Messagerie candidats
+      * 5h d’entretien vidéo/mois
+      * Jobdating vidéo limité
 
 ---
 
 ## 🔧 Add-on Recrutement Business
 
 * **+9,99 €/mois** depuis **Pro**
-* **+5,99 €/mois** depuis **Business**
-  Débloque le “tout illimité + branding employeur” (vidéo illimitée, jobdating illimité, page entreprise).
+  * **+5,99 €/mois** depuis **Business**
+    Débloque le “tout illimité + branding employeur” (vidéo illimitée, jobdating illimité, page entreprise).
 
 ---
 
@@ -66,31 +66,31 @@
 ### **Recruit Lite — 9,99 €/mois** (102 €/an, -15%)
 
 * 5 offres actives/mois
-* Quiz candidats
-* Jobdating basique
-* Pas de vidéo / pas de messagerie
+  * Quiz candidats
+  * Jobdating basique
+  * Pas de vidéo / pas de messagerie
 
 ---
 
 ### **Recruit Pro — 24,99 €/mois** (255 €/an, -15%)
 
 * Offres illimitées
-* Quiz illimités
-* Messagerie candidats
-* 5h d’entretien vidéo/mois
-* Jobdating vidéo limité
+  * Quiz illimités
+  * Messagerie candidats
+  * 5h d’entretien vidéo/mois
+  * Jobdating vidéo limité
 
 ---
 
 ### **Recruit Business — 49,99 €/mois** (510 €/an, -15%)
 
 * Offres illimitées
-* Quiz illimités
-* Messagerie illimitée
-* Entretiens vidéo illimités
-* Jobdating vidéo illimité
-* Branding employeur (page vitrine + logo, couleurs)
-* Support premium
+  * Quiz illimités
+  * Messagerie illimitée
+  * Entretiens vidéo illimités
+  * Jobdating vidéo illimité
+  * Branding employeur (page vitrine + logo, couleurs)
+  * Support premium
 
 ---
 
